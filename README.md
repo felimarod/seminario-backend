@@ -1,169 +1,149 @@
-# API Seminario Backend
+## Heavyweight(FastAPI) Starter Template for Large Applications
 
-API REST para el sistema de gestión de recursos del seminario desarrollada con FastAPI.
+This repository provides a robust template for creating powerful FastAPI applications that leverage Postgres and Alembic. Inspired by [Radoslav Georgiev's Django Structure for Scale lecture](https://youtu.be/yG3ZdxBb1oo?si=D6A9dHyhKb_Kf-J7) and my own personal experience, this template offers a structured approach to building scalable web applications.
 
-## Características
-
-- API REST completa con operaciones CRUD para todas las entidades
-- Documentación automática con Swagger UI
-- Base de datos PostgreSQL
-- Validación de datos con Pydantic
-- Arquitectura modular con routers separados
-
-## Modelos de Datos
-
-El sistema maneja las siguientes entidades:
-
-- **Usuario**: Gestión de usuarios del sistema
-- **Unidad**: Unidades organizacionales
-- **TipoRecurso**: Tipos de recursos disponibles
-- **Recurso**: Recursos individuales
-- **Reserva**: Reservas de recursos
-- **Prestamo**: Préstamos de recursos
-- **Devolucion**: Devoluciones de recursos
-- **Calificacion**: Calificaciones de servicios
-
-## Instalación
-
-### Prerrequisitos
-
-- Python 3.8+
-- PostgreSQL
-- pip
-
-### Configuración
-
-1. Clona el repositorio:
-```bash
-git clone <url-del-repositorio>
-cd seminario-backend
+### Project Structure
+```
+.vscode
+alembic/
+app/
+    common/
+        __init__.py
+        dependencies.py
+        paginators.py
+        regex.py
+        schemas.py
+        security.py
+        types.py
+    config/
+        __init__.py
+        database.py
+        settings.py
+    example_module/
+        __init__.py
+        apis.py
+        models.py
+        schemas.py
+        selectors.py
+        services.py
+    __init__.py
+    main.py
+.gitignore
+alembic.ini
+docker-compose.yml
+Dockerfile
+env_sample.txt
+railway.toml
+requirements.txt
+start.sh
 ```
 
-2. Crea un entorno virtual:
-```bash
-python -m venv .venv
-source .venv/bin/activate  # En Linux/macOS
-# o
-.venv\Scripts\activate  # En Windows
-```
+### Components
 
-3. Instala las dependencias:
-```bash
-pip install -r requirements.txt
-```
+**.vscode:** Configuration files for Visual Studio Code.
 
-4. Configura las variables de entorno:
-Copia el archivo `.env.example` a `.env` y ajusta la configuración:
-```bash
-cp .env.example .env
-```
+**alembic/:** Contains Alembic settings and migrations.
 
-Edita el archivo `.env` con tu configuración de base de datos:
-```properties
-DATABASE_URL=postgresql://usuario:contraseña@localhost:5432/nombre_bd
-```
+**config/:** Holds project settings.
+- **database.py:** Manages database connection, session settings, and the base database model.
+- **settings.py:** Utilizes pydantic_settings to load environment variables. Change the `SECRET_KEY` from the default value on Railway.
 
-## Uso
+**app/:** The main FastAPI project directory.
+  - **common/:**:
+    - **dependencies.py:** The common dependencies used by all the modules
+    - **paginators.py:** The collection of helpers for response pagination
+    - **regex.py:** Where common regular expressions will be kept
+    - **schemas.py:** Where you will keep your general/generic schemas
+    - **security.py:** Where the authentication functions are kept
+    - **types.py:** Where general/generic types are kept
 
-### Ejecutar el servidor
+  - **config/:** Holds project settings.
+    - **database.py:** Manages database connection, session settings, and the base database model.
+    - **settings.py:** Utilizes pydantic_settings to load environment variables. Change the `SECRET_KEY` from the default value on Railway.
 
-```bash
-cd app
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
+  - **example_module/:**
+    An Example of how you might structure your different modules/apps, doing it this way makes it easy to decouple/seggregate
+    - **apis.py:** Houses endpoints like `user_create`, `user_login`, and `user_details`.
+    - **models.py:** Uses SQLAlchemy to draft the user table. Alembic handles migrations.
+    - **schemas.py:** Defines schemas for create, details, login, and token requests.
+    - **selectors.py:** Manages GET operations, fetching data from the database.
+    - **services.py:** Handles POST, PUT, PATCH, and DELETE operations, manipulating database data.
+  - **main.py:** Entry point of the application
 
-El servidor estará disponible en: `http://localhost:8000`
+**.gitignore:** This specifies which folders/files to not push to github
+**env_sample.txt:** Sample environment variable list. Create a `.env` file and provide values.
+
+### Getting Started
+
+1. Setup Virtual Environment (If you are not using docker)
+   ```shell
+   $ py -m venv .venv
+   $ .venv\Scripts\activate
+   ```
+   NOTE: If you are using VsCode and you see a popup that says use env as workspace env then click yes
+
+</br>
+2. Install dependencies:
+   Locally
+
+   ```shell
+   $ pip install -r requirements.txt
+   ```
+</br>
+    With Docker
+   
+   ```shell
+   docker-compose up
+   ```
+</br>
+
+3. Create a `.env` file and input environment variables.
+</br>
+
+4. Initialize database tables:
+   ```
+   alembic upgrade head
+   ```
+
+</br>
+
+5. Start the application in development mode:
+   ```
+   fastapi dev
+   ```
+  In production use
+  ```
+  fastapi run
+  ```
+</br>
+
+6. Test the application by making requests to endpoints.
+
+### Contribute to the Project
+
+We welcome contributions from the community to make this FastAPI Starter Template even better. If you have ideas for improvements, new features, or bug fixes, feel free to:
+
+- Fork the repository and create a new branch for your contribution.
+- Submit pull requests to propose changes to the project.
+- Engage in discussions and share your thoughts on enhancements.
+
+By contributing, you help make this template more valuable for developers building FastAPI applications. Together, we can create a robust foundation for large-scale projects. Thank you for your support!
+
+For detailed information, refer to the following resources:
+
+- FastAPI documentation: https://fastapi.tiangolo.com/
+- Alembic documentation: https://alembic.sqlalchemy.org/en/latest/
+- Django Structure for Scale lecture: https://youtu.be/yG3ZdxBb1oo?si=D6A9dHyhKb_Kf-J7
 
 
-## Endpoints Disponibles
+### Contact
 
-La API proporciona endpoints CRUD completos para todas las entidades del sistema. Para ver la documentación detallada de todos los endpoints disponibles, accede a:
+If you have any questions or suggestions, feel free to reach out to me:
+(P.S I am looking for a job, i consult and i tutor :)
 
-- **Swagger UI**: `http://localhost:8000/docs`
-- **ReDoc**: `http://localhost:8000/redoc`
-
-Cada entidad cuenta con las siguientes operaciones:
-- `GET /{entidad}/` - Obtener todos los registros
-- `GET /{entidad}/{id}` - Obtener registro por ID
-- `POST /{entidad}/` - Crear nuevo registro
-- `PUT /{entidad}/{id}` - Actualizar registro existente
-- `DELETE /{entidad}/{id}` - Eliminar registro
-
-## Estructura del Proyecto
-
-```
-seminario-backend/
-├── app/
-│   ├── main.py            # Archivo principal de la aplicación
-│   ├── database.py        # Configuración de base de datos
-│   ├── models/            # Modelos SQLAlchemy
-│   │   ├── __init__.py
-│   │   ├── base.py
-│   │   ├── calificacion.py
-│   │   ├── devolucion.py
-│   │   ├── prestamo.py
-│   │   ├── recurso.py
-│   │   ├── reserva.py
-│   │   ├── tipo_recurso.py
-│   │   ├── unidad.py
-│   │   └── usuario.py
-│   ├── routers/           # Routers de FastAPI
-│   │   ├── calificacion.py
-│   │   ├── devolucion.py
-│   │   ├── prestamo.py
-│   │   ├── recurso.py
-│   │   ├── reserva.py
-│   │   ├── tipo_recurso.py
-│   │   ├── unidad.py
-│   │   └── usuario.py
-│   └── db/                # Archivos de base de datos
-├── requirements.txt       # Dependencias del proyecto
-├── .env                   # Variables de entorno
-├── .env.example          # Ejemplo de variables de entorno
-├── .gitignore            # Archivos a ignorar en git
-└── README.md             # Documentación del proyecto
-```
-
-## Ejemplos de Uso
-
-### Crear una nueva calificación
-
-```bash
-curl -X POST "http://localhost:8000/calificacion/" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "id_reserva": 1,
-       "cumplimiento": 5,
-       "calidad_recurso": 4,
-       "amabilidad": 5
-     }'
-```
-
-### Obtener todas las reservas
-
-```bash
-curl -X GET "http://localhost:8000/reserva/" \
-     -H "accept: application/json"
-```
-
-## Tecnologías Utilizadas
-
-- **FastAPI**: Framework web moderno y rápido para Python
-- **SQLAlchemy**: ORM para Python
-- **PostgreSQL**: Base de datos relacional
-- **Pydantic**: Validación de datos
-- **Uvicorn**: Servidor ASGI
-- **python-dotenv**: Gestión de variables de entorno
-
-## Desarrollo
-
-### Ejecutar en modo desarrollo
-
-```bash
-cd app
-uvicorn main:app --reload
-```
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT.
+- Name: Bello Shehu Ango
+- Email: angobello0@gmail.com
+- GitHub: https://github.com/Grey-A
+- Linkedin: https://linkedin.com/in/angobello0
+- Upwork: https://www.upwork.com/freelancers/~01bb1007bf8311388a
+- Instagram: https://www.instagram.com/bello_ango0/
