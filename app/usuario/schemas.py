@@ -4,31 +4,30 @@ from typing import Optional
 
 from pydantic import BaseModel, EmailStr, Field
 
-from app.unidad.schemas import UnidadResponse
-
 
 class UsuarioBase(BaseModel):
     """Base schema para Usuario."""
 
-    id_unidad: int = Field(..., description="ID de la unidad")
+    # id_unidad: int = Field(..., description="ID de la unidad")
     nombre: str = Field(..., max_length=100, description="Nombre del usuario")
-    email: EmailStr = Field(..., description="Email del usuario")
-    rol: str = Field(..., max_length=20, description="Rol del usuario")
+    apellido: str = Field(..., max_length=100, description="Apellido del usuario")
+    correo: EmailStr = Field(..., description="Email del usuario")
+    id_tipo_usuario: int = Field(..., description="ID de la unidad")
 
 
 class UsuarioCreate(UsuarioBase):
     """Schema para crear un nuevo Usuario."""
 
-    pass
+    contrasena: str = Field(..., max_length=100, description="Contraseña del usuario")
 
 
 class UsuarioUpdate(BaseModel):
     """Schema para actualizar un Usuario."""
 
-    id_unidad: Optional[int] = None
-    nombre: Optional[str] = Field(None, max_length=100)
-    email: Optional[EmailStr] = None
-    rol: Optional[str] = Field(None, max_length=20)
+    nombre: Optional[str] = Field(..., max_length=100, description="Nombre del usuario")
+    apellido: Optional[str] = Field(..., max_length=100, description="Apellido del usuario")
+    correo: Optional[EmailStr] = Field(..., description="Email del usuario")
+    id_tipo_usuario: Optional[int] = Field(..., description="ID de la unidad")
 
 
 class UsuarioResponse(UsuarioBase):
@@ -38,9 +37,3 @@ class UsuarioResponse(UsuarioBase):
 
     class Config:
         from_attributes = True
-
-
-class UsuarioWithUnidad(UsuarioResponse):
-    """Schema de Usuario con información de su Unidad."""
-
-    unidad: UnidadResponse

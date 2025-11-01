@@ -9,7 +9,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import ORJSONResponse
 
-from app.calificacion.apis import router as calificacion_router
 from app.common.dependencies import get_db
 from app.common.exceptions import (
     BadGatewayError,
@@ -24,12 +23,6 @@ from app.core.handlers import (
     request_validation_exception_handler,
 )
 from app.core.settings import get_settings
-from app.devolucion.apis import router as devolucion_router
-from app.prestamo.apis import router as prestamo_router
-from app.recurso.apis import router as recurso_router
-from app.reserva.apis import router as reserva_router
-from app.tipo_recurso.apis import router as tipo_recurso_router
-from app.unidad.apis import router as unidad_router
 from app.usuario.apis import router as usuario_router
 
 # Globals
@@ -94,17 +87,4 @@ async def health_check(_=Depends(get_db)):
 
 
 # Routers
-app.include_router(
-    calificacion_router, prefix="/calificacion_router", tags=["calificacion_router"]
-)
-app.include_router(
-    devolucion_router, prefix="/devolucion_router", tags=["devolucion_router"]
-)
-app.include_router(prestamo_router, prefix="/prestamo_router", tags=["prestamo_router"])
-app.include_router(recurso_router, prefix="/recurso_router", tags=["recurso_router"])
-app.include_router(reserva_router, prefix="/reserva_router", tags=["reserva_router"])
-app.include_router(
-    tipo_recurso_router, prefix="/tipo_recurso_router", tags=["tipo_recurso_router"]
-)
-app.include_router(unidad_router, prefix="/unidad_router", tags=["unidad_router"])
-app.include_router(usuario_router, prefix="/usuario_router", tags=["usuario_router"])
+app.include_router(usuario_router, prefix="/usuario", tags=["Usuario"])

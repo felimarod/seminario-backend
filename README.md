@@ -77,7 +77,7 @@ start.sh
 
 1. Setup Virtual Environment (If you are not using docker)
    ```shell
-   $ py -m venv .venv
+   $ python3 -m venv .venv
    $ .venv\Scripts\activate
    ```
    NOTE: If you are using VsCode and you see a popup that says use env as workspace env then click yes

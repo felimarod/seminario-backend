@@ -10,31 +10,30 @@ from app.usuario.schemas import (
     UsuarioCreate,
     UsuarioResponse,
     UsuarioUpdate,
-    UsuarioWithUnidad,
 )
 from app.usuario.selectors import UsuarioSelectors
 from app.usuario.services import UsuarioService
 
-router = APIRouter(prefix="/usuarios", tags=["usuario"])
+router = APIRouter()
 
 
 @router.get("/", response_model=List[UsuarioResponse])
 def get_usuarios(
-    unidad_id: int = Query(None, description="Filtrar por unidad"),
+    id_tipo_usuario: int = Query(None, description="Filtrar por unidad"),
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
     db: Session = Depends(get_db),
 ):
     """Obtiene usuarios, opcionalmente filtrados por unidad."""
-    if unidad_id:
-        return UsuarioSelectors.get_by_unidad(db, unidad_id, skip=skip, limit=limit)
+    if id_tipo_usuario:
+        return UsuarioSelectors.get_by_tipo_usuario(db, id_tipo_usuario, skip=skip, limit=limit)
     return []
 
 
-@router.get("/{usuario_id}", response_model=UsuarioWithUnidad)
-def get_usuario(usuario_id: int, db: Session = Depends(get_db)):
+@router.get("/{id_usuario}", response_model=UsuarioResponse)
+def get_usuario(id_usuario: int, db: Session = Depends(get_db)):
     """Obtiene un usuario por su ID."""
-    usuario = UsuarioSelectors.get_by_id(db, usuario_id)
+    usuario = UsuarioSelectors.get_by_id(db, id_usuario)
     if not usuario:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return usuario
@@ -46,9 +45,9 @@ def create_usuario(usuario_data: UsuarioCreate, db: Session = Depends(get_db)):
     return UsuarioService.create(db, usuario_data)
 
 
-@router.put("/{usuario_id}", response_model=UsuarioResponse)
+@router.put("/{id_usuario}", response_model=UsuarioResponse)
 def update_usuario(
-    usuario_id: int, usuario_data: UsuarioUpdate, db: Session = Depends(get_db)
+    id_usuario: int, usuario_data: UsuarioUpdate, db: Session = Depends(get_db)
 ):
     """Actualiza un usuario."""
-    return UsuarioService.update(db, usuario_id, usuario_data)
+    return UsuarioService.update(db, id_usuario, usuario_data)

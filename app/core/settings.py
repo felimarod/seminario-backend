@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = os.environ.get("SECRET_KEY")
 
     # DB Settings
-    POSTGRES_DATABASE_URL: str = os.environ.get("POSTGRES_DATABASE_URL")
+    DATABASE_URL: str = os.environ.get("DATABASE_URL")
 
 
 @lru_cache

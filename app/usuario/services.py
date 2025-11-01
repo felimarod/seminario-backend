@@ -14,11 +14,11 @@ class UsuarioService:
     @staticmethod
     def create(db: Session, usuario_data: UsuarioCreate) -> Usuario:
         """Crea un nuevo usuario."""
-        existing_usuario = UsuarioSelectors.get_by_email(db, usuario_data.email)
+        existing_usuario = UsuarioSelectors.get_by_correo(db, usuario_data.correo)
         if existing_usuario:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Ya existe un usuario con este email",
+                detail="Ya existe un usuario con este correo",
             )
         db_usuario = Usuario(**usuario_data.model_dump())
         db.add(db_usuario)
@@ -27,9 +27,9 @@ class UsuarioService:
         return db_usuario
 
     @staticmethod
-    def update(db: Session, usuario_id: int, usuario_data: UsuarioUpdate) -> Usuario:
+    def update(db: Session, id_usuario: int, usuario_data: UsuarioUpdate) -> Usuario:
         """Actualiza un usuario existente."""
-        db_usuario = UsuarioSelectors.get_by_id(db, usuario_id)
+        db_usuario = UsuarioSelectors.get_by_id(db, id_usuario)
         if not db_usuario:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="Usuario no encontrado"
