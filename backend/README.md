@@ -1,5 +1,6 @@
-# Getting Started
+# Backend
 
+## Configuración local
 1. Setup Virtual Environment (If you are not using docker)
 
    ```shell
@@ -35,3 +36,5 @@
 5. Test the application by making requests to endpoints.
 
   You can go to the next URI to see the ednpoints:
+
+  http://localhost:8080/docs

@@ -1,15 +1,9 @@
-FROM python:3.11
-
-
-ENV PYTHONUNBUFFERED=1
+FROM python:3.13-slim
 
 WORKDIR /app
 
-COPY . /app
+COPY requirements.txt .
 
 RUN pip install --no-cache -r requirements.txt
 
-# uvloop doesnt support windows
-RUN pip install uvloop
-
-CMD [ "fastapi", "run", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ] 
+CMD [ "fastapi", "dev", "--host", "0.0.0.0", "--port", "8080", "--reload" ]
