@@ -38,3 +38,15 @@
   You can go to the next URI to see the ednpoints:
 
   http://localhost:8080/docs
+
+6. To connect to the database, you have to:
+
+  - run the dockers and wait that the database starts completely
+  
+  - connect to the database with the credentials: user = system, password = oracle
+
+  - run the script called user.sql
+
+  - connect to the database with the credentials: user = seminario, password = seminario
+
+  - run the scripts called tables.sql and addInfo.sql

@@ -2,7 +2,7 @@ services:
   seminario-bd:
     image: gvenzl/oracle-xe:21-slim
     ports:
-      - "1521:1521"
+      - "1522:1521"
     environment:
       - ORACLE_PASSWORD=oracle
     volumes:
@@ -15,12 +15,12 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8081:8080"
     volumes:
       - ./:/app
     environment:
       - ENV=development
-      - DATABASE_URL=oracle+cx_oracle://seminario:seminario@seminario-bd:1521/xe
+      - DATABASE_URL=oracle+oracledb://seminario:seminario@seminario-bd:1521/?service_name=xe
     depends_on:
       - seminario-bd
 volumes:

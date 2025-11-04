@@ -28,7 +28,7 @@ def get_usuarios(
     print("Holaaa :D")
     if id_tipo_usuario:
         return UsuarioSelectors.get_by_tipo_usuario(db, id_tipo_usuario, skip=skip, limit=limit)
-    return []
+    return UsuarioSelectors.get_all(db, skip=skip, limit=limit)
 
 
 @router.get("/{id_usuario}", response_model=UsuarioResponse)

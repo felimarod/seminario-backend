@@ -9,7 +9,7 @@ class Usuario(DBBase):
     id_usuario = Column(Integer, primary_key=True, autoincrement=True)
     # id_unidad = Column(Integer, ForeignKey("unidad.id_unidad"), nullable=False)
     id_tipo_usuario = Column(
-        Integer, ForeignKey("tipo_usuario.id_tipo_usuario"), nullable=False
+        Integer, nullable=False
     )
     nombre = Column(String(100), nullable=False)
     apellido = Column(String(100), nullable=False)
