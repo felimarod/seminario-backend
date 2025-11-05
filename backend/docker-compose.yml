@@ -21,6 +21,8 @@ services:
     environment:
       - ENV=development
       - DATABASE_URL=oracle+oracledb://seminario:seminario@seminario-bd:1521/?service_name=xe
+      - SECRET_KEY=cualquiercosaquevosgusteparaserunasecretkey
+      - ACCESS_TOKEN_EXPIRE_MINUTES=30
     depends_on:
       - seminario-bd
 volumes:

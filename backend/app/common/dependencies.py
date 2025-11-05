@@ -4,7 +4,14 @@ from typing import Literal
 
 from app.common.types import PaginationParamsType
 from app.core.database import SessionLocal
+from app.usuario.models import Usuario
 
+
+from fastapi import Depends, HTTPException, status
+from jose import JWTError, jwt
+from sqlalchemy.orm import Session
+from app.common.security import oauth2_scheme, ALGORITHM
+from app.core.settings import get_settings
 
 def get_db():
     """
@@ -16,6 +23,29 @@ def get_db():
     finally:
         db.close()
 
+# get settings
+settings = get_settings()
+
+#
+
+# Dependency to get the current user from the token
+async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    credential_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+                                         detail="Could not validate credentials", headers={"WWW-Authenticate": "Bearer"})
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
+        correo: str = payload.get("sub")
+        if correo is None:
+            raise credential_exception
+
+    except JWTError:
+        raise credential_exception
+
+    user = db.query(Usuario).filter(Usuario.correo == correo).first()
+    if user is None:
+        raise credential_exception
+
+    return user
 
 def pagination_params(
     q: str | None = None,

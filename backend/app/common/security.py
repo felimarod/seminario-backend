@@ -2,15 +2,23 @@
 
 from datetime import datetime, timedelta
 
-import jwt
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
+from fastapi.security import OAuth2PasswordBearer
 
 from app.core.settings import get_settings
 
 # Globals
 ph = PasswordHasher()
 settings = get_settings()
+
+# OAuth2 scheme setup
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="auth/token",
+    scheme_name="OAuth2PasswordBearer"
+)
+
+ALGORITHM = "HS256"
 
 # Constants
 HASHING_ALGORITHM = "HS256"

@@ -13,6 +13,7 @@ from app.usuario.schemas import (
 )
 from app.usuario.selectors import UsuarioSelectors
 from app.usuario.services import UsuarioService
+from app.common.dependencies import get_current_user
 
 router = APIRouter()
 
@@ -23,8 +24,11 @@ def get_usuarios(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
     db: Session = Depends(get_db),
+    current_user = Depends(get_current_user),
 ):
     """Obtiene usuarios, opcionalmente filtrados por unidad."""
+    if current_user.id_tipo_usuario != 1:
+        raise HTTPException(status_code=403, detail="No tienes permiso para ver esta información")
     if id_tipo_usuario:
         return UsuarioSelectors.get_by_tipo_usuario(db, id_tipo_usuario, skip=skip, limit=limit)
     return UsuarioSelectors.get_all(db, skip=skip, limit=limit)

@@ -15,6 +15,7 @@ class Settings(BaseSettings):
 
     # Security
     SECRET_KEY: str = os.environ.get("SECRET_KEY")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES")
 
     # DB Settings
     DATABASE_URL: str = os.environ.get("DATABASE_URL")

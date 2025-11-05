@@ -28,6 +28,7 @@ from app.tipo_recurso.apis import router as tipo_recurso_router
 from app.recurso.apis import router as recurso_router
 from app.transaccion.apis import router as transaccion_router
 from app.calificacion.apis import router as calificacion_router
+from app.common.auth import router as auth_router
 
 # Globals
 settings = get_settings()
@@ -96,3 +97,4 @@ app.include_router(tipo_recurso_router, prefix="/tipo_recurso", tags=["Tipo Recu
 app.include_router(recurso_router, prefix="/recurso", tags=["Recurso"])
 app.include_router(transaccion_router, prefix="/transaccion", tags=["Transaccion"])
 app.include_router(calificacion_router, prefix="/calificacion", tags=["Calificacion"])
+app.include_router(auth_router, prefix="/auth")
