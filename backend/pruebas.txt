@@ -1,0 +1,16 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- /home/felipe/Documentos/U/seminario/proyecto/backend/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/felipe/Documentos/U/seminario/proyecto/backend
+configfile: pytest.ini
+plugins: anyio-4.3.0
+collecting ... collected 6 items
+
+tests/test_calificacion.py::test_get_calificacion_by_id PASSED           [ 16%]
+tests/test_health.py::test_read_health PASSED                            [ 33%]
+tests/test_recurso.py::test_get_recurso_by_id PASSED                     [ 50%]
+tests/test_tipo_recurso.py::test_get_tipo_recurso_by_id PASSED           [ 66%]
+tests/test_transaccion.py::test_get_transaccion_by_id PASSED             [ 83%]
+tests/test_usuario.py::test_get_usuario_by_id PASSED                     [100%]
+
+============================== 6 passed in 0.57s ===============================

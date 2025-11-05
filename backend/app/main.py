@@ -57,7 +57,7 @@ app = FastAPI(
     description="API REST para el sistema de gestión de recursos del seminario",
     version="1.0.0",
     docs_url="/docs",
-    redoc_url="/redoc"
+    redoc_url="/redoc",
 )
 # Variables
 origins = ["*"]
