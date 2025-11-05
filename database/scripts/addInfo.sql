@@ -32,6 +32,17 @@ INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
 
 INSERT INTO Unidad (id_unidad, nombre_unidad, horario_unidad, admin_unidad)
  VALUES (1, 'Laboratorios de Computo', 'horario_default', 1);
+
+INSERT INTO TipoTransaccion (id_tipo_transaccion, nombre_tipo_transaccion, descripcion_tipo_transaccion)
+ VALUES (1, 'Reserva', 'Reserva de un recurso o espacio'); 
+INSERT INTO TipoTransaccion (id_tipo_transaccion, nombre_tipo_transaccion, descripcion_tipo_transaccion)
+ VALUES (2, 'Prestamo', 'Prestamo de un recurso o espacio');
+
 COMMIT;
+
+
+-- 
+
+
 
 SELECT 'Script addInfo.sql executed successfully.' AS message FROM dual;

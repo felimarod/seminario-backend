@@ -106,8 +106,7 @@ CREATE TABLE Recurso(
 	CONSTRAINT nombre_recurso_nn NOT NULL,
 	descripcion_recurso VARCHAR2(500),
 	foto_recurso BLOB,
-	estado_recurso VARCHAR(50)
-	CONSTRAINT estado_recurso_nn NOT NULL,
+	estado_recurso VARCHAR(50) DEFAULT 'Disponible' NOT NULL,
 	id_tipo_recurso NUMBER(5) 
 	CONSTRAINT recurso_tipo_recurso_fk REFERENCES TipoRecurso(id_tipo_recurso)
 );

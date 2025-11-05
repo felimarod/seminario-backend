@@ -50,3 +50,7 @@
   - connect to the database with the credentials: user = seminario, password = seminario
 
   - run the scripts called tables.sql and addInfo.sql
+
+7. To run the test
+  - Execute the project
+  - Run `pytest -v`
