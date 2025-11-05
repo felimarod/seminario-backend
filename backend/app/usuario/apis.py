@@ -25,7 +25,6 @@ def get_usuarios(
     db: Session = Depends(get_db),
 ):
     """Obtiene usuarios, opcionalmente filtrados por unidad."""
-    print("Holaaa :D")
     if id_tipo_usuario:
         return UsuarioSelectors.get_by_tipo_usuario(db, id_tipo_usuario, skip=skip, limit=limit)
     return UsuarioSelectors.get_all(db, skip=skip, limit=limit)

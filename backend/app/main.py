@@ -24,6 +24,10 @@ from app.core.handlers import (
 )
 from app.core.settings import get_settings
 from app.usuario.apis import router as usuario_router
+from app.tipo_recurso.apis import router as tipo_recurso_router
+from app.recurso.apis import router as recurso_router
+from app.transaccion.apis import router as transaccion_router
+from app.calificacion.apis import router as calificacion_router
 
 # Globals
 settings = get_settings()
@@ -88,3 +92,7 @@ async def health_check(_=Depends(get_db)):
 
 # Routers
 app.include_router(usuario_router, prefix="/usuario", tags=["Usuario"])
+app.include_router(tipo_recurso_router, prefix="/tipo_recurso", tags=["Tipo Recurso"])
+app.include_router(recurso_router, prefix="/recurso", tags=["Recurso"])
+app.include_router(transaccion_router, prefix="/transaccion", tags=["Transaccion"])
+app.include_router(calificacion_router, prefix="/calificacion", tags=["Calificacion"])

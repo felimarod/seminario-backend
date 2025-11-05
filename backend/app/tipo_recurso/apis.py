@@ -1,0 +1,53 @@
+"""API routes para tipo recurso."""
+
+from typing import List
+
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy.orm import Session
+
+from app.common.dependencies import get_db
+from app.tipo_recurso.schemas import (
+    TipoRecursoCreate,
+    TipoRecursoResponse,
+    TipoRecursoUpdate,
+)
+from app.tipo_recurso.selectors import TipoRecursoSelectors
+from app.tipo_recurso.services import TipoRecursoService
+
+router = APIRouter()
+
+
+@router.get("/", response_model=List[TipoRecursoResponse])
+def get_tipo_recursos(
+    id_unidad_tipo_recurso: int = Query(None, description="Filtrar por unidad"),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=1000),
+    db: Session = Depends(get_db),
+):
+    """Obtiene tipo_recursos, opcionalmente filtrados por unidad."""
+    if id_unidad_tipo_recurso:
+        return TipoRecursoSelectors.get_by_unidad_tipo_recurso(db, id_unidad_tipo_recurso, skip=skip, limit=limit)
+    return TipoRecursoSelectors.get_all(db, skip=skip, limit=limit)
+
+
+@router.get("/{id_tipo_recurso}", response_model=TipoRecursoResponse)
+def get_tipo_recurso(id_tipo_recurso: int, db: Session = Depends(get_db)):
+    """Obtiene un tipo_recurso por su ID."""
+    tipo_recurso = TipoRecursoSelectors.get_by_id(db, id_tipo_recurso)
+    if not tipo_recurso:
+        raise HTTPException(status_code=404, detail="TipoRecurso no encontrado")
+    return tipo_recurso
+
+
+@router.post("/", response_model=TipoRecursoResponse, status_code=201)
+def create_tipo_recurso(tipo_recurso_data: TipoRecursoCreate, db: Session = Depends(get_db)):
+    """Crea un nuevo tipo_recurso."""
+    return TipoRecursoService.create(db, tipo_recurso_data)
+
+
+@router.put("/{id_tipo_recurso}", response_model=TipoRecursoResponse)
+def update_tipo_recurso(
+    id_tipo_recurso: int, tipo_recurso_data: TipoRecursoUpdate, db: Session = Depends(get_db)
+):
+    """Actualiza un tipo_recurso."""
+    return TipoRecursoService.update(db, id_tipo_recurso, tipo_recurso_data)
