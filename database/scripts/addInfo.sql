@@ -5,10 +5,6 @@ INSERT INTO TipoUsuario (id_tipo_usuario, nombre_tipo_usuario)
 INSERT INTO TipoUsuario (id_tipo_usuario, nombre_tipo_usuario)
  VALUES (3,'usuario');
 
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario)
- VALUES ('admin_labs', 'admin_labs', 'admin123', 'admin@ejemplo.com', 1, 2);
-
-delete from USUARIO where id_usuario = 3;
 
 INSERT INTO Horario (id_horario)
  VALUES ('horario_default');
@@ -30,8 +26,13 @@ INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
  VALUES ('horario_default', 'Festivos', TO_TIMESTAMP('00:00', 'HH24:MI'), TO_TIMESTAMP('00:00', 'HH24:MI'));
 
-INSERT INTO Unidad (id_unidad, nombre_unidad, horario_unidad, admin_unidad)
- VALUES (1, 'Laboratorios de Computo', 'horario_default', 1);
+INSERT INTO Unidad (id_unidad, nombre_unidad, horario_unidad)
+ VALUES (1, 'Laboratorios de Computo', 'horario_default');
+
+INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('super', 'admin', '1234', 'super@macista.com', 1, 1, 1);
+INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('admin_labs', 'admin_labs', 'admin123', 'admin@ejemplo.com', 1, 2, 1);
 
 INSERT INTO TipoTransaccion (id_tipo_transaccion, nombre_tipo_transaccion, descripcion_tipo_transaccion)
  VALUES (1, 'Reserva', 'Reserva de un recurso o espacio'); 

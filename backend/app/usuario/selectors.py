@@ -13,7 +13,7 @@ class UsuarioSelectors:
     @staticmethod
     def login(db: Session, correo: str, password: str) -> Optional[Usuario]:
         """Obtiene un usuario por su correo y contraseña."""
-        return db.query(Usuario).filter(Usuario.email == correo, Usuario.password == password).first()
+        return db.query(Usuario).filter(Usuario.correo == correo, Usuario.contrasena == password).first()
 
     @staticmethod
     def get_by_id(db: Session, id_usuario: int) -> Optional[Usuario]:

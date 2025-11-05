@@ -1,3 +1,20 @@
+CREATE TABLE Horario(
+	id_horario VARCHAR(100)
+	CONSTRAINT horario_pk PRIMARY KEY
+);
+
+CREATE TABLE HorarioDetalle(
+	id_horario VARCHAR(100) 
+	CONSTRAINT horario_detalle_fk REFERENCES Horario(id_horario),
+	dia_semana VARCHAR(20) 
+	CONSTRAINT dia_semana_nn NOT NULL,
+	CONSTRAINT horario_detalle_pk PRIMARY KEY (id_horario, dia_semana),
+	hora_apertura TIMESTAMP 
+	CONSTRAINT hora_apertura_nn NOT NULL,
+	hora_cierre TIMESTAMP 
+	CONSTRAINT hora_cierre_nn NOT NULL
+);
+
 CREATE TABLE Permiso(
     id_permiso NUMBER(5) 
 	CONSTRAINT permiso_pk PRIMARY KEY,
@@ -14,6 +31,17 @@ CREATE TABLE TipoUsuario(
 	descripcion_tipo_usuario VARCHAR2(500)
 );
 
+
+CREATE TABLE Unidad(
+	id_unidad NUMBER(5) 
+	CONSTRAINT unidad_pk PRIMARY KEY,
+	nombre_unidad VARCHAR(100) 
+	CONSTRAINT nombre_unidad_nn NOT NULL,
+	horario_unidad VARCHAR(100)
+	CONSTRAINT horario_unidad_nn NOT NULL
+	CONSTRAINT horario_unidad_fk REFERENCES Horario(id_horario)
+);
+
 CREATE TABLE Usuario(
 	id_usuario NUMBER(5) 
 	CONSTRAINT usuario_pk PRIMARY KEY,
@@ -28,7 +56,9 @@ CREATE TABLE Usuario(
 	activo NUMBER(1) DEFAULT 1
 	CONSTRAINT activo_nn NOT NULL,
 	id_tipo_usuario NUMBER(5) 
-	CONSTRAINT usuario_tipo_usuario_fk REFERENCES TipoUsuario(id_tipo_usuario)
+	CONSTRAINT usuario_tipo_usuario_fk REFERENCES TipoUsuario(id_tipo_usuario),
+	id_unidad NUMBER(5) 
+	CONSTRAINT usuario_unidad_fk REFERENCES Unidad(id_unidad)
 );
 
 CREATE SEQUENCE usuario_seq START WITH 1 INCREMENT BY 1;
@@ -48,34 +78,8 @@ CREATE TABLE Usuario_Permiso(
 	CONSTRAINT usuario_permiso_pk PRIMARY KEY (id_usuario, id_permiso)
 );
 
-CREATE TABLE Horario(
-	id_horario VARCHAR(100)
-	CONSTRAINT horario_pk PRIMARY KEY
-);
 
-CREATE TABLE HorarioDetalle(
-	id_horario VARCHAR(100) 
-	CONSTRAINT horario_detalle_fk REFERENCES Horario(id_horario),
-	dia_semana VARCHAR(20) 
-	CONSTRAINT dia_semana_nn NOT NULL,
-	CONSTRAINT horario_detalle_pk PRIMARY KEY (id_horario, dia_semana),
-	hora_apertura TIMESTAMP 
-	CONSTRAINT hora_apertura_nn NOT NULL,
-	hora_cierre TIMESTAMP 
-	CONSTRAINT hora_cierre_nn NOT NULL
-);
 
-CREATE TABLE Unidad(
-	id_unidad NUMBER(5) 
-	CONSTRAINT unidad_pk PRIMARY KEY,
-	nombre_unidad VARCHAR(100) 
-	CONSTRAINT nombre_unidad_nn NOT NULL,
-	horario_unidad VARCHAR(100)
-	CONSTRAINT horario_unidad_nn NOT NULL
-	CONSTRAINT horario_unidad_fk REFERENCES Horario(id_horario),
-	admin_unidad NUMBER(5) 
-	CONSTRAINT admin_unidad_fk REFERENCES Usuario(id_usuario)
-);
 
 CREATE TABLE TipoRecurso(
 	id_tipo_recurso NUMBER(5) 
