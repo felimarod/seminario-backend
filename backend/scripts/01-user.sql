@@ -10,4 +10,4 @@ grant create sequence to seminario;
 grant create trigger to seminario;
 grant create procedure to seminario;
 -- si quieres dar todo:
-grant unlimited tablespace to seminario;
+-- grant unlimited tablespace to seminario;

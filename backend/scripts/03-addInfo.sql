@@ -1,3 +1,4 @@
+CONNECT seminario/seminario;
 INSERT INTO TipoUsuario (id_tipo_usuario, nombre_tipo_usuario)
  VALUES (1,'superadmin');
 INSERT INTO TipoUsuario (id_tipo_usuario, nombre_tipo_usuario)

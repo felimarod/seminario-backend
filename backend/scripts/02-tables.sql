@@ -1,3 +1,4 @@
+CONNECT seminario/seminario;
 CREATE TABLE Horario(
 	id_horario VARCHAR(100)
 	CONSTRAINT horario_pk PRIMARY KEY

@@ -41,15 +41,15 @@
 
 6. To connect to the database, you have to:
 
-  - run the dockers and wait that the database starts completely
-  
-  - connect to the database with the credentials: user = system, password = oracle
+  - run the docker container with "docker-compose up"
 
-  - run the script called user.sql
+  - (optional) you can create a connection to the database with the next credentials
 
-  - connect to the database with the credentials: user = seminario, password = seminario
-
-  - run the scripts called tables.sql and addInfo.sql
+  user = seminario
+  password = seminario
+  host = localhost
+  port = 1522
+  service name = XE
 
 7. To run the test
   - Execute the project
