@@ -2,7 +2,7 @@
 
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session
 
 from app.common.dependencies import get_db
@@ -13,21 +13,21 @@ from app.usuario.schemas import (
 )
 from app.usuario.selectors import UsuarioSelectors
 from app.usuario.services import UsuarioService
-from app.common.dependencies import get_current_user
 
 router = APIRouter()
 
 
 @router.get("/", response_model=List[UsuarioResponse])
 def get_usuarios(
+    request: Request,
     id_tipo_usuario: int = Query(None, description="Filtrar por unidad"),
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
-    db: Session = Depends(get_db),
-    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
 ):
     """Obtiene usuarios, opcionalmente filtrados por unidad."""
-    if current_user.id_tipo_usuario != 1:
+    user = request.state.user
+    if user["tipo"] != 1:
         raise HTTPException(status_code=403, detail="No tienes permiso para ver esta información")
     if id_tipo_usuario:
         return UsuarioSelectors.get_by_tipo_usuario(db, id_tipo_usuario, skip=skip, limit=limit)
@@ -35,8 +35,11 @@ def get_usuarios(
 
 
 @router.get("/{id_usuario}", response_model=UsuarioResponse)
-def get_usuario(id_usuario: int, db: Session = Depends(get_db)):
+def get_usuario(id_usuario: int,request: Request, db: Session = Depends(get_db)):
     """Obtiene un usuario por su ID."""
+    user = request.state.user
+    if user["tipo"] != 1:
+        raise HTTPException(status_code=403, detail="No tienes permiso para ver esta información")
     usuario = UsuarioSelectors.get_by_id(db, id_usuario)
     if not usuario:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
@@ -44,14 +47,20 @@ def get_usuario(id_usuario: int, db: Session = Depends(get_db)):
 
 
 @router.post("/", response_model=UsuarioResponse, status_code=201)
-def create_usuario(usuario_data: UsuarioCreate, db: Session = Depends(get_db)):
+def create_usuario(usuario_data: UsuarioCreate, request: Request, db: Session = Depends(get_db)):
     """Crea un nuevo usuario."""
+    user = request.state.user
+    if user["tipo"] != 1:
+        raise HTTPException(status_code=403, detail="No tienes permiso para ver esta información")
     return UsuarioService.create(db, usuario_data)
 
 
 @router.put("/{id_usuario}", response_model=UsuarioResponse)
 def update_usuario(
-    id_usuario: int, usuario_data: UsuarioUpdate, db: Session = Depends(get_db)
+    id_usuario: int, usuario_data: UsuarioUpdate, request: Request, db: Session = Depends(get_db)
 ):
     """Actualiza un usuario."""
+    user = request.state.user
+    if user["tipo"] != 1:
+        raise HTTPException(status_code=403, detail="No tienes permiso para ver esta información")
     return UsuarioService.update(db, id_usuario, usuario_data)

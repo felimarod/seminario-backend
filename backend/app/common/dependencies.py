@@ -7,7 +7,8 @@ from app.core.database import SessionLocal
 from app.usuario.models import Usuario
 
 
-from fastapi import Depends, HTTPException, status
+
+from fastapi import Depends, HTTPException, status, Request
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 from app.common.security import oauth2_scheme, ALGORITHM
@@ -29,7 +30,7 @@ settings = get_settings()
 #
 
 # Dependency to get the current user from the token
-async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+async def get_current_user(request:Request ,token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     credential_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                          detail="Could not validate credentials", headers={"WWW-Authenticate": "Bearer"})
     try:
@@ -44,8 +45,11 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
     user = db.query(Usuario).filter(Usuario.correo == correo).first()
     if user is None:
         raise credential_exception
-
-    return user
+    request.state.user = {
+        "id":user.id_usuario,
+        "tipo": user.id_tipo_usuario,
+        "unidad": user.id_unidad
+        }
 
 def pagination_params(
     q: str | None = None,

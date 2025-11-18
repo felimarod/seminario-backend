@@ -8,6 +8,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import ORJSONResponse
+from app.common.dependencies import get_current_user
 
 from app.common.dependencies import get_db
 from app.common.exceptions import (
@@ -92,9 +93,9 @@ async def health_check(_=Depends(get_db)):
 
 
 # Routers
-app.include_router(usuario_router, prefix="/usuario", tags=["Usuario"])
-app.include_router(tipo_recurso_router, prefix="/tipo_recurso", tags=["Tipo Recurso"])
-app.include_router(recurso_router, prefix="/recurso", tags=["Recurso"])
-app.include_router(transaccion_router, prefix="/transaccion", tags=["Transaccion"])
-app.include_router(calificacion_router, prefix="/calificacion", tags=["Calificacion"])
+app.include_router(usuario_router, prefix="/usuario", tags=["Usuario"],dependencies = [Depends(get_current_user)])
+app.include_router(tipo_recurso_router, prefix="/tipo_recurso", tags=["Tipo Recurso"],dependencies = [Depends(get_current_user)])
+app.include_router(recurso_router, prefix="/recurso", tags=["Recurso"],dependencies = [Depends(get_current_user)])
+app.include_router(transaccion_router, prefix="/transaccion", tags=["Transaccion"],dependencies = [Depends(get_current_user)])
+app.include_router(calificacion_router, prefix="/calificacion", tags=["Calificacion"],dependencies = [Depends(get_current_user)])
 app.include_router(auth_router, prefix="/auth")
