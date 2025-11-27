@@ -1,7 +1,7 @@
 """Pydantic schemas para Recurso."""
 
 from typing import Optional
-
+import base64
 from pydantic import BaseModel, Field
 
 
@@ -9,10 +9,9 @@ class RecursoBase(BaseModel):
     """Base schema para Recurso."""
 
     nombre_recurso: str = Field(..., max_length=100, description="Nombre del recurso")
-    descripcion_recurso: str = Field(..., max_length=100, description="Descripción del recurso")
-    estado_recurso: str = Field(..., description="Estado del recurso")
-    id_tipo_recurso: int = Field(..., description="ID del tipo de recurso")
-
+    descripcion_recurso: str = Field(..., max_length=500, description="Descripción del recurso")
+    id_tipo_recurso: int = Field(..., description="ID del tipo de recurso")  
+    estado_recurso: Optional[str] = Field(..., description="Estado del recurso")
 
 class RecursoCreate(RecursoBase):
     """Schema para crear un nuevo Recurso."""
@@ -32,7 +31,18 @@ class RecursoUpdate(BaseModel):
 class RecursoResponse(RecursoBase):
     """Schema para respuesta de Recurso."""
 
-    id_recurso: int
-
+    id_recurso: str
+    foto_recurso: Optional[str]
     model_config = {"from_attributes": True}
+
+    @classmethod
+    def parse_image(cls, recurso_db):
+        data = recurso_db.__dict__.copy()
+        if recurso_db.foto_recurso:
+            # data["foto_recurso"] = base64.b64encode(recurso_db.foto_recurso).decode("utf-8")
+            data["foto_recurso"]="incluye imagen"
+        else:
+            data["foto_recurso"] = None
+
+        return cls.from_orm(data)
 

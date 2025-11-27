@@ -12,7 +12,7 @@ class RecursoService:
     """Service para operaciones con Recurso."""
 
     @staticmethod
-    def create(db: Session, recurso_data: RecursoCreate) -> Recurso:
+    def create(db: Session, recurso_data: RecursoCreate, foto_recurso = None) -> Recurso:
         """Crea un nuevo recurso."""
         recursos_tipo = RecursoSelectors.get_by_tipo_recurso(
             db, recurso_data.id_tipo_recurso
@@ -23,7 +23,7 @@ class RecursoService:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Ya existe un recurso con este nombre para el tipo de recurso",
             )
-        db_recurso = Recurso(**recurso_data.model_dump())
+        db_recurso = Recurso(**recurso_data.model_dump(),foto_recurso=foto_recurso)
         db.add(db_recurso)
         db.commit()
         db.refresh(db_recurso)

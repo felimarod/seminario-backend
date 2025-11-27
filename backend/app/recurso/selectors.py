@@ -5,6 +5,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 
 from app.recurso.models import Recurso
+from app.tipo_recurso.models import TipoRecurso
 
 
 class RecursoSelectors:
@@ -33,6 +34,21 @@ class RecursoSelectors:
         return (
             db.query(Recurso)
             .filter(Recurso.id_tipo_recurso == id_tipo_recurso)
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
+    
+    @staticmethod
+    def get_by_unidad(
+        db: Session, id_unidad: int, skip: int = 0, limit: int = 100
+    ) -> List[Recurso]:
+        """Obtiene recursos por tipo de recurso."""
+        
+        return (
+            db.query(Recurso)
+            .join(TipoRecurso, TipoRecurso.id_tipo_recurso == Recurso.id_tipo_recurso)
+            .filter(TipoRecurso.id_unidad == id_unidad)
             .offset(skip)
             .limit(limit)
             .all()
