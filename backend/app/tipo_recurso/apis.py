@@ -12,6 +12,7 @@ from app.tipo_recurso.schemas import (
     TipoRecursoUpdate,
 )
 from app.tipo_recurso.selectors import TipoRecursoSelectors
+from app.unidad.selectors import UnidadSelectors
 from app.tipo_recurso.services import TipoRecursoService
 
 router = APIRouter()
@@ -46,6 +47,14 @@ def get_tipo_recurso(id_tipo_recurso: int, request: Request, db: Session = Depen
 @router.post("/", response_model=TipoRecursoResponse, status_code=201)
 def create_tipo_recurso(tipo_recurso_data: TipoRecursoCreate, request: Request, db: Session = Depends(get_db)):
     """Crea un nuevo tipo_recurso."""
+    user = request.state.user
+    if user["tipo"] not in (1,2):
+        raise HTTPException(status_code=403, detail="No tienes permiso para ver esta información")
+    if user["tipo"] == 2:
+        tipo_recurso_data.id_unidad = user["unidad"]
+        if tipo_recurso_data.horario_disponibilidad is None:
+            unidad = UnidadSelectors.get_by_id(db,tipo_recurso_data.id_unidad)
+            tipo_recurso_data.horario_disponibilidad = unidad.horario_unidad
     return TipoRecursoService.create(db, tipo_recurso_data)
 
 

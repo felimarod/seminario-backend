@@ -39,9 +39,18 @@ CREATE TABLE Unidad(
 	nombre_unidad VARCHAR(100) 
 	CONSTRAINT nombre_unidad_nn NOT NULL,
 	horario_unidad VARCHAR(100)
-	CONSTRAINT horario_unidad_nn NOT NULL
+	CONSTRAINT horario_unidad NOT NULL
 	CONSTRAINT horario_unidad_fk REFERENCES Horario(id_horario)
 );
+
+CREATE SEQUENCE unidad_seq START WITH 1 INCREMENT BY 1;
+
+CREATE TRIGGER unidad_bir BEFORE INSERT ON Unidad
+FOR EACH ROW
+BEGIN
+  SELECT unidad_seq.NEXTVAL INTO :NEW.id_unidad FROM dual;
+END;
+/
 
 CREATE TABLE Usuario(
 	id_usuario NUMBER(5) 
@@ -87,19 +96,23 @@ CREATE TABLE TipoRecurso(
 	codigo_tipo_recurso VARCHAR(100) 
 	CONSTRAINT codigo_tipo_recurso NOT NULL,
 	descripcion_tipo_recurso VARCHAR2(500),
-	granuralidad_disponibilidad TIMESTAMP,
+	granuralidad_disponibilidad NUMBER(5)
+	constraint CK_libros_precio_positivo check (granuralidad_disponibilidad>=0),
 	horario_disponibilidad VARCHAR(100)
-	CONSTRAINT horario_disponibilidad_fk REFERENCES Horario(id_horario),
+	CONSTRAINT horario_disponibilidad_fk REFERENCES Horario(id_horario)
+	CONSTRAINT horario_disponibilidad_nn NOT NULL,
 	id_unidad NUMBER(5) 
 	CONSTRAINT tipo_recurso_unidad_fk REFERENCES Unidad(id_unidad)
+	CONSTRAINT tipo_recurso_unidad_nn NOT NULL,
+	CONSTRAINT codigo_undidad_unicidad UNIQUE (codigo_tipo_recurso, id_unidad)
 );
 
 CREATE TABLE IDsRecurso(
-	codigo_tipo_recurso_id VARCHAR(100)
-	CONSTRAINT codigo_tipo_recurso_id PRIMARY KEY,
-	consecutivo NUMBER(5) DEFAULT 1 NOT NULL,
-	id_tipo_recurso_fk NUMBER(5)
-	CONSTRAINT id_tipo_recurso_fk REFERENCES TipoRecurso(id_tipo_recurso)
+	codigo_tipo VARCHAR(100),
+	id_tipo_recurso NUMBER(5)
+	CONSTRAINT id_tipo_recurso_fk REFERENCES TipoRecurso(id_tipo_recurso),
+	CONSTRAINT codigo_recurso_pk PRIMARY KEY (codigo_tipo,id_tipo_recurso),
+	consecutivo NUMBER(5) DEFAULT 1 NOT NULL
 );
 
 CREATE SEQUENCE tipo_recurso_seq START WITH 1 INCREMENT BY 1;
@@ -114,7 +127,7 @@ END;
 CREATE OR REPLACE TRIGGER tipo_recurso_air AFTER INSERT ON TipoRecurso
 FOR EACH ROW
 BEGIN
-	INSERT INTO IDsRecurso (codigo_tipo_recurso_id,id_tipo_recurso_fk)
+	INSERT INTO IDsRecurso (codigo_tipo,id_tipo_recurso)
  	 	VALUES (:NEW.codigo_tipo_recurso,:NEW.id_tipo_recurso);
 END;
 /
@@ -137,12 +150,12 @@ DECLARE
 	v_codigo_tipo TipoRecurso.codigo_tipo_recurso%TYPE;
 	v_consecutivo NUMBER(5);
 BEGIN
-	SELECT codigo_tipo_recurso_id,consecutivo INTO v_codigo_tipo, v_consecutivo
-		FROM IDsRecurso where id_tipo_recurso_fk = :NEW.id_tipo_recurso;
+	SELECT codigo_tipo,consecutivo INTO v_codigo_tipo, v_consecutivo
+		FROM IDsRecurso where id_tipo_recurso = :NEW.id_tipo_recurso;
 	:NEW.id_recurso := v_codigo_tipo||'-'||TO_CHAR(v_consecutivo);
 	UPDATE IDsRecurso
   	SET consecutivo = v_consecutivo + 1
-  	WHERE id_tipo_recurso_fk = :NEW.id_tipo_recurso;
+  	WHERE id_tipo_recurso = :NEW.id_tipo_recurso;
 END;
 /
 
@@ -172,7 +185,7 @@ CREATE TABLE Transaccion(
 	CONSTRAINT trans_responsable_fk REFERENCES Usuario(id_usuario)
 );
 
-CREATE SEQUENCE trans_seq START WITH 0 INCREMENT BY 1;
+CREATE SEQUENCE trans_seq START WITH 1 INCREMENT BY 1;
 
 CREATE TRIGGER trans_bir BEFORE INSERT ON Transaccion
 FOR EACH ROW

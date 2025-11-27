@@ -13,7 +13,7 @@ class UsuarioBase(BaseModel):
     apellido: str = Field(..., max_length=100, description="Apellido del usuario")
     correo: EmailStr = Field(..., description="Email del usuario")
     id_tipo_usuario: int = Field(..., description="ID de la unidad")
-    id_unidad: int = Field(..., description="ID de la unidad")
+    id_unidad: Optional[int] = Field(..., description="ID de la unidad")
 
 
 class UsuarioCreate(UsuarioBase):

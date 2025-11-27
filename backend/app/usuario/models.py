@@ -14,5 +14,5 @@ class Usuario(DBBase):
     contrasena = Column(String(100), nullable=False)
     correo = Column(String(100), unique=True, nullable=False)
     activo = Column(Integer, nullable=False, default=1)
-    id_unidad = Column(Integer, ForeignKey("unidad.id_unidad"), nullable=False)
+    id_unidad = Column(Integer, nullable=True)
     # tipo_usuario = relationship("TipoUsuario", back_populates="usuarios")
