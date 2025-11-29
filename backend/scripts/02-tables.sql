@@ -10,9 +10,9 @@ CREATE TABLE HorarioDetalle(
 	dia_semana VARCHAR(20) 
 	CONSTRAINT dia_semana_nn NOT NULL,
 	CONSTRAINT horario_detalle_pk PRIMARY KEY (id_horario, dia_semana),
-	hora_apertura TIMESTAMP 
+	hora_apertura INTERVAL DAY TO SECOND
 	CONSTRAINT hora_apertura_nn NOT NULL,
-	hora_cierre TIMESTAMP 
+	hora_cierre INTERVAL DAY TO SECOND
 	CONSTRAINT hora_cierre_nn NOT NULL
 );
 

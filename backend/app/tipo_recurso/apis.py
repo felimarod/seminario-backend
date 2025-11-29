@@ -11,6 +11,7 @@ from app.tipo_recurso.schemas import (
     TipoRecursoResponse,
     TipoRecursoUpdate,
 )
+from app.horario.schemas import HorarioDetalleBase
 from app.tipo_recurso.selectors import TipoRecursoSelectors
 from app.unidad.selectors import UnidadSelectors
 from app.tipo_recurso.services import TipoRecursoService
@@ -63,4 +64,17 @@ def update_tipo_recurso(
     id_tipo_recurso: int, tipo_recurso_data: TipoRecursoUpdate, request: Request, db: Session = Depends(get_db)
 ):
     """Actualiza un tipo_recurso."""
+    user = request.state.user
+    if user["tipo"] not in (1,2):
+        raise HTTPException(status_code=403, detail="No tienes permiso para ver esta información")
+    if user["tipo"] == 2:
+        if not tipo_recurso_data.id_unidad: tipo_recurso_data.id_unidad = user["unidad"]
+        tipo_recurso = TipoRecursoSelectors.get_by_id(db, id_tipo_recurso)
+        if tipo_recurso is None:
+            raise HTTPException(status_code=403, detail="El tipo de recurso no existe")
+        if tipo_recurso.id_unidad != user["unidad"]:
+            raise HTTPException(status_code=403, detail="Este tipo de recursos no pertenece a tu unidad")
+        if tipo_recurso_data.id_unidad != user["unidad"]:
+            raise HTTPException(status_code=403, detail="No puedes mover tus recursos a otras unidades")
+    print(1)
     return TipoRecursoService.update(db, id_tipo_recurso, tipo_recurso_data)

@@ -21,121 +21,121 @@ INSERT INTO Horario (id_horario)
  VALUES ('horario_default');
 
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_default', 'Lunes', TO_TIMESTAMP('08:00', 'HH24:MI'), TO_TIMESTAMP('18:00', 'HH24:MI'));
+ VALUES ('horario_default', 'Lunes', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '18:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_default', 'Martes', TO_TIMESTAMP('08:00', 'HH24:MI'), TO_TIMESTAMP('18:00', 'HH24:MI'));
+ VALUES ('horario_default', 'Martes', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '18:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_default', 'Miércoles', TO_TIMESTAMP('08:00', 'HH24:MI'), TO_TIMESTAMP('18:00', 'HH24:MI'));
+ VALUES ('horario_default', 'Miércoles', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '18:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_default', 'Jueves', TO_TIMESTAMP('08:00', 'HH24:MI'), TO_TIMESTAMP('18:00', 'HH24:MI'));
+ VALUES ('horario_default', 'Jueves', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '18:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_default', 'Viernes', TO_TIMESTAMP('08:00', 'HH24:MI'), TO_TIMESTAMP('18:00', 'HH24:MI'));
+ VALUES ('horario_default', 'Viernes', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '18:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_default', 'Sabado', TO_TIMESTAMP('10:00', 'HH24:MI'), TO_TIMESTAMP('14:00', 'HH24:MI'));
+ VALUES ('horario_default', 'Sabado', INTERVAL '8:00' HOUR TO MINUTE, INTERVAL '14:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_default', 'Domingo', TO_TIMESTAMP('00:00', 'HH24:MI'), TO_TIMESTAMP('00:00', 'HH24:MI'));
+ VALUES ('horario_default', 'Domingo', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '00:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_default', 'Festivos', TO_TIMESTAMP('00:00', 'HH24:MI'), TO_TIMESTAMP('00:00', 'HH24:MI'));
+ VALUES ('horario_default', 'Festivos', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '00:00' HOUR TO MINUTE);
 
 INSERT INTO Horario (id_horario)
  VALUES ('horario_extendido');
 
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_extendido', 'Lunes', TO_TIMESTAMP('06:00','HH24:MI'), TO_TIMESTAMP('22:00','HH24:MI'));
+ VALUES ('horario_extendido', 'Lunes', INTERVAL '06:00' HOUR TO MINUTE, INTERVAL '22:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_extendido', 'Martes', TO_TIMESTAMP('06:00','HH24:MI'), TO_TIMESTAMP('22:00','HH24:MI'));
+ VALUES ('horario_extendido', 'Martes', INTERVAL '06:00' HOUR TO MINUTE, INTERVAL '22:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_extendido', 'Miércoles', TO_TIMESTAMP('06:00','HH24:MI'), TO_TIMESTAMP('22:00','HH24:MI'));
+ VALUES ('horario_extendido', 'Miércoles', INTERVAL '06:00' HOUR TO MINUTE, INTERVAL '22:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_extendido', 'Jueves', TO_TIMESTAMP('06:00','HH24:MI'), TO_TIMESTAMP('22:00','HH24:MI'));
+ VALUES ('horario_extendido', 'Jueves', INTERVAL '06:00' HOUR TO MINUTE, INTERVAL '22:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_extendido', 'Viernes', TO_TIMESTAMP('06:00','HH24:MI'), TO_TIMESTAMP('22:00','HH24:MI'));
+ VALUES ('horario_extendido', 'Viernes', INTERVAL '06:00' HOUR TO MINUTE, INTERVAL '22:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_extendido', 'Sabado', TO_TIMESTAMP('08:00','HH24:MI'), TO_TIMESTAMP('20:00','HH24:MI'));
+ VALUES ('horario_extendido', 'Sabado', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '20:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_extendido', 'Domingo', TO_TIMESTAMP('08:00','HH24:MI'), TO_TIMESTAMP('18:00','HH24:MI'));
+ VALUES ('horario_extendido', 'Domingo', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '18:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_extendido', 'Festivos', TO_TIMESTAMP('08:00','HH24:MI'), TO_TIMESTAMP('18:00','HH24:MI'));
+ VALUES ('horario_extendido', 'Festivos', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '18:00' HOUR TO MINUTE);
 
 INSERT INTO Horario (id_horario)
  VALUES ('horario_nocturno');
 
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_nocturno', 'Lunes', TO_TIMESTAMP('18:00','HH24:MI'), TO_TIMESTAMP('06:00','HH24:MI'));
+ VALUES ('horario_nocturno', 'Lunes', INTERVAL '18:00' HOUR TO MINUTE, INTERVAL '06:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_nocturno', 'Martes', TO_TIMESTAMP('18:00','HH24:MI'), TO_TIMESTAMP('06:00','HH24:MI'));
+ VALUES ('horario_nocturno', 'Martes', INTERVAL '18:00' HOUR TO MINUTE, INTERVAL '06:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_nocturno', 'Miércoles', TO_TIMESTAMP('18:00','HH24:MI'), TO_TIMESTAMP('06:00','HH24:MI'));
+ VALUES ('horario_nocturno', 'Miércoles', INTERVAL '18:00' HOUR TO MINUTE, INTERVAL '06:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_nocturno', 'Jueves', TO_TIMESTAMP('18:00','HH24:MI'), TO_TIMESTAMP('06:00','HH24:MI'));
+ VALUES ('horario_nocturno', 'Jueves', INTERVAL '18:00' HOUR TO MINUTE, INTERVAL '06:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_nocturno', 'Viernes', TO_TIMESTAMP('18:00','HH24:MI'), TO_TIMESTAMP('06:00','HH24:MI'));
+ VALUES ('horario_nocturno', 'Viernes', INTERVAL '18:00' HOUR TO MINUTE, INTERVAL '06:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_nocturno', 'Sabado', TO_TIMESTAMP('18:00','HH24:MI'), TO_TIMESTAMP('06:00','HH24:MI'));
+ VALUES ('horario_nocturno', 'Sabado', INTERVAL '18:00' HOUR TO MINUTE, INTERVAL '06:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_nocturno', 'Domingo', TO_TIMESTAMP('18:00','HH24:MI'), TO_TIMESTAMP('06:00','HH24:MI'));
+ VALUES ('horario_nocturno', 'Domingo', INTERVAL '18:00' HOUR TO MINUTE, INTERVAL '06:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_nocturno', 'Festivos', TO_TIMESTAMP('18:00','HH24:MI'), TO_TIMESTAMP('06:00','HH24:MI'));
+ VALUES ('horario_nocturno', 'Festivos', INTERVAL '18:00' HOUR TO MINUTE, INTERVAL '06:00' HOUR TO MINUTE);
 
 INSERT INTO Horario (id_horario)
  VALUES ('horario_fin_semana');
 
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_fin_semana', 'Lunes', TO_TIMESTAMP('00:00','HH24:MI'), TO_TIMESTAMP('00:00','HH24:MI'));
+ VALUES ('horario_fin_semana', 'Lunes', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '00:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_fin_semana', 'Martes', TO_TIMESTAMP('00:00','HH24:MI'), TO_TIMESTAMP('00:00','HH24:MI'));
+ VALUES ('horario_fin_semana', 'Martes', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '00:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_fin_semana', 'Miércoles', TO_TIMESTAMP('00:00','HH24:MI'), TO_TIMESTAMP('00:00','HH24:MI'));
+ VALUES ('horario_fin_semana', 'Miércoles', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '00:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_fin_semana', 'Jueves', TO_TIMESTAMP('00:00','HH24:MI'), TO_TIMESTAMP('00:00','HH24:MI'));
+ VALUES ('horario_fin_semana', 'Jueves', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '00:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_fin_semana', 'Viernes', TO_TIMESTAMP('00:00','HH24:MI'), TO_TIMESTAMP('00:00','HH24:MI'));
+ VALUES ('horario_fin_semana', 'Viernes', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '00:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_fin_semana', 'Sabado', TO_TIMESTAMP('08:00','HH24:MI'), TO_TIMESTAMP('22:00','HH24:MI'));
+ VALUES ('horario_fin_semana', 'Sabado', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '22:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_fin_semana', 'Domingo', TO_TIMESTAMP('08:00','HH24:MI'), TO_TIMESTAMP('20:00','HH24:MI'));
+ VALUES ('horario_fin_semana', 'Domingo', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '20:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_fin_semana', 'Festivos', TO_TIMESTAMP('08:00','HH24:MI'), TO_TIMESTAMP('20:00','HH24:MI'));
+ VALUES ('horario_fin_semana', 'Festivos', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '20:00' HOUR TO MINUTE);
 
 INSERT INTO Horario (id_horario)
  VALUES ('horario_medio_tiempo');
 
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_medio_tiempo', 'Lunes', TO_TIMESTAMP('08:00','HH24:MI'), TO_TIMESTAMP('12:00','HH24:MI'));
+ VALUES ('horario_medio_tiempo', 'Lunes', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '12:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_medio_tiempo', 'Martes', TO_TIMESTAMP('08:00','HH24:MI'), TO_TIMESTAMP('12:00','HH24:MI'));
+ VALUES ('horario_medio_tiempo', 'Martes', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '12:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_medio_tiempo', 'Miércoles', TO_TIMESTAMP('08:00','HH24:MI'), TO_TIMESTAMP('12:00','HH24:MI'));
+ VALUES ('horario_medio_tiempo', 'Miércoles', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '12:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_medio_tiempo', 'Jueves', TO_TIMESTAMP('08:00','HH24:MI'), TO_TIMESTAMP('12:00','HH24:MI'));
+ VALUES ('horario_medio_tiempo', 'Jueves', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '12:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_medio_tiempo', 'Viernes', TO_TIMESTAMP('08:00','HH24:MI'), TO_TIMESTAMP('12:00','HH24:MI'));
+ VALUES ('horario_medio_tiempo', 'Viernes', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '12:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_medio_tiempo', 'Sabado', TO_TIMESTAMP('08:00','HH24:MI'), TO_TIMESTAMP('12:00','HH24:MI'));
+ VALUES ('horario_medio_tiempo', 'Sabado', INTERVAL '08:00' HOUR TO MINUTE, INTERVAL '12:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_medio_tiempo', 'Domingo', TO_TIMESTAMP('00:00','HH24:MI'), TO_TIMESTAMP('00:00','HH24:MI'));
+ VALUES ('horario_medio_tiempo', 'Domingo', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '00:00' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_medio_tiempo', 'Festivos', TO_TIMESTAMP('00:00','HH24:MI'), TO_TIMESTAMP('00:00','HH24:MI'));
+ VALUES ('horario_medio_tiempo', 'Festivos', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '00:00' HOUR TO MINUTE);
 
 INSERT INTO Horario (id_horario)
  VALUES ('horario_24_7');
 
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_24_7', 'Lunes', TO_TIMESTAMP('00:00','HH24:MI'), TO_TIMESTAMP('23:59','HH24:MI'));
+ VALUES ('horario_24_7', 'Lunes', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '23:59' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_24_7', 'Martes', TO_TIMESTAMP('00:00','HH24:MI'), TO_TIMESTAMP('23:59','HH24:MI'));
+ VALUES ('horario_24_7', 'Martes', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '23:59' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_24_7', 'Miércoles', TO_TIMESTAMP('00:00','HH24:MI'), TO_TIMESTAMP('23:59','HH24:MI'));
+ VALUES ('horario_24_7', 'Miércoles', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '23:59' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_24_7', 'Jueves', TO_TIMESTAMP('00:00','HH24:MI'), TO_TIMESTAMP('23:59','HH24:MI'));
+ VALUES ('horario_24_7', 'Jueves', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '23:59' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_24_7', 'Viernes', TO_TIMESTAMP('00:00','HH24:MI'), TO_TIMESTAMP('23:59','HH24:MI'));
+ VALUES ('horario_24_7', 'Viernes', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '23:59' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_24_7', 'Sabado', TO_TIMESTAMP('00:00','HH24:MI'), TO_TIMESTAMP('23:59','HH24:MI'));
+ VALUES ('horario_24_7', 'Sabado', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '23:59' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_24_7', 'Domingo', TO_TIMESTAMP('00:00','HH24:MI'), TO_TIMESTAMP('23:59','HH24:MI'));
+ VALUES ('horario_24_7', 'Domingo', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '23:59' HOUR TO MINUTE);
 INSERT INTO HorarioDetalle (id_horario, dia_semana, hora_apertura, hora_cierre)
- VALUES ('horario_24_7', 'Festivos', TO_TIMESTAMP('00:00','HH24:MI'), TO_TIMESTAMP('23:59','HH24:MI'));
+ VALUES ('horario_24_7', 'Festivos', INTERVAL '00:00' HOUR TO MINUTE, INTERVAL '23:59' HOUR TO MINUTE);
 
 
 --INSERCCION DE UNIDADES DEL SISTEMA-------------------------------------------------------------------
