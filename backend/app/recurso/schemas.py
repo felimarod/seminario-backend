@@ -22,16 +22,17 @@ class RecursoCreate(RecursoBase):
 class RecursoUpdate(BaseModel):
     """Schema para actualizar un Recurso."""
 
-    nombre_recurso: Optional[str] = Field(..., max_length=100, description="Nombre del recurso")
-    descripcion_recurso: Optional[str] = Field(..., max_length=100, description="Descripción del recurso")
-    estado_recurso: Optional[str] = Field(..., description="Estado del recurso")
-    id_tipo_recurso: Optional[int] = Field(..., description="ID del tipo de recurso")
+    nombre_recurso: Optional[str] = Field(default=None, max_length=100, description="Nombre del recurso")
+    descripcion_recurso: Optional[str] = Field(default=None, max_length=100, description="Descripción del recurso")
+    estado_recurso: Optional[str] = Field(default=None, description="Estado del recurso")
+    id_tipo_recurso: Optional[int] = Field(default=None, description="ID del tipo de recurso")
 
 
 class RecursoResponse(RecursoBase):
     """Schema para respuesta de Recurso."""
 
     id_recurso: str
+    nombre_tipo: str
     foto_recurso: Optional[str]
     model_config = {"from_attributes": True}
 
@@ -46,3 +47,8 @@ class RecursoResponse(RecursoBase):
 
         return cls.from_orm(data)
 
+class Filtros(BaseModel):
+    """Schema para respuesta de Tipo Recurso."""
+    estado_recurso: Optional[str] = Field(default=None, description="Estado del recurso")
+    id_tipo_recurso: Optional[int] = Field(default=None, description="ID del tipo de recurso")
+    id_unidad: Optional[int] = Field(default=None, description="ID de la unidad")

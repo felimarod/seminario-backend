@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 from app.recurso.models import Recurso
 from app.tipo_recurso.models import TipoRecurso
 
+from app.recurso.schemas import Filtros
+
 
 class RecursoSelectors:
     """Selectors para el modelo Recurso."""
@@ -53,3 +55,20 @@ class RecursoSelectors:
             .limit(limit)
             .all()
         )
+    
+    @staticmethod
+    def get_filter(
+        db: Session, filtros: Filtros, skip: int = 0, limit: int = 100
+    ) -> List[Recurso]:
+        """Obtiene recursos filtrados con paginacion"""
+        query = db.query(Recurso)
+        if filtros.id_unidad:
+            query = query.join(TipoRecurso, TipoRecurso.id_tipo_recurso == Recurso.id_tipo_recurso)
+            query = query.filter(TipoRecurso.id_unidad == filtros.id_unidad)
+        if filtros.estado_recurso:
+            query = query.filter(Recurso.estado_recurso  == filtros.estado_recurso)
+        if filtros.id_tipo_recurso:
+            query = query.filter(Recurso.id_tipo_recurso  == filtros.id_tipo_recurso)
+        
+        
+        return query.offset(skip).limit(limit).all()

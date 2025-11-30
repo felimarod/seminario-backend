@@ -10,18 +10,20 @@ from app.recurso.schemas import (
     RecursoCreate,
     RecursoResponse,
     RecursoUpdate,
+    Filtros
 )
 from app.recurso.selectors import RecursoSelectors
 from app.tipo_recurso.selectors import TipoRecursoSelectors
 from app.recurso.services import RecursoService
 
+
 router = APIRouter()
 
 
-@router.get("/", response_model=List[RecursoResponse])
+@router.post("/", response_model=List[RecursoResponse])
 def get_recursos(
     request: Request,
-    id_unidad: int = Query(None, description="Filtrar por tipo de recurso"),
+    filtros: Filtros,
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
     db: Session = Depends(get_db),
@@ -29,47 +31,20 @@ def get_recursos(
     """Obtiene recursos, opcionalmente filtrados por tipo de recurso."""
     user = request.state.user
     if user["tipo"] in (2,3):
-        id_unidad = user["unidad"]
+        filtros.id_unidad = user["unidad"]
     recursos = []
-    if id_unidad:
-        recursos =  RecursoSelectors.get_by_unidad(db, id_unidad, skip=skip, limit=limit)
-    else: recursos = RecursoSelectors.get_all(db, skip=skip, limit=limit)
+    recursos = RecursoSelectors.get_filter(db=db,filtros=filtros,skip=skip,limit=limit)
     
+    for recurso in recursos:
+        recurso.nombre_tipo = TipoRecursoSelectors.get_by_id(db=db,id_tipo_recurso=recurso.id_tipo_recurso).nombre_tipo_recurso
     recursosRes = []
     for recurso in recursos:
         recursosRes.append(RecursoResponse.parse_image(recurso_db=recurso))
     
     return recursosRes
 
-@router.get("/{tipo}", response_model=List[RecursoResponse])
-def get_recursos(
-    tipo: int,
-    skip: int = Query(0, ge=0),
-    limit: int = Query(100, ge=1, le=1000),
-    db: Session = Depends(get_db),
-):
-    """Obtiene recursos, opcionalmente filtrados por tipo de recurso."""
-    if tipo:
-        recursos =  RecursoSelectors.get_by_tipo_recurso(db, tipo, skip=skip, limit=limit)
-    else: recursos = RecursoSelectors.get_all(db, skip=skip, limit=limit)
-    
-    recursosRes = []
-    for recurso in recursos:
-        recursosRes.append(RecursoResponse.parse_image(recurso_db=recurso))
-    
-    return recursosRes
 
-@router.get("/{id_recurso}", response_model=RecursoResponse)
-def get_recurso(id_recurso: int, db: Session = Depends(get_db)):
-    """Obtiene un recurso por su ID."""
-    recurso = RecursoSelectors.get_by_id(db, id_recurso)
-    if not recurso:
-        raise HTTPException(status_code=404, detail="Recurso no encontrado")
-    
-    return RecursoResponse.parse_image(recurso_db=recurso)
-
-
-@router.post("/", response_model=RecursoResponse, status_code=201)
+@router.post("/create", response_model=RecursoResponse, status_code=201)
 async def create_recurso(request:Request, 
                         nombre_recurso: str = Form(...),
                         descripcion_recurso: str = Form(...),
@@ -101,6 +76,7 @@ async def create_recurso(request:Request,
         id_tipo_recurso = id_tipo_recurso)
     
     recursoDB = RecursoService.create(db, recurso_data, foto_recurso=contenido)
+    recursoDB.nombre_tipo = TipoRecursoSelectors.get_by_id(db=db,id_tipo_recurso=recursoDB.id_tipo_recurso).nombre_tipo_recurso
     return RecursoResponse.parse_image(recursoDB)
 
 

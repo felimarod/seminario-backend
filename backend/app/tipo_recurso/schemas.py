@@ -23,8 +23,8 @@ class TipoRecursoBase(BaseModel):
 
 class TipoRecursoCreate(TipoRecursoBase):
     """Schema para crear un nuevo Tipo Recurso."""    
-    granuralidad_disponibilidad: Optional[int] = Field(...,gt=0 , description="Tiempo minimo (en minutos) de peticion del tipo de recurso")
-    id_unidad: Optional[int] = Field(..., description="ID de la unidad")
+    granuralidad_disponibilidad: Optional[int] = Field(default=None,gt=0 , description="Tiempo minimo (en minutos) de peticion del tipo de recurso")
+    id_unidad: Optional[int] = Field(default=None, description="ID de la unidad")
 
 
 class TipoRecursoUpdate(BaseModel):
@@ -50,6 +50,17 @@ class TipoRecursoUpdate(BaseModel):
 class TipoRecursoResponse(TipoRecursoBase):
     """Schema para respuesta de Tipo Recurso."""
 
-    id_tipo_recurso: int = Field(..., description="ID del tipo de recurso")
-
+    id_tipo_recurso: int
+    id_unidad: int
+    unidad: str
     model_config = {"from_attributes": True}
+
+class Filtros(BaseModel):
+    """Schema para respuesta de Tipo Recurso."""
+
+    horario_disponibilidad: Optional[str] = Field(
+        default=None, description="Horario del tipo de recurso"
+    )
+    id_unidad: Optional[int] = Field(
+        default=None, description="ID de la unidad"
+    )

@@ -5,6 +5,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 
 from app.tipo_recurso.models import TipoRecurso
+from app.tipo_recurso.schemas import Filtros
 
 
 class TipoRecursoSelectors:
@@ -20,6 +21,18 @@ class TipoRecursoSelectors:
         """Obtiene un tipo_recurso por su nombre."""
         return db.query(TipoRecurso).filter(TipoRecurso.nombre_tipo_recurso == nombre).first()
 
+    @staticmethod
+    def get_filter(db: Session, filtros: Filtros, skip: int = 0, limit: int = 100) -> List[TipoRecurso]:
+        """Obtiene todos los tipo_recursos filtrados con paginación."""
+        query = db.query(TipoRecurso)
+        if filtros.id_unidad:
+            query = query.filter(TipoRecurso.id_unidad == filtros.id_unidad)
+        if filtros.horario_disponibilidad:
+            query = query.filter(TipoRecurso.horario_disponibilidad == filtros.horario_disponibilidad)
+        
+        
+        return query.offset(skip).limit(limit).all()
+    
     @staticmethod
     def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[TipoRecurso]:
         """Obtiene todos los tipo_recursos con paginación."""
