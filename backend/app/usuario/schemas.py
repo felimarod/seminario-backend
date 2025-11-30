@@ -12,8 +12,8 @@ class UsuarioBase(BaseModel):
     nombre: str = Field(..., max_length=100, description="Nombre del usuario")
     apellido: str = Field(..., max_length=100, description="Apellido del usuario")
     correo: EmailStr = Field(..., description="Email del usuario")
-    id_tipo_usuario: int = Field(..., description="ID de la unidad")
-    id_unidad: Optional[int] = Field(..., description="ID de la unidad")
+    id_tipo_usuario: int = Field(..., description="ID del tipo de usuario")
+    id_unidad: Optional[int] = Field(None, description="ID de la unidad")
 
 
 class UsuarioCreate(UsuarioBase):
@@ -36,6 +36,7 @@ class UsuarioResponse(UsuarioBase):
     """Schema para respuesta de Usuario."""
 
     id_usuario: int
-
+    tipo_usuario: str
+    unidad: Optional[str]
     model_config = {"from_attributes": True}
 
