@@ -14,7 +14,7 @@ class RecursoSelectors:
     """Selectors para el modelo Recurso."""
 
     @staticmethod
-    def get_by_id(db: Session, id_recurso: int) -> Optional[Recurso]:
+    def get_by_id(db: Session, id_recurso: str) -> Optional[Recurso]:
         """Obtiene un recurso por su ID."""
         return db.query(Recurso).filter(Recurso.id_recurso == id_recurso).first()
 

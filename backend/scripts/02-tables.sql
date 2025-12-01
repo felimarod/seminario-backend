@@ -170,8 +170,9 @@ CREATE TABLE TipoTransaccion(
 CREATE TABLE Transaccion(
 	id_transaccion NUMBER(5) 
 	CONSTRAINT transaccion_pk PRIMARY KEY,
-	fecha_inicio_transaccion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	fecha_inicio_transaccion TIMESTAMP,
 	fecha_fin_transaccion TIMESTAMP,
+	fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	estado_transaccion VARCHAR(50)
 	CONSTRAINT estado_transaccion_nn NOT NULL,
 	falla_servicio VARCHAR2(500),

@@ -5,6 +5,9 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 
 from app.transaccion.models import Transaccion
+from app.recurso.models import Recurso
+from app.tipo_recurso.models import TipoRecurso
+from app.transaccion.schemas import Filtros
 
 
 class TransaccionSelectors:
@@ -58,3 +61,61 @@ class TransaccionSelectors:
             .limit(limit)
             .all()
         )
+    
+    @staticmethod
+    def get_by_empleado(
+        db: Session, id_empleado: int, skip: int = 0, limit: int = 100
+    ) -> List[Transaccion]:
+        """Obtiene transaccions por un recurso."""
+        return (
+            db.query(Transaccion)
+            .filter(Transaccion.id_empleado_responsable == id_empleado)
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
+    
+    @staticmethod
+    def get_filter(
+        db: Session, filtros: Filtros, skip: int = 0, limit: int = 100
+    ) -> List[Transaccion]:
+        """Obtiene transaccions por un recurso."""
+        query = db.query(Transaccion)
+
+            
+
+        if filtros.id_tipo_recurso:
+            query = query.join(Recurso, Recurso.id_recurso == Transaccion.id_recurso)
+            query = query.filter(Recurso.id_tipo_recurso == filtros.id_tipo_recurso)
+        
+        if filtros.id_tipo_recurso:
+            query = query.join(Recurso, Recurso.id_recurso == Transaccion.id_recurso)
+            query = query.join(TipoRecurso, TipoRecurso.id_tipo_recurso == Recurso.id_tipo_recurso)
+            query = query.filter(TipoRecurso.id_unidad == filtros.id_unidad)
+
+        if filtros.id_usuario:
+            query = query.filter(Transaccion.id_usuario == filtros.id_usuario)
+        if filtros.id_tipo_transaccion:
+            query = query.filter(Transaccion.id_tipo_transaccion  == filtros.id_tipo_transaccion)
+        if filtros.id_empleado_responsable:
+            query = query.filter(Transaccion.id_empleado_responsable  == filtros.id_empleado_responsable)
+        if filtros.id_recurso:
+            query = query.filter(Transaccion.id_recurso  == filtros.id_recurso)
+        
+        if filtros.ventana_atributo == "creacion":
+            if filtros.ventana_tiempo_inicio:
+                query = query.filter(Transaccion.fecha_creacion >= filtros.ventana_tiempo_inicio)
+            if filtros.ventana_tiempo_fin:
+                query = query.filter(Transaccion.fecha_creacion >= filtros.ventana_tiempo_fin)
+        if filtros.ventana_atributo == "inicio":
+            if filtros.ventana_tiempo_inicio:
+                query = query.filter(Transaccion.fecha_inicio_transaccion >= filtros.ventana_tiempo_inicio)
+            if filtros.ventana_tiempo_fin:
+                query = query.filter(Transaccion.fecha_inicio_transaccion >= filtros.ventana_tiempo_fin)
+        if filtros.ventana_atributo == "fin":
+            if filtros.ventana_tiempo_inicio:
+                query = query.filter(Transaccion.fecha_fin_transaccion >= filtros.ventana_tiempo_inicio)
+            if filtros.ventana_tiempo_fin:
+                query = query.filter(Transaccion.fecha_fin_transaccion >= filtros.ventana_tiempo_fin)
+        
+        return query.offset(skip).limit(limit).all()

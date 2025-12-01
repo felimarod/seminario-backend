@@ -69,7 +69,9 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Incorrect nombre or password", headers={"WWW-Authenticate": "Bearer"})
     
-    dataUser = {"sub": user.correo,
+    dataUser = {"sub":user.correo,
+              "nombre": user.nombre,
+              "apellido": user.apellido,
               "id_usuario": user.id_usuario,
               "id_tipo_usuario": user.id_tipo_usuario,
               "tipo_usuario": user.tipo_usuario,
