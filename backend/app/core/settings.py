@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env")
 
     # App
-    DEBUG: bool = os.environ.get("DEBUG")
+    DEBUG: bool = False
 
     # Security
     SECRET_KEY: str = os.environ.get("SECRET_KEY")

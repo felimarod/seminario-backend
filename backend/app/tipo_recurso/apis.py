@@ -39,11 +39,23 @@ def get_tipo_recursos(
 
 
 @router.get("/{id_tipo_recurso}", response_model=TipoRecursoResponse)
-def get_tipo_recurso(id_tipo_recurso: int, request: Request, db: Session = Depends(get_db)):
+def get_tipo_recurso(
+    id_tipo_recurso: int,
+    request: Request,
+    db: Session = Depends(get_db),
+):
     """Obtiene un tipo_recurso por su ID."""
+    user = request.state.user
     tipo_recurso = TipoRecursoSelectors.get_by_id(db, id_tipo_recurso)
-    if not tipo_recurso:
-        raise HTTPException(status_code=404, detail="TipoRecurso no encontrado")
+    if tipo_recurso is None:
+        raise HTTPException(status_code=404, detail="Tipo de recurso no encontrado")
+    if user["tipo"] == 2 and tipo_recurso.id_unidad != user["unidad"]:
+        raise HTTPException(
+            status_code=403, detail="No tienes permiso para ver esta información"
+        )
+    tipo_recurso.unidad = UnidadSelectors.get_by_id(
+        db, tipo_recurso.id_unidad
+    ).nombre_unidad
     return tipo_recurso
 
 

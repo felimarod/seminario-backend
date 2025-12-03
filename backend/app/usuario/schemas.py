@@ -36,7 +36,6 @@ class UsuarioResponse(UsuarioBase):
     """Schema para respuesta de Usuario."""
 
     id_usuario: int
-    tipo_usuario: str
-    unidad: Optional[str]
+    
     model_config = {"from_attributes": True}
 

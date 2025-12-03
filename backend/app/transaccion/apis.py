@@ -21,6 +21,43 @@ from app.transaccion.services import TransaccionService
 
 router = APIRouter()
 
+@router.get("/{id_transaccion}", response_model=TransaccionResponse)
+def get_transaccion(
+    id_transaccion: int,
+    db: Session = Depends(get_db),
+):
+    """Obtiene un transaccion por su ID."""
+    transaccion = TransaccionSelectors.get_by_id(db, id_transaccion)
+    if transaccion is None:
+        raise HTTPException(status_code=404, detail="Transaccion no encontrado")
+    usuario = UsuarioSelectors.get_by_id(db=db,id_usuario=transaccion.id_usuario)
+    empleado = UsuarioSelectors.get_by_id(db=db,id_usuario=transaccion.id_empleado_responsable)
+    recurso = RecursoSelectors.get_by_id(db=db,id_recurso=transaccion.id_recurso)
+    tipoRecurso = TipoRecursoSelectors.get_by_id(db=db,id_tipo_recurso=recurso.id_tipo_recurso)
+    tipoTrans = TipoTransaccionSelectors.get_by_id(db=db,id_tipo_transaccion=transaccion.id_tipo_transaccion)
+    transaccion.usuario = {
+        "id_usuario":usuario.id_usuario,
+        "nombre": usuario.nombre,
+        "apellido": usuario.apellido
+    }
+    transaccion.recurso = {
+        "id_recurso": recurso.id_recurso,
+        "nombre_recurso": recurso.nombre_recurso,
+        "id_tip": tipoRecurso.id_tipo_recurso,
+        "nombre_tipo": tipoRecurso.nombre_tipo_recurso,
+    }
+    transaccion.tipo_transaccion = {
+        "id_tipo": tipoTrans.id_tipo_transaccion,
+        "nombre_tipo": tipoTrans.nombre_tipo_transaccion
+    }
+    if transaccion.id_empleado_responsable is not None:
+        transaccion.empleado_responsable={
+            "id_usuario":empleado.id_usuario,
+            "nombre": usuario.nombre,
+            "apellido": usuario.apellido
+        }
+    return transaccion
+
 
 @router.post("/", response_model=List[TransaccionResponse])
 def get_transaccions(

@@ -38,7 +38,7 @@ def get_usuarios(
 def get_usuario(id_usuario: int,request: Request, db: Session = Depends(get_db)):
     """Obtiene un usuario por su ID."""
     user = request.state.user
-    if user["tipo"] != 1:
+    if user["tipo"] != 2:
         raise HTTPException(status_code=403, detail="No tienes permiso para ver esta información")
     usuario = UsuarioSelectors.get_by_id(db, id_usuario)
     if not usuario:
