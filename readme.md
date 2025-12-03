@@ -25,7 +25,7 @@ Cambiar la configuración de la conexión para usar el usuario recien creado. Po
 
 ## Backend
 
-Probar en `http://localhost:8080/docs`
+Probar en `http://localhost:8081/docs`
 
 
 ### Verificar si se esta ejecutando el contenedor
