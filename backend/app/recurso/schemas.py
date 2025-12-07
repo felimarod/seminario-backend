@@ -60,6 +60,6 @@ class Filtros(BaseModel):
     """Schema para respuesta de Tipo Recurso."""
     id_tipo_recurso: Optional[int] = Field(default=None, description="ID del tipo de recurso")
     id_unidad: Optional[int] = Field(default=None, description="ID de la unidad")
-    ventana_tiempo_inicio: Optional[datetime] = Field(default=datetime.now().date(), description="inicio de ventana temporal")
-    ventana_tiempo_fin: Optional[datetime] = Field(default=datetime.now().date()+timedelta(days=1), description="fin de ventana temporal")
+    ventana_tiempo_inicio: Optional[datetime] = Field(default=None, description="inicio de ventana temporal")
+    ventana_tiempo_fin: Optional[datetime] = Field(default=None, description="fin de ventana temporal")
     disponibilidad_completa: Optional[bool] = Field(default=False, description="Indica si se requiere disponibilidad completa o parcial en la ventana temporal")
