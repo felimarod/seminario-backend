@@ -61,6 +61,6 @@ class Filtros(BaseModel):
     id_recurso: Optional[str] = Field(default=None, description="ID del recurso")
     id_tipo_recurso: Optional[int] = Field(default=None, description="ID del tipo de recurso")
     id_unidad: Optional[int] = Field(default=None, description="ID de la unidad")
-    ventana_tiempo_inicio: Optional[datetime] = Field(default=None, description="inicio de ventana temporal")
-    ventana_tiempo_fin: Optional[datetime] = Field(default=None, description="fin de ventana temporal")
+    ventana_tiempo_inicio: Optional[datetime] = Field(default=None, description="inicio de ventana temporal en formato AAAA-MM-DD HH:MM")
+    ventana_tiempo_fin: Optional[datetime] = Field(default=None, description="fin de ventana temporal en formato AAAA-MM-DD HH:MM")
     disponibilidad_completa: Optional[bool] = Field(default=False, description="Indica si se requiere disponibilidad completa o parcial en la ventana temporal")

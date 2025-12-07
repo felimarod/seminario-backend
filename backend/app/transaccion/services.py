@@ -1,6 +1,7 @@
 """Service para operaciones con Transaccion."""
 
 from typing import Optional
+from zoneinfo import ZoneInfo
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
@@ -10,8 +11,6 @@ from app.transaccion.models import Transaccion
 from app.transaccion.schemas import TransaccionCreate, TransaccionUpdate
 from app.transaccion.selectors import TransaccionSelectors
 from app.recurso.selectors import RecursoSelectors, Filtros
-from app.tipo_recurso.selectors import TipoRecursoSelectors
-from app.horario.selectors import HorarioSelectors
 from app.usuario.selectors import UsuarioSelectors
 
 
@@ -22,21 +21,34 @@ class TransaccionService:
     def create(db: Session, transaccion_data: TransaccionCreate) -> Optional[Transaccion]:
         """Crea un nuevo transaccion."""
         try:
-            ahora = datetime.now()
-            TransaccionService.validarExistencia(db=db, transaccion_data=transaccion_data)
+            tz = ZoneInfo("America/Bogota")
+            ahora = datetime.now(tz)
+
+            def to_aware(dt: Optional[datetime]) -> Optional[datetime]:
+                if dt is None:
+                    return None
+                if dt.tzinfo is None:
+                    return dt.replace(tzinfo=tz)
+                return dt.astimezone(tz)
+            transaccion_data.fecha_inicio_transaccion = to_aware(transaccion_data.fecha_inicio_transaccion)
+            transaccion_data.fecha_fin_transaccion = to_aware(transaccion_data.fecha_fin_transaccion)
             
+            if transaccion_data.id_empleado_responsable:
+                if transaccion_data.fecha_inicio_transaccion is None: 
+                    transaccion_data.fecha_inicio_transaccion = ahora
+                if transaccion_data.fecha_inicio_transaccion - ahora > timedelta(minutes=5):
+                    raise ValueError(f"Los prestamos deben ser registrados al momento de la entrega del recurso (con un margen de 5 minutos)")
+            if transaccion_data.id_empleado_responsable is None:
+                if transaccion_data.fecha_inicio_transaccion - ahora < timedelta(hours=2):
+                    raise ValueError(f"Las reservas deben realizarse con al menos 2 horas de anticipación")
+            TransaccionService.validarExistencia(db=db, transaccion_data=transaccion_data)
             if transaccion_data.fecha_inicio_transaccion < ahora:
                 raise ValueError(f"la transacción no puede iniciar antes de la hora actual")
             if transaccion_data.fecha_inicio_transaccion > transaccion_data.fecha_fin_transaccion:
                 raise ValueError(f"la transacción no puede iniciar despues de finalizar")   
             if transaccion_data.fecha_inicio_transaccion.date() != transaccion_data.fecha_fin_transaccion.date():
                 raise ValueError(f"la transacción debe empezar y terminar el mismo dia")
-            if transaccion_data.id_empleado_responsable:
-                if transaccion_data.fecha_inicio_transaccion - ahora < timedelta(minutes=5):
-                    raise ValueError(f"Los prestamos deben ser registrados al momento de la entrega del recurso (con un margen de 5 minutos)")
-            if transaccion_data.id_empleado_responsable is not None:
-                if transaccion_data.fecha_inicio_transaccion - ahora < timedelta(hours=2):
-                    raise ValueError(f"Las reservas deben realizarse con al menos 2 horas de anticipación")
+            
             
             TransaccionService.validarUsuarios(db=db, transaccion_data=transaccion_data)
             TransaccionService.validarDisponibilidad(db=db, transaccion_data=transaccion_data)
@@ -58,16 +70,28 @@ class TransaccionService:
 
     @staticmethod
     def validarExistencia(db: Session, transaccion_data: TransaccionCreate):
-        if not RecursoSelectors.get_by_id(db=db, id_recurso=transaccion_data.id_recurso):
+        recurso = RecursoSelectors.get_by_id(db=db, id_recurso=transaccion_data.id_recurso)
+        if not recurso:
             print(transaccion_data.id_recurso)
             raise ValueError(f"No se encuentró el recurso'")
         
         if not UsuarioSelectors.get_by_id(db=db, id_usuario=transaccion_data.id_usuario):
             raise ValueError(f"No se encuentró el usuario")
         
+
         if transaccion_data.id_empleado_responsable and not UsuarioSelectors.get_by_id(db=db, id_usuario=transaccion_data.id_empleado_responsable):
             raise ValueError(f"No se encuentró el empleado")
     
+        if transaccion_data.id_empleado_responsable is None:
+            return
+        
+        empleado = UsuarioSelectors.get_by_id(db=db, id_usuario=transaccion_data.id_empleado_responsable)
+        if not empleado:
+            raise ValueError(f"No se encuentró el empleado")
+        
+        if recurso.tipo_recurso.id_unidad != empleado.id_unidad:
+            raise ValueError(f"El empleado no pertenece a la unidad del recurso")
+           
     @staticmethod
     def validarUsuarios(db: Session, transaccion_data: TransaccionCreate):
         userType = UsuarioSelectors.get_by_id(db=db,id_usuario=transaccion_data.id_usuario).id_tipo_usuario

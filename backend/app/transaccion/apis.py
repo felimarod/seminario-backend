@@ -80,6 +80,8 @@ def create_transaccion(request: Request, transaccion_data: TransaccionCreate, db
     if user["tipo"] == 3:
         transaccion_data.id_empleado_responsable = user["id"]
     if user["tipo"] == 4:
+        if transaccion_data.fecha_inicio_transaccion is None:
+            raise HTTPException(status_code=403, detail="Ingresa una fecha de inicio para realizar la reserva")
         if transaccion_data.id_empleado_responsable is not None:
             raise HTTPException(status_code=403, detail="No tienes permiso para asignar un empleado responsable")
         transaccion_data.id_usuario = user["id"]

@@ -9,8 +9,8 @@ from app.transaccion.models import Transaccion
 
 class TransaccionBase(BaseModel):
     """Base schema para Transaccion."""
-    fecha_inicio_transaccion: datetime = Field(..., description="fecha y hora de inicio")
-    fecha_fin_transaccion: datetime = Field(..., description="fecha y hora de finalización")
+    fecha_inicio_transaccion: Optional[datetime] = Field(None, description="fecha y hora de inicio en formato AAAA-MM-DD HH:MM")
+    fecha_fin_transaccion: datetime = Field(..., description="fecha y hora de finalización en formato AAAA-MM-DD HH:MM")
     falla_servicio: Optional[str] = Field(default=None, description="comentarios de falla en el servicio")
     
 
@@ -20,15 +20,15 @@ class TransaccionCreate(TransaccionBase):
     id_usuario: Optional[int] = Field(default=None, description="id del usuario que solicita el recurso")
     id_recurso: str = Field(..., description="id del recurso solicitado")
     id_empleado_responsable: Optional[int] = Field(default=None, description="id del empleado que da/recibe el recurso")
-    fecha_inicio_transaccion: datetime = Field(default="AAAA-MM-DD HH:MM", description="fecha y hora de inicio")
-    fecha_fin_transaccion: datetime = Field(default="AAAA-MM-DD HH:MM", description="fecha y hora de finalización")
+    fecha_inicio_transaccion: datetime = Field(..., description="fecha y hora de inicio en formato AAAA-MM-DD HH:MM")
+    fecha_fin_transaccion: datetime = Field(..., description="fecha y hora de finalización en formato AAAA-MM-DD HH:MM")
     
 
 class TransaccionUpdate(BaseModel):
     """Schema para actualizar un Transaccion."""
 
-    fecha_inicio_transaccion: Optional[datetime] = Field(default=None, description="fecha y hora de inicio")
-    fecha_fin_transaccion: Optional[datetime] = Field(default=None, description="fecha y hora de finalización")
+    fecha_inicio_transaccion: Optional[datetime] = Field(default=None, description="fecha y hora de inicio en formato AAAA-MM-DD HH:MM")
+    fecha_fin_transaccion: Optional[datetime] = Field(default=None, description="fecha y hora de finalización en formato AAAA-MM-DD HH:MM")
     estado_transaccion: Optional[str] = Field(default=None, description="estado de la transaccion")
     falla_servicio: Optional[str] = Field(default=None, description="comentarios de falla en el servicio")
     id_usuario: Optional[int] = Field(default=None, description="id del usuario que solicita el recurso")
@@ -79,8 +79,8 @@ class TransaccionResponse(BaseModel):
 class Filtros(BaseModel):
     """Schema para respuesta de Transaccion."""
 
-    ventana_tiempo_inicio: Optional[datetime] = Field(default=None, description="inicio de ventana temporal")
-    ventana_tiempo_fin: Optional[datetime] = Field(default=None, description="fin de ventana temporal")
+    ventana_tiempo_inicio: Optional[datetime] = Field(default=None, description="inicio de ventana temporal en formato AAAA-MM-DD HH:MM")
+    ventana_tiempo_fin: Optional[datetime] = Field(default=None, description="fin de ventana temporal en formato AAAA-MM-DD HH:MM")
     ventana_atributo: Optional[str] = Field(default=None, description="atributo a buscar en la ventana de tiempo")
     id_usuario: Optional[int] = Field(default=None, description="id del usuario que solicita el recurso")
     id_recurso: Optional[str] = Field(default=None, description="id recurso del recurso solicitado")

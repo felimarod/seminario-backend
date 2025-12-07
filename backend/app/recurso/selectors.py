@@ -100,7 +100,6 @@ class RecursoSelectors:
                     condicion_excl_trans
                 )
             )
-            print(f"Transaccion solapada: {transaccion_solapada}")
             query = query.filter(not_(transaccion_solapada))
             
         if filtros.ventana_tiempo_inicio and filtros.ventana_tiempo_fin:
@@ -108,7 +107,6 @@ class RecursoSelectors:
             dia_semana = dias[filtros.ventana_tiempo_inicio.weekday()]
             tiempo_inicio_str = filtros.ventana_tiempo_inicio.strftime('%H:%M:%S')
             tiempo_fin_str = filtros.ventana_tiempo_fin.strftime('%H:%M:%S')
-            print(f"Tiempo inicio: {tiempo_inicio_str}, Tiempo fin: {tiempo_fin_str}")
             condicion_excl_tipo = False
             
             if filtros.disponibilidad_completa:
@@ -129,7 +127,6 @@ class RecursoSelectors:
                     condicion_excl_tipo
                 )
             )
-            print(f"Transaccion solapada: {transaccion_solapada}")
             query = query.filter(not_(transaccion_solapada))
 
 
