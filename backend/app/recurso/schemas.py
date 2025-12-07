@@ -1,6 +1,6 @@
 """Pydantic schemas para Recurso."""
 
-from typing import Optional
+from typing import Dict, Optional, Any
 import base64
 from pydantic import BaseModel, Field
 
@@ -34,6 +34,8 @@ class RecursoResponse(RecursoBase):
     id_recurso: str
     nombre_tipo: str
     foto_recurso: Optional[str]
+    horario_disponible: Dict[str,Any]
+    unidad: Dict[str,Any]
     model_config = {"from_attributes": True}
 
     @classmethod

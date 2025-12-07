@@ -14,6 +14,8 @@ from app.recurso.schemas import (
 )
 from app.recurso.selectors import RecursoSelectors
 from app.tipo_recurso.selectors import TipoRecursoSelectors
+from app.unidad.selectors import UnidadSelectors
+from app.horario.selectors import HorarioSelectors
 from app.recurso.services import RecursoService
 
 
@@ -48,7 +50,17 @@ def get_recursos(
     recursos = RecursoSelectors.get_filter(db=db,filtros=filtros,skip=skip,limit=limit)
     
     for recurso in recursos:
-        recurso.nombre_tipo = TipoRecursoSelectors.get_by_id(db=db,id_tipo_recurso=recurso.id_tipo_recurso).nombre_tipo_recurso
+        tipo_recurso = TipoRecursoSelectors.get_by_id(db=db,id_tipo_recurso=recurso.id_tipo_recurso)
+        recurso.nombre_tipo = tipo_recurso.nombre_tipo_recurso
+        unidad = UnidadSelectors.get_by_id(db=db,id_unidad=tipo_recurso.id_unidad)
+        recurso.unidad = {"id_unidad": unidad.id_unidad, "nombre_unidad": unidad.nombre_unidad}
+        recurso.horario_disponible = {}
+        Horario = HorarioSelectors.get_detaills_by_id(db=db, id_horario=tipo_recurso.horario_disponibilidad)
+        for detalle in Horario:
+            recurso.horario_disponible[detalle.dia_semana] = {
+                "hora_inicio": str(detalle.hora_apertura),
+                "hora_fin": str(detalle.hora_cierre)
+            }
     recursosRes = []
     for recurso in recursos:
         recursosRes.append(RecursoResponse.parse_image(recurso_db=recurso))
@@ -79,7 +91,7 @@ async def create_recurso(request:Request,
     contenido = None
     if foto_recurso:
         contenido = await foto_recurso.read()
-    if estado_recurso is "":
+    if estado_recurso == "":
         estado_recurso = "Disponible"
     recurso_data = RecursoCreate(
         nombre_recurso = nombre_recurso,
