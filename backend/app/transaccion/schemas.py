@@ -5,6 +5,7 @@ from typing import Optional, Dict, Any, Tuple
 from pydantic import BaseModel, Field
 from datetime import datetime
 
+from app.transaccion.models import Transaccion
 
 class TransaccionBase(BaseModel):
     """Base schema para Transaccion."""
@@ -38,17 +39,45 @@ class TransaccionUpdate(BaseModel):
     id_empleado_responsable: Optional[int] = Field(default=None, description="id del empleado que da/recibe el recurso")
 
 
-class TransaccionResponse(TransaccionBase):
+class TransaccionResponse(BaseModel):
     """Schema para respuesta de Transaccion."""
 
-    
-    id_transaccion:int
-    fecha_creacion:datetime
-    tipo_transaccion: Dict[str,Any]
-    usuario: Dict[str,Any]
+    transaccion:int
+    estado_actual: str
+    fechas: Dict[str,datetime]   
     recurso: Dict[str,Any]
+    usuario: Dict[str,Any]
     empleado_responsable: Optional[Dict[str,Any]] = None
+    falla_servicio: Optional[str] = Field(default=None, description="comentarios de falla en el servicio")
     model_config = {"from_attributes": True}
+
+    @classmethod
+    def from_transaccion_db(cls, transaccion_db: Transaccion):
+        data = transaccion_db.__dict__.copy()
+        data["transaccion"] = transaccion_db.id_transaccion
+        data["estado_actual"] = transaccion_db.historial[0].estado.nombre_estado_transaccion
+        data["fechas"] = {
+            "fecha_inicio_transaccion": transaccion_db.fecha_inicio_transaccion,
+            "fecha_fin_transaccion": transaccion_db.fecha_fin_transaccion,
+            "fecha_creacion": transaccion_db.fecha_creacion
+        }
+        data["recurso"] = {
+            "id_recurso": transaccion_db.recurso.id_recurso,
+            "nombre_recurso": transaccion_db.recurso.nombre_recurso
+        }
+        data["usuario"] = {
+            "id_usuario": transaccion_db.usuario.id_usuario,
+            "nombre": transaccion_db.usuario.nombre,
+            "apellido": transaccion_db.usuario.apellido
+        }
+        if transaccion_db.empleado_responsable:
+            data["empleado_responsable"] = {
+                "id_usuario": transaccion_db.empleado_responsable.id_usuario,
+                "nombre": transaccion_db.empleado_responsable.nombre,
+                "apellido": transaccion_db.empleado_responsable.apellido,
+            }
+        data["falla_servicio"] = transaccion_db.falla_servicio
+        return cls.from_orm(data)
 
 class Filtros(BaseModel):
     """Schema para respuesta de Transaccion."""

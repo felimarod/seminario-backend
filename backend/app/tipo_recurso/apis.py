@@ -33,9 +33,7 @@ def get_tipo_recursos(
     if user["tipo"] in (2,3):
         filtros.id_unidad = user["unidad"]
     recursos = TipoRecursoSelectors.get_filter(db, filtros=filtros, skip=skip, limit=limit)
-    for recurso in recursos:
-        recurso.unidad = UnidadSelectors.get_by_id(db,recurso.id_unidad).nombre_unidad
-    return recursos
+    return [TipoRecursoResponse.from_tipo_recurso_db(recurso) for recurso in recursos]
 
 
 @router.get("/{id_tipo_recurso}", response_model=TipoRecursoResponse)
@@ -71,8 +69,7 @@ def create_tipo_recurso(tipo_recurso_data: TipoRecursoCreate, request: Request, 
             unidad = UnidadSelectors.get_by_id(db,tipo_recurso_data.id_unidad)
             tipo_recurso_data.horario_disponibilidad = unidad.horario_unidad
     respuesta = TipoRecursoService.create(db, tipo_recurso_data)
-    respuesta.unidad = UnidadSelectors.get_by_id(db,tipo_recurso_data.id_unidad).nombre_unidad
-    return respuesta
+    return TipoRecursoResponse.from_tipo_recurso_db(respuesta)
 
 
 @router.put("/{id_tipo_recurso}", response_model=TipoRecursoResponse)

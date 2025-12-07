@@ -1,8 +1,10 @@
 """Pydantic schemas para Tipo Recurso."""
 
-from typing import Optional
+from typing import Optional, Dict, Any
 
 from pydantic import BaseModel, Field
+
+from app.tipo_recurso.models import TipoRecurso
 
 
 class TipoRecursoBase(BaseModel):
@@ -47,13 +49,28 @@ class TipoRecursoUpdate(BaseModel):
     )
 
 
-class TipoRecursoResponse(TipoRecursoBase):
+class TipoRecursoResponse(BaseModel):
     """Schema para respuesta de Tipo Recurso."""
 
-    id_tipo_recurso: int
-    id_unidad: int
-    unidad: str
+    tipo_recurso: Dict[str,Any]
+    unidad: Dict[str,Any]
+    horario: str
     model_config = {"from_attributes": True}
+
+    @classmethod
+    def from_tipo_recurso_db(cls, tipo_recurso_db: TipoRecurso):
+        data = tipo_recurso_db.__dict__.copy()
+        data["tipo_recurso"] = {
+            "id_tipo_recurso": tipo_recurso_db.id_tipo_recurso,
+            "nombre_tipo_recurso": tipo_recurso_db.nombre_tipo_recurso,
+            "codigo_tipo_recurso": tipo_recurso_db.codigo_tipo_recurso,
+        }
+        data["unidad"] = {
+            "id_unidad": tipo_recurso_db.unidad.id_unidad,
+            "nombre_unidad": tipo_recurso_db.unidad.nombre_unidad
+        }
+        data["horario"] = tipo_recurso_db.horario_disponibilidad.id_horario
+        return cls.from_orm(data)
 
 class Filtros(BaseModel):
     """Schema para respuesta de Tipo Recurso."""

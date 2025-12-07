@@ -10,4 +10,4 @@ class EstadoTransaccion(DBBase):
     nombre_estado_transaccion = Column(String(100), nullable=False)
         
     # Relación con historial de transacciones
-    historial = relationship("HistorialTransaccion", back_populates="estadotransaccion")
+    historial = relationship("HistorialTransaccion", back_populates="estado")

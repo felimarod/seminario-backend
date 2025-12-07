@@ -30,7 +30,7 @@ class RecursoResponse(BaseModel):
     """Schema para respuesta de Recurso."""
 
     recurso: Dict[str,Any]
-    tipo: Dict[str,Any]
+    tipo_recurso: Dict[str,Any]
     unidad: Dict[str,Any]
     foto_recurso: Optional[str]
     model_config = {"from_attributes": True}
@@ -43,10 +43,10 @@ class RecursoResponse(BaseModel):
             "nombre_recurso": recurso_db.nombre_recurso,
             "descripcion_recurso": recurso_db.descripcion_recurso
         }
-        data["tipo"] = {"id": recurso_db.tipo_recurso.id_tipo_recurso, 
-                        "nombre": recurso_db.tipo_recurso.nombre_tipo_recurso,}
-        data["unidad"] = {"id": recurso_db.tipo_recurso.unidad.id_unidad, 
-                          "nombre": recurso_db.tipo_recurso.unidad.nombre_unidad}
+        data["tipo_recurso"] = {"id_tipo_recurso": recurso_db.tipo_recurso.id_tipo_recurso, 
+                        "nombre_tipo_recurso": recurso_db.tipo_recurso.nombre_tipo_recurso,}
+        data["unidad"] = {"id_unidad": recurso_db.tipo_recurso.unidad.id_unidad, 
+                          "nombre_unidad": recurso_db.tipo_recurso.unidad.nombre_unidad}
         
         if recurso_db.foto_recurso:
             # data["foto_recurso"] = base64.b64encode(recurso_db.foto_recurso).decode("utf-8")

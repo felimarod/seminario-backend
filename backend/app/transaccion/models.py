@@ -3,6 +3,7 @@ from sqlalchemy.orm import relationship
 from app.core.database import DBBase
 
 
+
 class Transaccion(DBBase):
     """Modelo de Transaccion."""
     __tablename__ = "transaccion"
@@ -21,4 +22,5 @@ class Transaccion(DBBase):
     recurso = relationship("Recurso")
     usuario = relationship("Usuario", foreign_keys=[id_usuario])
     empleado_responsable = relationship("Usuario", foreign_keys=[id_empleado_responsable])
+    historial = relationship("HistorialTransaccion", back_populates="transaccion")
     

@@ -3,7 +3,10 @@
 from typing import List, Optional
 
 from sqlalchemy.orm import Session
+from sqlalchemy import select
 
+from app.historial_transaccion.models import HistorialTransaccion
+from app.estado_transaccion.models import EstadoTransaccion
 from app.transaccion.models import Transaccion
 from app.recurso.models import Recurso
 from app.tipo_recurso.models import TipoRecurso
@@ -82,7 +85,22 @@ class TransaccionSelectors:
         """Obtiene transaccions por un recurso."""
         query = db.query(Transaccion)
 
-            
+        subq_estado = (
+            select(HistorialTransaccion.estado_nuevo)
+            .where(HistorialTransaccion.id_transaccion == Transaccion.id_transaccion)
+            .order_by(HistorialTransaccion.fecha_cambio.desc())
+            .limit(1)
+            .scalar_subquery()
+        )
+        db.query(
+                Transaccion,
+                EstadoTransaccion.nombre_estado_transaccion.label("estado_actual"),
+            ).outerjoin(
+                EstadoTransaccion,
+                EstadoTransaccion.id_estado_transaccion == subq_estado,
+            )
+        query = query.join(HistorialTransaccion, HistorialTransaccion.id_transaccion == Transaccion.id_transaccion)
+        query = query.order_by(HistorialTransaccion.fecha_cambio.desc())
 
         if filtros.id_tipo_recurso:
             query = query.join(Recurso, Recurso.id_recurso == Transaccion.id_recurso)
