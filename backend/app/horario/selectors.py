@@ -25,7 +25,6 @@ class HorarioSelectors:
         db: Session, id_horario: str, skip: int = 0, limit: int = 100
     ) -> List[HorarioDetalle]:
         """Obtiene horarios por tipo de horario."""
-        print("ss")
         return (
             db.query(HorarioDetalle)
             .filter(HorarioDetalle.id_horario == id_horario)

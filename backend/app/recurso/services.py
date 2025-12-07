@@ -29,6 +29,7 @@ class RecursoService:
         db.refresh(db_recurso)
         return db_recurso
 
+    ## TODO: Update recurso
     @staticmethod
     def update(db: Session, id_recurso: int, recurso_data: RecursoUpdate) -> Recurso:
         """Actualiza un recurso existente."""

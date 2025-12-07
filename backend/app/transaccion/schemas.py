@@ -28,7 +28,7 @@ class TransaccionCreate(TransaccionBase):
 class TransaccionUpdate(BaseModel):
     """Schema para actualizar un Transaccion."""
 
-    echa_inicio_transaccion: Optional[datetime] = Field(default=None, description="fecha y hora de inicio")
+    fecha_inicio_transaccion: Optional[datetime] = Field(default=None, description="fecha y hora de inicio")
     fecha_fin_transaccion: Optional[datetime] = Field(default=None, description="fecha y hora de finalización")
     estado_transaccion: Optional[str] = Field(default=None, description="estado de la transaccion")
     falla_servicio: Optional[str] = Field(default=None, description="comentarios de falla en el servicio")

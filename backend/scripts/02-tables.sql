@@ -10,9 +10,9 @@ CREATE TABLE HorarioDetalle(
 	dia_semana VARCHAR(20) 
 	CONSTRAINT dia_semana_nn NOT NULL,
 	CONSTRAINT horario_detalle_pk PRIMARY KEY (id_horario, dia_semana),
-	hora_apertura INTERVAL DAY TO SECOND
+	hora_apertura VARCHAR(8)
 	CONSTRAINT hora_apertura_nn NOT NULL,
-	hora_cierre INTERVAL DAY TO SECOND
+	hora_cierre VARCHAR(8)
 	CONSTRAINT hora_cierre_nn NOT NULL
 );
 
@@ -132,6 +132,23 @@ BEGIN
 END;
 /
 
+-- CREATE TABLE EstadoRecurso(
+-- 	id_estado_recurso NUMBER(5) 
+-- 	CONSTRAINT estado_recurso_pk PRIMARY KEY,
+-- 	nombre_estado_recurso VARCHAR(100) 
+-- 	CONSTRAINT nombre_estado_recurso_nn NOT NULL,
+-- 	descripcion_estado_recurso VARCHAR2(500)
+-- );
+
+-- CREATE TABLE RecursoEstadoHistorial(
+-- 	id_recurso VARCHAR(20) 
+-- 	CONSTRAINT recurso_estado_historial_recurso_fk REFERENCES Recurso(id_recurso),
+-- 	fecha_cambio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+-- 	estado_nuevo NUMBER(5) 
+-- 	CONSTRAINT recurso_estado_historial_estado_fk REFERENCES EstadoRecurso(id_estado_recurso),
+-- 	CONSTRAINT recurso_estado_historial_pk PRIMARY KEY (id_recurso, fecha_cambio)
+-- );
+
 CREATE TABLE Recurso(
 	id_recurso VARCHAR(20) 
 	CONSTRAINT recurso_pk PRIMARY KEY,
@@ -139,7 +156,6 @@ CREATE TABLE Recurso(
 	CONSTRAINT nombre_recurso_nn NOT NULL,
 	descripcion_recurso VARCHAR2(500),
 	foto_recurso BLOB,
-	estado_recurso VARCHAR(50) DEFAULT 'Disponible' NOT NULL,
 	id_tipo_recurso NUMBER(5) 
 	CONSTRAINT recurso_tipo_recurso_fk REFERENCES TipoRecurso(id_tipo_recurso)
 );
@@ -159,12 +175,19 @@ BEGIN
 END;
 /
 
-CREATE TABLE TipoTransaccion(
-	id_tipo_transaccion NUMBER(5) 
-	CONSTRAINT tipo_transaccion_pk PRIMARY KEY,
-	nombre_tipo_transaccion VARCHAR(100)
-	CONSTRAINT nombre_tipo_transaccion_nn NOT NULL,
-	descripcion_tipo_transaccion VARCHAR2(500)
+-- CREATE OR REPLACE TRIGGER recurso_air AFTER INSERT ON Recurso
+-- FOR EACH ROW
+-- BEGIN
+-- 	INSERT INTO RecursoEstadoHistorial (id_recurso, estado_nuevo)
+--  	 	VALUES (:NEW.id_recurso,1);
+-- END;
+-- /
+
+CREATE TABLE EstadoTransaccion(
+	id_estado_transaccion NUMBER(5) 
+	CONSTRAINT estado_transaccion_pk PRIMARY KEY,
+	nombre_estado_transaccion VARCHAR(100)
+	CONSTRAINT nombre_estado_transaccion_nn NOT NULL
 );
 
 CREATE TABLE Transaccion(
@@ -173,11 +196,7 @@ CREATE TABLE Transaccion(
 	fecha_inicio_transaccion TIMESTAMP,
 	fecha_fin_transaccion TIMESTAMP,
 	fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	estado_transaccion VARCHAR(50)
-	CONSTRAINT estado_transaccion_nn NOT NULL,
 	falla_servicio VARCHAR2(500),
-	id_tipo_transaccion NUMBER(5) 
-	CONSTRAINT trans_tipo_transaccion_fk REFERENCES TipoTransaccion(id_tipo_transaccion),
 	id_usuario NUMBER(5) 
 	CONSTRAINT trans_usuario_fk REFERENCES Usuario(id_usuario),
 	id_recurso VARCHAR(20) 
@@ -192,6 +211,28 @@ CREATE TRIGGER trans_bir BEFORE INSERT ON Transaccion
 FOR EACH ROW
 BEGIN
   SELECT trans_seq.NEXTVAL INTO :NEW.id_transaccion FROM dual;
+END;
+/
+
+CREATE TABLE HistorialTransaccion(
+	id_transaccion NUMBER(5) 
+	CONSTRAINT historialtrans_trans_fk REFERENCES Transaccion(id_transaccion),
+	fecha_cambio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	estado_nuevo NUMBER(5)
+	CONSTRAINT historialtrans_est_fk REFERENCES EstadoTransaccion(id_estado_transaccion),
+	CONSTRAINT historialtrans_pk PRIMARY KEY (id_transaccion, fecha_cambio)
+);
+
+CREATE TRIGGER trans_air AFTER INSERT ON Transaccion
+FOR EACH ROW
+BEGIN
+	IF :NEW.id_empleado_responsable IS NULL THEN
+		INSERT INTO HistorialTransaccion (id_transaccion, estado_nuevo)
+ 	 	VALUES (:NEW.id_transaccion, 1);
+	ELSE
+		INSERT INTO HistorialTransaccion (id_transaccion, estado_nuevo)
+ 	 	VALUES (:NEW.id_transaccion, 2);
+	END IF;
 END;
 /
 

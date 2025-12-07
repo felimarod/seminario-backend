@@ -1,5 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
-
+from sqlalchemy.orm import relationship
 from app.core.database import DBBase
 
 
@@ -8,5 +8,6 @@ class Unidad(DBBase):
     __tablename__ = "unidad"
     id_unidad = Column(Integer, primary_key=True, autoincrement=True)
     nombre_unidad = Column(String(100), nullable=False)
-    horario_unidad = Column(String(100), nullable=False)
+    horario_unidad = Column(String(100), ForeignKey("horario.id_horario"), nullable=False)
     
+    horario = relationship("Horario")

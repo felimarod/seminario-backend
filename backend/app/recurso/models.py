@@ -1,4 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, LargeBinary, text
+from sqlalchemy.orm import relationship
 from sqlalchemy.schema import FetchedValue
 from app.core.database import DBBase
 
@@ -12,5 +13,8 @@ class Recurso(DBBase):
     nombre_recurso = Column(String(100), nullable=False)
     descripcion_recurso = Column(String(500), nullable=False)
     foto_recurso = Column(LargeBinary)
-    estado_recurso = Column(String(100), nullable=True)
-    id_tipo_recurso = Column(Integer, nullable=False)
+    
+    id_tipo_recurso = Column(Integer, ForeignKey("tiporecurso.id_tipo_recurso"), nullable=False)
+    
+    # Relación con TipoRecurso
+    tipo_recurso = relationship("TipoRecurso")

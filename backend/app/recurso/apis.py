@@ -1,6 +1,6 @@
 """API routes para Recurso."""
 
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, UploadFile, File, Form
 from sqlalchemy.orm import Session
@@ -14,8 +14,6 @@ from app.recurso.schemas import (
 )
 from app.recurso.selectors import RecursoSelectors
 from app.tipo_recurso.selectors import TipoRecursoSelectors
-from app.unidad.selectors import UnidadSelectors
-from app.horario.selectors import HorarioSelectors
 from app.recurso.services import RecursoService
 
 
@@ -46,35 +44,17 @@ def get_recursos(
     user = request.state.user
     if user["tipo"] in (2,3):
         filtros.id_unidad = user["unidad"]
-    recursos = []
+
     recursos = RecursoSelectors.get_filter(db=db,filtros=filtros,skip=skip,limit=limit)
-    
-    for recurso in recursos:
-        tipo_recurso = TipoRecursoSelectors.get_by_id(db=db,id_tipo_recurso=recurso.id_tipo_recurso)
-        recurso.nombre_tipo = tipo_recurso.nombre_tipo_recurso
-        unidad = UnidadSelectors.get_by_id(db=db,id_unidad=tipo_recurso.id_unidad)
-        recurso.unidad = {"id_unidad": unidad.id_unidad, "nombre_unidad": unidad.nombre_unidad}
-        recurso.horario_disponible = {}
-        Horario = HorarioSelectors.get_detaills_by_id(db=db, id_horario=tipo_recurso.horario_disponibilidad)
-        for detalle in Horario:
-            recurso.horario_disponible[detalle.dia_semana] = {
-                "hora_inicio": str(detalle.hora_apertura),
-                "hora_fin": str(detalle.hora_cierre)
-            }
-    recursosRes = []
-    for recurso in recursos:
-        recursosRes.append(RecursoResponse.parse_image(recurso_db=recurso))
-    
-    return recursosRes
+    return [RecursoResponse.from_recurso_db(recurso_db=recurso) for recurso in recursos]
 
 
 @router.post("/create", response_model=RecursoResponse, status_code=201)
 async def create_recurso(request:Request, 
                         nombre_recurso: str = Form(...),
                         descripcion_recurso: str = Form(...),
-                        estado_recurso: str = Form(None),
                         id_tipo_recurso: int = Form(...),
-                        foto_recurso: UploadFile = File(None), 
+                        foto_recurso: Optional[UploadFile] = File(None), 
                         db: Session = Depends(get_db)):
     """Crea un nuevo recurso."""
     
@@ -88,23 +68,18 @@ async def create_recurso(request:Request,
         if tipo_recurso.id_unidad != user["unidad"]:
             raise HTTPException(status_code=403, detail="Este tipo de recursos no pertenece a tu unidad")
     
-    contenido = None
-    if foto_recurso:
-        contenido = await foto_recurso.read()
-    if estado_recurso == "":
-        estado_recurso = "Disponible"
+    contenido = await foto_recurso.read() if foto_recurso is not None else None
+    
     recurso_data = RecursoCreate(
         nombre_recurso = nombre_recurso,
         descripcion_recurso = descripcion_recurso,
-        estado_recurso = estado_recurso,
         id_tipo_recurso = id_tipo_recurso)
     
     recursoDB = RecursoService.create(db, recurso_data, foto_recurso=contenido)
-    recursoDB.nombre_tipo = TipoRecursoSelectors.get_by_id(db=db,id_tipo_recurso=recursoDB.id_tipo_recurso).nombre_tipo_recurso
-    return RecursoResponse.parse_image(recursoDB)
+    return RecursoResponse.from_recurso_db(recursoDB)
 
-
-@router.put("/{id_recurso}", response_model=RecursoResponse)
+## TODO: Update recurso
+# @router.put("/{id_recurso}", response_model=RecursoResponse)
 def update_recurso(
     id_recurso: int, recurso_data: RecursoUpdate, db: Session = Depends(get_db)
 ):

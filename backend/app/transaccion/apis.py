@@ -14,7 +14,6 @@ from app.transaccion.schemas import (
 )
 from app.transaccion.selectors import TransaccionSelectors
 from app.usuario.selectors import UsuarioSelectors
-from app.tipo_transaccion.selectors import TipoTransaccionSelectors
 from app.recurso.selectors import RecursoSelectors
 from app.tipo_recurso.selectors import TipoRecursoSelectors
 from app.transaccion.services import TransaccionService
@@ -145,6 +144,13 @@ def create_transaccion(request: Request, transaccion_data: TransaccionCreate, db
         }
     return response
 
+
+@router.put("/{id_transaccion}", response_model=TransaccionResponse)
+def update_transaccion(
+    id_transaccion: int, transaccion_data: TransaccionUpdate, db: Session = Depends(get_db)
+):
+    """Actualiza un transaccion."""
+    return TransaccionService.update(db, id_transaccion, transaccion_data)
 
 @router.put("/{id_transaccion}", response_model=TransaccionResponse)
 def update_transaccion(
