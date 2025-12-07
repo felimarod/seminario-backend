@@ -158,57 +158,61 @@ INSERT INTO Unidad (nombre_unidad, horario_unidad)
  VALUES ('Auditorio Principal', 'horario_fin_semana');
 
 
---INSERCCION DE USUARIOS-------------------------------------------------------------------
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario)
- VALUES ('super', 'super', 'super', 'super@macista.com', 1, 1);
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario)
- VALUES ('user', 'user', 'user', 'user@saurio.com', 1, 4);
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('admin', 'admin', 'admin', 'admin@istrador.com', 1, 2, 1);
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('empleado', 'empleado', 'empleado', 'emple@ado.com', 1, 3, 1);
+-- Super Admin general
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario)
+ VALUES ('Carlos', 'Vergara', 'Super2025*', 'carlos.vergara@admin.com', 1, 1);
 
+-- Usuarios normales
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario)
+ VALUES ('Laura', 'Ramírez', 'Laura123', 'laura.ramirez@gmail.com', 1, 4);
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario)
+ VALUES ('Mateo', 'Hernández', 'Mateo123', 'mateo.hdz@hotmail.com', 1, 4);
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario)
+ VALUES ('Sofía', 'Pérez', 'Sofia123', 'sofia.perez@yahoo.com', 1, 4);
+-- Laboratorios de Cómputo
 INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('admin_labcomp', 'admin', 'admin', 'admin.labcomp@correo.com', 1, 2, 1);
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('empleado1_labcomp', 'empleado', 'empleado', 'empleado1.labcomp@correo.com', 1, 3, 1);
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('empleado2_labcomp', 'empleado', 'empleado', 'empleado2.labcomp@correo.com', 1, 3, 1);
-
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('admin_multimedia', 'admin', 'admin', 'admin.multimedia@correo.com', 1, 2, 2);
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('empleado1_multimedia', 'empleado', 'empleado', 'empleado1.multimedia@correo.com', 1, 3, 2);
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('empleado2_multimedia', 'empleado', 'empleado', 'empleado2.multimedia@correo.com', 1, 3, 2);
-
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('admin_biblioteca', 'admin', 'admin', 'admin.biblioteca@correo.com', 1, 2, 3);
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('empleado1_biblioteca', 'empleado', 'empleado', 'empleado1.biblioteca@correo.com', 1, 3, 3);
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('empleado2_biblioteca', 'empleado', 'empleado', 'empleado2.biblioteca@correo.com', 1, 3, 3);
-
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('admin_emprendimiento', 'admin', 'admin', 'admin.emprendimiento@correo.com', 1, 2, 4);
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('empleado1_emprendimiento', 'empleado', 'empleado', 'empleado1.emprendimiento@correo.com', 1, 3, 4);
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('empleado2_emprendimiento', 'empleado', 'empleado', 'empleado2.emprendimiento@correo.com', 1, 3, 4);
-
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('admin_electronica', 'admin', 'admin', 'admin.electronica@correo.com', 1, 2, 5);
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('empleado1_electronica', 'empleado', 'empleado', 'empleado1.electronica@correo.com', 1, 3, 5);
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('empleado2_electronica', 'empleado', 'empleado', 'empleado2.electronica@correo.com', 1, 3, 5);
-
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('admin_auditorio', 'admin', 'admin', 'admin.auditorio@correo.com', 1, 2, 6);
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('empleado1_auditorio', 'empleado', 'empleado', 'empleado1.auditorio@correo.com', 1, 3, 6);
-INSERT INTO Usuario (nombre,apellido,contrasena, correo, activo, id_tipo_usuario, id_unidad)
- VALUES ('empleado2_auditorio', 'empleado', 'empleado', 'empleado2.auditorio@correo.com', 1, 3, 6);
+ VALUES ('Juan', 'Olmos', 'admin', 'admin@juandoc.com', 1, 2, 1);
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Andrea', 'Muñoz', 'AdminLab2025', 'andrea.munoz@labcomputo.com', 1, 2, 1);
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Julián', 'Cortés', 'Empleado01', 'julian.cortes@labcomputo.com', 1, 3, 1);
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Daniela', 'Lagos', 'Empleado02', 'daniela.lagos@labcomputo.com', 1, 3, 1);
+-- Sala de Multimedia
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Mariana', 'Guzmán', 'AdminMulti2025', 'mariana.guzman@multimedia.com', 1, 2, 2);
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Felipe', 'Santos', 'Empleado01', 'felipe.santos@multimedia.com', 1, 3, 2);
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Valeria', 'Suárez', 'Empleado02', 'valeria.suarez@multimedia.com', 1, 3, 2);
+-- Biblioteca Central
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Ricardo', 'Molina', 'AdminBiblio2025', 'ricardo.molina@biblioteca.com', 1, 2, 3);
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Camila', 'Torres', 'Empleado01', 'camila.torres@biblioteca.com', 1, 3, 3);
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Héctor', 'Gómez', 'Empleado02', 'hector.gomez@biblioteca.com', 1, 3, 3);
+-- Centro de Emprendimiento
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Natalia', 'Ríos', 'AdminEmp2025', 'natalia.rios@emprendimiento.com', 1, 2, 4);
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Santiago', 'Paredes', 'Empleado01', 'santiago.paredes@emprendimiento.com', 1, 3, 4);
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Diana', 'Granados', 'Empleado02', 'diana.granados@emprendimiento.com', 1, 3, 4);
+-- Laboratorio de Electrónica
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Jorge', 'Fajardo', 'AdminElec2025', 'jorge.fajardo@electronica.com', 1, 2, 5);
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Melisa', 'Ortega', 'Empleado01', 'melisa.ortega@electronica.com', 1, 3, 5);
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Samuel', 'Ardila', 'Empleado02', 'samuel.ardila@electronica.com', 1, 3, 5);
+-- Auditorio Principal
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Paola', 'Nieves', 'AdminAud2025', 'paola.nieves@auditorio.com', 1, 2, 6);
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Brayan', 'López', 'Empleado01', 'brayan.lopez@auditorio.com', 1, 3, 6);
+INSERT INTO Usuario (nombre, apellido, contrasena, correo, activo, id_tipo_usuario, id_unidad)
+ VALUES ('Tatiana', 'Mejía', 'Empleado02', 'tatiana.mejia@auditorio.com', 1, 3, 6);
 
 
 --INSERCCION DE TIPOS DE RECURSO-------------------------------------------------------------------

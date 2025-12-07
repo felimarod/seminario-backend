@@ -43,7 +43,10 @@ def authenticate_user(correo: str, password: str, db: Session) -> Optional[Usuar
         return None
     if password != userRes.contrasena:
         return None
-    userRes.unidad  = UnidadSelectors.get_by_id(db=db,id_unidad=userRes.id_unidad).nombre_unidad
+    if userRes.id_tipo_usuario in (2,3):  # admin or empleado
+        userRes.unidad  = UnidadSelectors.get_by_id(db=db,id_unidad=userRes.id_unidad).nombre_unidad
+    else:
+        userRes.unidad = None
     userRes.tipo_usuario = TipoUsuarioSelectors.get_by_id(db=db, id_tipo_usuario=userRes.id_tipo_usuario).nombre_tipo_usuario
     print("user,correo,passaswd")
     print(userRes,correo,password)

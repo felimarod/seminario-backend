@@ -18,7 +18,7 @@ class TransaccionBase(BaseModel):
 class TransaccionCreate(TransaccionBase):
     """Schema para crear un nuevo Transaccion."""
     id_tipo_transaccion: int = Field(..., description="tipo de transaccion (reserva o prestamo)")
-    id_usuario: int = Field(..., description="id del usuario que solicita el recurso")
+    id_usuario: Optional[int] = Field(default=None, description="id del usuario que solicita el recurso")
     id_recurso: str = Field(..., description="id del recurso solicitado")
     id_empleado_responsable: Optional[int] = Field(default=None, description="id del empleado que da/recibe el recurso")
     fecha_inicio_transaccion: datetime = Field(default="AAAA-MM-DD HH:MM", description="fecha y hora de inicio")
