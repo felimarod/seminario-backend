@@ -69,7 +69,7 @@ class TipoRecursoResponse(BaseModel):
             "id_unidad": tipo_recurso_db.unidad.id_unidad,
             "nombre_unidad": tipo_recurso_db.unidad.nombre_unidad
         }
-        data["horario"] = tipo_recurso_db.horario_disponibilidad.id_horario
+        data["horario"] = tipo_recurso_db.horario_disponibilidad
         return cls.from_orm(data)
 
 class Filtros(BaseModel):
