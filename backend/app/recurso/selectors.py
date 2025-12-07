@@ -139,6 +139,8 @@ class RecursoSelectors:
             query = query.filter(TipoRecurso.id_unidad == filtros.id_unidad)
         if filtros.id_tipo_recurso:
             query = query.filter(Recurso.id_tipo_recurso  == filtros.id_tipo_recurso)
+        if filtros.id_recurso:
+            query = query.filter(Recurso.id_recurso == filtros.id_recurso)
         
         
         return query.offset(skip).limit(limit).all()

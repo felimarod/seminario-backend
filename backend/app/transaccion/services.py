@@ -7,9 +7,9 @@ from sqlalchemy.exc import IntegrityError
 from datetime import datetime, timedelta
 
 from app.transaccion.models import Transaccion
-from app.transaccion.schemas import TransaccionCreate, TransaccionUpdate, Filtros
+from app.transaccion.schemas import TransaccionCreate, TransaccionUpdate
 from app.transaccion.selectors import TransaccionSelectors
-from app.recurso.selectors import RecursoSelectors
+from app.recurso.selectors import RecursoSelectors, Filtros
 from app.tipo_recurso.selectors import TipoRecursoSelectors
 from app.horario.selectors import HorarioSelectors
 from app.usuario.selectors import UsuarioSelectors
@@ -31,18 +31,14 @@ class TransaccionService:
                 raise ValueError(f"la transacción no puede iniciar despues de finalizar")   
             if transaccion_data.fecha_inicio_transaccion.date() != transaccion_data.fecha_fin_transaccion.date():
                 raise ValueError(f"la transacción debe empezar y terminar el mismo dia")
-            print("pre")
-            if transaccion_data.id_tipo_transaccion == 1:
-                print("pres")
-                if transaccion_data.id_empleado_responsable is not None:
-                    print("presa")  
-                    raise ValueError(f"Las reservas no deben tener empleados responsables asignados")
-            else:
-                if transaccion_data.id_empleado_responsable is None:
-                    raise ValueError(f"Los prestamos deben tener un empleado responsable asignado")
-
+            if transaccion_data.id_empleado_responsable:
+                if transaccion_data.fecha_inicio_transaccion - ahora < timedelta(minutes=5):
+                    raise ValueError(f"Los prestamos deben ser registrados al momento de la entrega del recurso (con un margen de 5 minutos)")
+            if transaccion_data.id_empleado_responsable is not None:
+                if transaccion_data.fecha_inicio_transaccion - ahora < timedelta(hours=2):
+                    raise ValueError(f"Las reservas deben realizarse con al menos 2 horas de anticipación")
+            
             TransaccionService.validarUsuarios(db=db, transaccion_data=transaccion_data)
-            TransaccionService.validarBloque(db=db,transaccion_data=transaccion_data)
             TransaccionService.validarDisponibilidad(db=db, transaccion_data=transaccion_data)
 
             db_transaccion = Transaccion(**transaccion_data.model_dump())
@@ -59,7 +55,6 @@ class TransaccionService:
                 detail=str(e)
             )
         
-        return db_transaccion
 
     @staticmethod
     def validarExistencia(db: Session, transaccion_data: TransaccionCreate):
@@ -70,26 +65,8 @@ class TransaccionService:
         if not UsuarioSelectors.get_by_id(db=db, id_usuario=transaccion_data.id_usuario):
             raise ValueError(f"No se encuentró el usuario")
         
-        if not TransaccionSelectors.get_by_id(db=db, id_transaccion=transaccion_data.id_tipo_transaccion):
-            raise ValueError(f"No se encuentró el tipo de transacción")
-        
         if transaccion_data.id_empleado_responsable and not UsuarioSelectors.get_by_id(db=db, id_usuario=transaccion_data.id_empleado_responsable):
             raise ValueError(f"No se encuentró el empleado")
-    
-    @staticmethod
-    def validarBloque(db: Session, transaccion_data: TransaccionCreate):
-        diasStr = ["Lunes","Martes","Miercoles","Jueves","Viernes","Sabado","Domingo","Festivos"]
-        id_tipo_recurso = RecursoSelectors.get_by_id(db=db,id_recurso=transaccion_data.id_recurso).id_tipo_recurso
-        horario_recurso = TipoRecursoSelectors.get_by_id(db=db,id_tipo_recurso=id_tipo_recurso).horario_disponibilidad        
-        details = HorarioSelectors.get_detaills_by_id(db=db,id_horario=horario_recurso)
-        dia = diasStr[transaccion_data.fecha_inicio_transaccion.weekday()]
-        detailsDay = [x for x in details if x.dia_semana==dia]
-        for detail in detailsDay:
-            if(detail.hora_apertura <= TransaccionService.time_to_timedelta(transaccion_data.fecha_inicio_transaccion.time())
-               and detail.hora_cierre >= TransaccionService.time_to_timedelta(transaccion_data.fecha_fin_transaccion.time())
-               ):
-                return
-        raise ValueError(f"El valor no encaja dentro de el horario del recurso")
     
     @staticmethod
     def validarUsuarios(db: Session, transaccion_data: TransaccionCreate):
@@ -103,24 +80,14 @@ class TransaccionService:
             
     @staticmethod
     def validarDisponibilidad(db: Session, transaccion_data: TransaccionCreate):
-        inicio = transaccion_data.fecha_inicio_transaccion.date()
-        fin = inicio + timedelta(days=1)
         filtros = Filtros(
             id_recurso=transaccion_data.id_recurso,
-            id_tipo_transaccion=transaccion_data.id_tipo_transaccion,
-            ventana_tiempo_inicio=inicio,
-            ventana_tiempo_fin=fin,
-            ventana_atributo="fin"
+            ventana_tiempo_inicio=transaccion_data.fecha_inicio_transaccion,
+            ventana_tiempo_fin=transaccion_data.fecha_fin_transaccion,
+            disponibilidad_completa=True
         )
-        reservas = TransaccionSelectors.get_filter(db=db,filtros=filtros,limit=1000)
-        for reserva in reservas:
-            if not (reserva.fecha_inicio_transaccion > transaccion_data.fecha_fin_transaccion
-                or reserva.fecha_fin_transaccion < transaccion_data.fecha_inicio_transaccion):
-                raise ValueError("Conflicto con reservas existentes")
-    @staticmethod
-    def time_to_timedelta(t: datetime.time) -> timedelta:
-        return timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
-
+        if RecursoSelectors.get_filter(db=db,filtros=filtros,limit=1)==[]:
+            raise ValueError("El recurso no está disponible en la ventana de tiempo solicitada")
     @staticmethod
     def update(db: Session, id_transaccion: int, transaccion_data: TransaccionUpdate) -> Transaccion:
         """Actualiza un transaccion existente."""

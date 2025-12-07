@@ -58,6 +58,7 @@ class RecursoResponse(BaseModel):
 
 class Filtros(BaseModel):
     """Schema para respuesta de Tipo Recurso."""
+    id_recurso: Optional[str] = Field(default=None, description="ID del recurso")
     id_tipo_recurso: Optional[int] = Field(default=None, description="ID del tipo de recurso")
     id_unidad: Optional[int] = Field(default=None, description="ID de la unidad")
     ventana_tiempo_inicio: Optional[datetime] = Field(default=None, description="inicio de ventana temporal")
