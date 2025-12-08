@@ -8,7 +8,9 @@ class HistorialTransaccion(DBBase):
     """Modelo de HistorialTransaccion."""
     __tablename__ = "historialtransaccion"
     id_transaccion = Column(Integer, ForeignKey("transaccion.id_transaccion"), primary_key=True)
-    fecha_cambio = Column(String(100), nullable=False)
+    fecha_cambio = Column(String(100), primary_key=True,
+        server_default=text("NULL"),     # Force SQLA to send INSERT without PK
+        server_onupdate=FetchedValue())
     estado_nuevo = Column(Integer, ForeignKey("estadotransaccion.id_estado_transaccion"), nullable=False)
         
     # Relaciones de historial transacciones

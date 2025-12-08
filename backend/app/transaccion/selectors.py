@@ -88,7 +88,7 @@ class TransaccionSelectors:
             query = query.join(Recurso, Recurso.id_recurso == Transaccion.id_recurso)
             query = query.filter(Recurso.id_tipo_recurso == filtros.id_tipo_recurso)
         
-        if filtros.id_tipo_recurso:
+        if filtros.id_unidad:
             query = query.join(Recurso, Recurso.id_recurso == Transaccion.id_recurso)
             query = query.join(TipoRecurso, TipoRecurso.id_tipo_recurso == Recurso.id_tipo_recurso)
             query = query.filter(TipoRecurso.id_unidad == filtros.id_unidad)

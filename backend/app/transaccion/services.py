@@ -8,6 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from datetime import datetime, timedelta
 
 from app.transaccion.models import Transaccion
+from app.historial_transaccion.models import HistorialTransaccion
 from app.transaccion.schemas import TransaccionCreate, TransaccionUpdate
 from app.transaccion.selectors import TransaccionSelectors
 from app.recurso.selectors import RecursoSelectors, Filtros
@@ -37,8 +38,6 @@ class TransaccionService:
                 if transaccion_data.fecha_inicio_transaccion - ahora < timedelta(hours=2):
                     raise ValueError(f"Las reservas deben realizarse con al menos 2 horas de anticipación")
             TransaccionService.validarExistencia(db=db, transaccion_data=transaccion_data)
-            if transaccion_data.fecha_inicio_transaccion < ahora:
-                raise ValueError(f"la transacción no puede iniciar antes de la hora actual")
             if transaccion_data.fecha_inicio_transaccion > transaccion_data.fecha_fin_transaccion:
                 raise ValueError(f"la transacción no puede iniciar despues de finalizar")   
             if transaccion_data.fecha_inicio_transaccion.date() != transaccion_data.fecha_fin_transaccion.date():
@@ -117,26 +116,62 @@ class TransaccionService:
         return dt.astimezone(TZ)
         
     @staticmethod
-    def prestar(db: Session, id_transaccion: int, transaccion_data: TransaccionUpdate) -> Transaccion:
+    def prestar(db: Session, id_transaccion: int, id_empleado: int, password_user: str) -> Transaccion:
         """Actualiza un transaccion existente."""
-        db_transaccion = TransaccionSelectors.get_by_id(db, id_transaccion, transaccion_data)
-        if not db_transaccion:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Transaccion no encontrada"
-            )
-        if transaccion_data.id_empleado_responsable is None:
-            raise ValueError("El empleado responsable no puede ser nulo")
-        estado_actual = db_transaccion.historial[0].estado.nombre_estado_transaccion
-        if estado_actual != "reservado":
-            raise ValueError("La transacción no está en estado 'reservado', no se puede cambiar a 'prestado'")
-        ahora = datetime.now(TZ)
-        db_transaccion.fecha_inicio_transaccion = TransaccionService.to_aware(db_transaccion.fecha_inicio_transaccion)
-        db_transaccion.fecha_fin_transaccion = TransaccionService.to_aware(db_transaccion.fecha_fin_transaccion)
+        try:
+            db_transaccion = TransaccionSelectors.get_by_id(db, id_transaccion)
+            if not db_transaccion:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND, detail="Transaccion no encontrada"
+                )
+            if id_empleado is None:
+                raise ValueError("El empleado responsable no puede ser nulo")
+            estado_actual = db_transaccion.historial[0].estado.id_estado_transaccion
+            db_empleado = UsuarioSelectors.get_by_id(db=db,id_usuario=id_empleado)
+            if not db_empleado:
+                raise ValueError("El empleado responsable no existe")
             
-        if db_transaccion.fecha_inicio_transaccion > ahora or ahora > db_transaccion.fecha_fin_transaccion:
-            raise ValueError("No se puede prestar la reserva fuera del tiempo de programado")
-        for field, value in transaccion_data.model_dump(exclude_unset=True).items():
-            setattr(db_transaccion, field, value)
-        db.commit()
-        db.refresh(db_transaccion)
-        return db_transaccion
+            db_usuario = UsuarioSelectors.get_by_id(db=db,id_usuario=db_transaccion.id_usuario)
+            if db_usuario.contrasena != password_user:
+                raise ValueError("Contraseña de usuario incorrecta")
+
+            if db_empleado.id_unidad != db_transaccion.recurso.tipo_recurso.id_unidad:
+                raise ValueError("El empleado responsable no pertenece a la unidad del recurso")
+            
+            if estado_actual != 1:
+                raise ValueError("La transacción no está en estado 'reservado', no se puede cambiar a 'prestado'")
+            
+            ahora = datetime.now(TZ)
+            db_transaccion.fecha_inicio_transaccion = TransaccionService.to_aware(db_transaccion.fecha_inicio_transaccion)
+            db_transaccion.fecha_fin_transaccion = TransaccionService.to_aware(db_transaccion.fecha_fin_transaccion)
+                
+            if db_transaccion.fecha_inicio_transaccion > ahora or ahora > db_transaccion.fecha_fin_transaccion:
+                raise ValueError("No se puede prestar la reserva fuera del tiempo de programado")
+            
+            db_transaccion.id_empleado_responsable = id_empleado
+            
+            db_historial_transaccion = HistorialTransaccion(
+                id_transaccion=id_transaccion,
+                estado_nuevo=2
+            )
+            db.add(db_historial_transaccion)
+            db.commit()
+            db.refresh(db_historial_transaccion)
+            db.refresh(db_transaccion)
+            return db_transaccion
+        except ValueError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+        except IntegrityError as e:
+            print(e)
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Error de integridad al actualizar la transacción"
+            )
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Error interno del servidor al actualizar la transacción"
+            )

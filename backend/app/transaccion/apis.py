@@ -2,7 +2,7 @@
 
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Form
 from sqlalchemy.orm import Session
 
 from app.common.dependencies import get_db
@@ -89,18 +89,32 @@ def create_transaccion(request: Request, transaccion_data: TransaccionCreate, db
     return TransaccionResponse.from_transaccion_db(response)
 
 
-@router.put("/{id_transaccion}", response_model=TransaccionResponse)
+@router.put("/prestamo", response_model=TransaccionResponse)
 def reserva_to_prestamo(
-    id_transaccion: int, request: Request, db: Session = Depends(get_db)
+    request: Request, 
+    id_transaccion: int = Form(..., description="ID de la transacción a actualizar"), 
+    password_user: str = Form(..., description="Valor propio del usuario para validar que la accion se realiza con conocimiento del usuario (por ahora la contraseña)"), 
+    db: Session = Depends(get_db)
 ):
     """Actualiza estado de transaccion de reserva a prestamo."""
     user = request.state.user
-    if user["tipo"] not in (3):
+    if user["tipo"] != 3:
         raise HTTPException(status_code=403, detail="No tienes permiso para actualizar una reserva a prestamo")
-    transaccion_data = TransaccionUpdate(
-        id_empleado_responsable=user["id"]
-    )
-    return TransaccionService.prestar(db, id_transaccion, transaccion_data)
+    transaccion = TransaccionService.prestar(db, id_transaccion, int(user["id"]), password_user)
+    return TransaccionResponse.from_transaccion_db(transaccion)
+
+@router.put("/devolucion", response_model=TransaccionResponse)
+def reserva_to_prestamo(
+    request: Request, 
+    id_transaccion: int = Form(..., description="ID de la transacción a actualizar"),  
+    db: Session = Depends(get_db)
+):
+    """Actualiza estado de transaccion de reserva a prestamo."""
+    user = request.state.user
+    if user["tipo"] != 3:
+        raise HTTPException(status_code=403, detail="No tienes permiso para actualizar una reserva a prestamo")
+    transaccion = TransaccionService.prestar(db, id_transaccion, int(user["id"]), password_user)
+    return TransaccionResponse.from_transaccion_db(transaccion)
 
 @router.put("/{id_transaccion}", response_model=TransaccionResponse)
 def update_transaccion(
