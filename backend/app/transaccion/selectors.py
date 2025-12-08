@@ -84,24 +84,6 @@ class TransaccionSelectors:
     ) -> List[Transaccion]:
         """Obtiene transaccions por un recurso."""
         query = db.query(Transaccion)
-
-        subq_estado = (
-            select(HistorialTransaccion.estado_nuevo)
-            .where(HistorialTransaccion.id_transaccion == Transaccion.id_transaccion)
-            .order_by(HistorialTransaccion.fecha_cambio.desc())
-            .limit(1)
-            .scalar_subquery()
-        )
-        db.query(
-                Transaccion,
-                EstadoTransaccion.nombre_estado_transaccion.label("estado_actual"),
-            ).outerjoin(
-                EstadoTransaccion,
-                EstadoTransaccion.id_estado_transaccion == subq_estado,
-            )
-        query = query.join(HistorialTransaccion, HistorialTransaccion.id_transaccion == Transaccion.id_transaccion)
-        query = query.order_by(HistorialTransaccion.fecha_cambio.desc())
-
         if filtros.id_tipo_recurso:
             query = query.join(Recurso, Recurso.id_recurso == Transaccion.id_recurso)
             query = query.filter(Recurso.id_tipo_recurso == filtros.id_tipo_recurso)
@@ -113,8 +95,6 @@ class TransaccionSelectors:
 
         if filtros.id_usuario:
             query = query.filter(Transaccion.id_usuario == filtros.id_usuario)
-        if filtros.id_tipo_transaccion:
-            query = query.filter(Transaccion.id_tipo_transaccion  == filtros.id_tipo_transaccion)
         if filtros.id_empleado_responsable:
             query = query.filter(Transaccion.id_empleado_responsable  == filtros.id_empleado_responsable)
         if filtros.id_recurso:

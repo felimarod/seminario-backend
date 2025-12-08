@@ -90,11 +90,17 @@ def create_transaccion(request: Request, transaccion_data: TransaccionCreate, db
 
 
 @router.put("/{id_transaccion}", response_model=TransaccionResponse)
-def update_transaccion(
-    id_transaccion: int, transaccion_data: TransaccionUpdate, db: Session = Depends(get_db)
+def reserva_to_prestamo(
+    id_transaccion: int, request: Request, db: Session = Depends(get_db)
 ):
-    """Actualiza un transaccion."""
-    return TransaccionService.update(db, id_transaccion, transaccion_data)
+    """Actualiza estado de transaccion de reserva a prestamo."""
+    user = request.state.user
+    if user["tipo"] not in (3):
+        raise HTTPException(status_code=403, detail="No tienes permiso para actualizar una reserva a prestamo")
+    transaccion_data = TransaccionUpdate(
+        id_empleado_responsable=user["id"]
+    )
+    return TransaccionService.prestar(db, id_transaccion, transaccion_data)
 
 @router.put("/{id_transaccion}", response_model=TransaccionResponse)
 def update_transaccion(

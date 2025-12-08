@@ -13,7 +13,7 @@ from app.transaccion.selectors import TransaccionSelectors
 from app.recurso.selectors import RecursoSelectors, Filtros
 from app.usuario.selectors import UsuarioSelectors
 
-
+TZ = ZoneInfo("America/Bogota")
 class TransaccionService:
     """Service para operaciones con Transaccion."""
 
@@ -21,17 +21,12 @@ class TransaccionService:
     def create(db: Session, transaccion_data: TransaccionCreate) -> Optional[Transaccion]:
         """Crea un nuevo transaccion."""
         try:
-            tz = ZoneInfo("America/Bogota")
-            ahora = datetime.now(tz)
+            
+            ahora = datetime.now(TZ)
 
-            def to_aware(dt: Optional[datetime]) -> Optional[datetime]:
-                if dt is None:
-                    return None
-                if dt.tzinfo is None:
-                    return dt.replace(tzinfo=tz)
-                return dt.astimezone(tz)
-            transaccion_data.fecha_inicio_transaccion = to_aware(transaccion_data.fecha_inicio_transaccion)
-            transaccion_data.fecha_fin_transaccion = to_aware(transaccion_data.fecha_fin_transaccion)
+            
+            transaccion_data.fecha_inicio_transaccion = TransaccionService.to_aware(transaccion_data.fecha_inicio_transaccion)
+            transaccion_data.fecha_fin_transaccion = TransaccionService.to_aware(transaccion_data.fecha_fin_transaccion)
             
             if transaccion_data.id_empleado_responsable:
                 if transaccion_data.fecha_inicio_transaccion is None: 
@@ -112,14 +107,34 @@ class TransaccionService:
         )
         if RecursoSelectors.get_filter(db=db,filtros=filtros,limit=1)==[]:
             raise ValueError("El recurso no está disponible en la ventana de tiempo solicitada")
+
     @staticmethod
-    def update(db: Session, id_transaccion: int, transaccion_data: TransaccionUpdate) -> Transaccion:
+    def to_aware(dt: Optional[datetime]) -> Optional[datetime]:
+        if dt is None:
+            return None
+        if dt.tzinfo is None:
+            return dt.replace(tzinfo=TZ)
+        return dt.astimezone(TZ)
+        
+    @staticmethod
+    def prestar(db: Session, id_transaccion: int, transaccion_data: TransaccionUpdate) -> Transaccion:
         """Actualiza un transaccion existente."""
-        db_transaccion = TransaccionSelectors.get_by_id(db, id_transaccion)
+        db_transaccion = TransaccionSelectors.get_by_id(db, id_transaccion, transaccion_data)
         if not db_transaccion:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Transaccion no encontrado"
+                status_code=status.HTTP_404_NOT_FOUND, detail="Transaccion no encontrada"
             )
+        if transaccion_data.id_empleado_responsable is None:
+            raise ValueError("El empleado responsable no puede ser nulo")
+        estado_actual = db_transaccion.historial[0].estado.nombre_estado_transaccion
+        if estado_actual != "reservado":
+            raise ValueError("La transacción no está en estado 'reservado', no se puede cambiar a 'prestado'")
+        ahora = datetime.now(TZ)
+        db_transaccion.fecha_inicio_transaccion = TransaccionService.to_aware(db_transaccion.fecha_inicio_transaccion)
+        db_transaccion.fecha_fin_transaccion = TransaccionService.to_aware(db_transaccion.fecha_fin_transaccion)
+            
+        if db_transaccion.fecha_inicio_transaccion > ahora and ahora > db_transaccion.fecha_inicio_transaccion:
+        
         for field, value in transaccion_data.model_dump(exclude_unset=True).items():
             setattr(db_transaccion, field, value)
         db.commit()
