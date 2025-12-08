@@ -2,6 +2,8 @@
 
 from contextlib import asynccontextmanager
 
+from app import models_registry  # noqa: F401  # <-- importa para registrar los modelos
+
 from anyio import to_thread
 from fastapi import Depends, FastAPI
 from fastapi.exceptions import RequestValidationError
@@ -29,6 +31,7 @@ from app.tipo_recurso.apis import router as tipo_recurso_router
 from app.recurso.apis import router as recurso_router
 from app.transaccion.apis import router as transaccion_router
 from app.calificacion.apis import router as calificacion_router
+from app.historial_transaccion.apis import router as historial_router
 from app.common.auth import router as auth_router
 
 # Globals
@@ -97,5 +100,6 @@ app.include_router(usuario_router, prefix="/usuario", tags=["Usuario"],dependenc
 app.include_router(tipo_recurso_router, prefix="/tipo_recurso", tags=["Tipo Recurso"],dependencies = [Depends(get_current_user)])
 app.include_router(recurso_router, prefix="/recurso", tags=["Recurso"],dependencies = [Depends(get_current_user)])
 app.include_router(transaccion_router, prefix="/transaccion", tags=["Transaccion"],dependencies = [Depends(get_current_user)])
+app.include_router(historial_router, prefix="/historial_transaccion", tags=["Historial Transaccion"], dependencies=[Depends(get_current_user)])
 app.include_router(calificacion_router, prefix="/calificacion", tags=["Calificacion"],dependencies = [Depends(get_current_user)])
 app.include_router(auth_router, prefix="/auth")

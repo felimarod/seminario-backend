@@ -40,7 +40,7 @@ class TransaccionResponse(BaseModel):
     """Schema para respuesta de Transaccion."""
 
     transaccion:int
-    estado_actual: str
+    estado_actual: Dict[str,Any]
     fechas: Dict[str,datetime]   
     recurso: Dict[str,Any]
     usuario: Dict[str,Any]
@@ -52,7 +52,15 @@ class TransaccionResponse(BaseModel):
     def from_transaccion_db(cls, transaccion_db: Transaccion):
         data = transaccion_db.__dict__.copy()
         data["transaccion"] = transaccion_db.id_transaccion
-        data["estado_actual"] = transaccion_db.historial[0].estado.nombre_estado_transaccion
+        estado = sorted(
+                transaccion_db.historial, 
+                key=lambda h: h.fecha_cambio, 
+                reverse=True
+            )[0].estado
+        data["estado_actual"] = {
+            "id_estado_transaccion": estado.id_estado_transaccion,
+            "nombre_estado_transaccion": estado.nombre_estado_transaccion
+        }
         data["fechas"] = {
             "fecha_inicio_transaccion": transaccion_db.fecha_inicio_transaccion,
             "fecha_fin_transaccion": transaccion_db.fecha_fin_transaccion,

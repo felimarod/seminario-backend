@@ -919,6 +919,15 @@ INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_
   VALUES (TO_TIMESTAMP('2025-12-12 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2025-12-12 16:00:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'PC-1', NULL);
 INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
   VALUES (TO_TIMESTAMP('2025-12-13 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2025-12-13 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'PC-1', NULL);
+
+INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+  VALUES (TO_TIMESTAMP('2025-12-08 02:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2025-12-08 02:30:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'Ebook-1', NULL);
+INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+  VALUES (TO_TIMESTAMP('2025-12-08 02:50:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2025-12-08 03:20:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'Ebook-2', NULL);
+INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+  VALUES (TO_TIMESTAMP('2025-12-08 03:10:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2025-12-08 03:40:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'Ebook-3', NULL);
+INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+  VALUES (TO_TIMESTAMP('2025-12-08 03:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2025-12-08 05:00:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'Ebook-4', NULL);
 -- INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_tipo_transaccion, id_usuario, id_recurso, id_empleado_responsable)
 --   VALUES (SYSDATE, SYSDATE + 1, 'Completada', NULL, 1, 4, 'PC-1', 3);
 -- INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_tipo_transaccion, id_usuario, id_recurso, id_empleado_responsable)

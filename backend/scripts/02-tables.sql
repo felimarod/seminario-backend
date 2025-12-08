@@ -201,9 +201,9 @@ CREATE TABLE Transaccion(
 	CONSTRAINT trans_usuario_fk REFERENCES Usuario(id_usuario),
 	id_recurso VARCHAR(20) 
 	CONSTRAINT trans_recurso_fk REFERENCES Recurso(id_recurso),
-	id_empleado_responsable NUMBER(5) 
+	id_empleado_responsable NUMBER(5)
 	CONSTRAINT trans_responsable_fk REFERENCES Usuario(id_usuario)
-);
+	);
 
 CREATE SEQUENCE trans_seq START WITH 1 INCREMENT BY 1;
 
@@ -220,6 +220,8 @@ CREATE TABLE HistorialTransaccion(
 	fecha_cambio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	estado_nuevo NUMBER(5)
 	CONSTRAINT historialtrans_est_fk REFERENCES EstadoTransaccion(id_estado_transaccion),
+	usuario_responsable NUMBER(5)
+	CONSTRAINT historialtrans_user_fk REFERENCES Usuario(id_usuario),
 	CONSTRAINT historialtrans_pk PRIMARY KEY (id_transaccion, fecha_cambio)
 );
 
@@ -227,11 +229,11 @@ CREATE TRIGGER trans_air AFTER INSERT ON Transaccion
 FOR EACH ROW
 BEGIN
 	IF :NEW.id_empleado_responsable IS NULL THEN
-		INSERT INTO HistorialTransaccion (id_transaccion, estado_nuevo)
- 	 	VALUES (:NEW.id_transaccion, 1);
+		INSERT INTO HistorialTransaccion (id_transaccion, estado_nuevo, usuario_responsable)
+ 	 	VALUES (:NEW.id_transaccion, 1, :NEW.id_usuario);
 	ELSE
-		INSERT INTO HistorialTransaccion (id_transaccion, estado_nuevo)
- 	 	VALUES (:NEW.id_transaccion, 2);
+		INSERT INTO HistorialTransaccion (id_transaccion, estado_nuevo, usuario_responsable)
+ 	 	VALUES (:NEW.id_transaccion, 2, :NEW.id_empleado_responsable);
 	END IF;
 END;
 /

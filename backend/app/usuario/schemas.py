@@ -1,9 +1,10 @@
 """Pydantic schemas para Usuario."""
 
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from pydantic import BaseModel, EmailStr, Field
 
+from app.usuario.models import Usuario
 
 class UsuarioBase(BaseModel):
     """Base schema para Usuario."""
@@ -32,10 +33,31 @@ class UsuarioUpdate(BaseModel):
     id_unidad: Optional[int] = Field(..., description="ID de la unidad")
 
 
-class UsuarioResponse(UsuarioBase):
+class UsuarioResponse(BaseModel):
     """Schema para respuesta de Usuario."""
 
-    id_usuario: int
-    
+    usuario: Dict[str,Any]
+    unidad: Optional[Dict[str,Any]] = None
+    tipo: Dict[str,Any]
     model_config = {"from_attributes": True}
 
+    @classmethod
+    def from_usuario_db(cls, usuario_db: Usuario):
+        """Crea un UsuarioResponse a partir de un modelo de base de datos Usuario."""
+        data = usuario_db.__dict__.copy()
+        data["usuario"] = {
+            "id_usuario": usuario_db.id_usuario,
+            "nombre": usuario_db.nombre,
+            "apellido": usuario_db.apellido,
+            "correo": usuario_db.correo,
+        }
+        data["tipo"] = {
+            "id_tipo_usuario": usuario_db.tipo_usuario.id_tipo_usuario,
+            "nombre_tipo_usuario": usuario_db.tipo_usuario.nombre_tipo_usuario
+        }
+        if usuario_db.unidad:
+            data["unidad"] = {
+                "id_unidad": usuario_db.unidad.id_unidad,
+                "nombre_unidad": usuario_db.unidad.nombre_unidad
+            }
+        return cls.from_orm(data)

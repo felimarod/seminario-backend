@@ -2,7 +2,6 @@ from sqlalchemy import Column, ForeignKey, Integer, String, LargeBinary, text
 from sqlalchemy.orm import relationship
 from app.core.database import DBBase
 
-
 class EstadoTransaccion(DBBase):
     """Modelo de EstadoTransaccion."""
     __tablename__ = "estadotransaccion"

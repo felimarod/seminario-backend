@@ -5,12 +5,9 @@ from pydantic import BaseModel
 from datetime import datetime, timedelta
 from jose import jwt
 from sqlalchemy.orm import Session
-from app.usuario.models import Usuario
 from app.usuario.schemas import UsuarioResponse
-from app.unidad.selectors import UnidadSelectors
 from app.usuario.selectors import UsuarioSelectors
-from app.tipo_usuario.selectors import TipoUsuarioSelectors
-from app.common.dependencies import get_db, get_current_user
+from app.common.dependencies import get_db
 
 # Setting up constants for JWT
 SECRET_KEY = "cualquiercosaquevosgusteparaserunasecretkey"
@@ -38,19 +35,11 @@ class Token(BaseModel):
 def authenticate_user(correo: str, password: str, db: Session) -> Optional[UsuarioResponse]:
     
     userRes = UsuarioSelectors.login(db=db,correo=correo, password=password)
-    #userRes = UsuarioResponse.model_validate(user)
     if not userRes:
         return None
     if password != userRes.contrasena:
         return None
-    if userRes.id_tipo_usuario in (2,3):  # admin or empleado
-        userRes.unidad  = UnidadSelectors.get_by_id(db=db,id_unidad=userRes.id_unidad).nombre_unidad
-    else:
-        userRes.unidad = None
-    userRes.tipo_usuario = TipoUsuarioSelectors.get_by_id(db=db, id_tipo_usuario=userRes.id_tipo_usuario).nombre_tipo_usuario
-    print("user,correo,passaswd")
-    print(userRes,correo,password)
-    return userRes
+    return UsuarioResponse.from_usuario_db(userRes)
 
 # Function to create JWT access token
 def create_access_token(data: dict, expires_delta: timedelta = None):
@@ -72,21 +61,17 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail="Incorrect nombre or password", headers={"WWW-Authenticate": "Bearer"})
     
-    dataUser = {"sub":user.correo,
-              "nombre": user.nombre,
-              "apellido": user.apellido,
-              "id_usuario": user.id_usuario,
-              "id_tipo_usuario": user.id_tipo_usuario,
-              "tipo_usuario": user.tipo_usuario,
-              "id_unidad": user.id_unidad,
-              "unidad": user.unidad}
+    dataUser = {"sub":user.usuario["correo"],
+              "nombre": user.usuario["nombre"],
+              "apellido": user.usuario["apellido"],
+              "id_usuario": user.usuario["id_usuario"],
+              "id_tipo_usuario": user.tipo["id_tipo_usuario"],
+              "tipo_usuario": user.tipo["nombre_tipo_usuario"],
+              "id_unidad": user.unidad["id_unidad"] if user.unidad else None,
+              "unidad": user.unidad["nombre_unidad"] if user.unidad else None}
 
     access_token = create_access_token(
         data=dataUser,
         expires_delta=timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     
     return {"access_token": access_token, "token_type": "bearer", "usuario":dataUser}
-
-@router.get("/protected-endpoint")
-async def protected_endpoint(current_user: Usuario = Depends(get_current_user)):
-    return current_user

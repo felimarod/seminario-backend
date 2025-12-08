@@ -104,7 +104,7 @@ def reserva_to_prestamo(
     return TransaccionResponse.from_transaccion_db(transaccion)
 
 @router.put("/devolucion", response_model=TransaccionResponse)
-def reserva_to_prestamo(
+def prestamo_to_devolucion(
     request: Request, 
     id_transaccion: int = Form(..., description="ID de la transacción a actualizar"),  
     db: Session = Depends(get_db)
@@ -113,7 +113,7 @@ def reserva_to_prestamo(
     user = request.state.user
     if user["tipo"] != 3:
         raise HTTPException(status_code=403, detail="No tienes permiso para actualizar una reserva a prestamo")
-    transaccion = TransaccionService.prestar(db, id_transaccion, int(user["id"]), password_user)
+    transaccion = TransaccionService.devolver(db, id_transaccion, int(user["id"]))
     return TransaccionResponse.from_transaccion_db(transaccion)
 
 @router.put("/{id_transaccion}", response_model=TransaccionResponse)

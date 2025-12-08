@@ -117,7 +117,7 @@ class TransaccionService:
         
     @staticmethod
     def prestar(db: Session, id_transaccion: int, id_empleado: int, password_user: str) -> Transaccion:
-        """Actualiza un transaccion existente."""
+        """Actualiza un transaccion existente de reserva a prestamo."""
         try:
             db_transaccion = TransaccionSelectors.get_by_id(db, id_transaccion)
             if not db_transaccion:
@@ -126,7 +126,12 @@ class TransaccionService:
                 )
             if id_empleado is None:
                 raise ValueError("El empleado responsable no puede ser nulo")
-            estado_actual = db_transaccion.historial[0].estado.id_estado_transaccion
+            estado_actual =  sorted(
+                db_transaccion.historial, 
+                key=lambda h: h.fecha_cambio, 
+                reverse=True
+            )[0].estado.id_estado_transaccion
+            
             db_empleado = UsuarioSelectors.get_by_id(db=db,id_usuario=id_empleado)
             if not db_empleado:
                 raise ValueError("El empleado responsable no existe")
@@ -152,7 +157,8 @@ class TransaccionService:
             
             db_historial_transaccion = HistorialTransaccion(
                 id_transaccion=id_transaccion,
-                estado_nuevo=2
+                estado_nuevo=2,
+                usuario_responsable=id_empleado
             )
             db.add(db_historial_transaccion)
             db.commit()
@@ -171,6 +177,60 @@ class TransaccionService:
                 detail="Error de integridad al actualizar la transacción"
             )
         except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Error interno del servidor al actualizar la transacción"
+            )
+
+    @staticmethod
+    def devolver(db: Session, id_transaccion: int, id_empleado: int) -> Transaccion:
+        """Actualiza un transaccion existente de prestamo a devolucion."""
+        try:
+            db_transaccion = TransaccionSelectors.get_by_id(db, id_transaccion)
+            if not db_transaccion:
+                raise ValueError("Transaccion no encontrada")
+            if id_empleado is None:
+                raise ValueError("El empleado responsable no puede ser nulo")
+            estado_actual =  sorted(
+                db_transaccion.historial, 
+                key=lambda h: h.fecha_cambio, 
+                reverse=True
+            )[0].estado.id_estado_transaccion
+            db_empleado = UsuarioSelectors.get_by_id(db=db,id_usuario=id_empleado)
+            if not db_empleado:
+                raise ValueError("El empleado responsable no existe")
+            
+            if db_empleado.id_unidad != db_transaccion.recurso.tipo_recurso.id_unidad:
+                raise ValueError("El empleado responsable no pertenece a la unidad del recurso")
+            
+            if estado_actual != 2:
+                raise ValueError("La transacción no está en estado 'prestado', no se puede realizar la devolucion")
+            
+            db_transaccion.id_empleado_responsable = id_empleado
+            
+            db_historial_transaccion = HistorialTransaccion(
+                id_transaccion=id_transaccion,
+                estado_nuevo=4,
+                usuario_responsable=id_empleado
+            )
+            db.add(db_historial_transaccion)
+            db.commit()
+            db.refresh(db_historial_transaccion)
+            db.refresh(db_transaccion)
+            return db_transaccion
+        except ValueError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+        except IntegrityError as e:
+            print(e)
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Error de integridad al actualizar la transacción"
+            )
+        except Exception as e:
+            print(e)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Error interno del servidor al actualizar la transacción"
