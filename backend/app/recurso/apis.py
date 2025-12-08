@@ -20,18 +20,6 @@ from app.recurso.services import RecursoService
 router = APIRouter()
 
 
-@router.get("/{id_recurso}", response_model=RecursoResponse)
-def get_recurso(id_recurso: str, db: Session = Depends(get_db)):
-    """Obtiene un recurso por su ID."""
-    recurso = RecursoSelectors.get_by_id(db, id_recurso)
-    if recurso is None:
-        raise HTTPException(status_code=404, detail="Recurso no encontrado")
-    recurso.nombre_tipo = TipoRecursoSelectors.get_by_id(
-        db=db, id_tipo_recurso=recurso.id_tipo_recurso
-    ).nombre_tipo_recurso
-    return RecursoResponse.parse_image(recurso_db=recurso)
-
-
 @router.post("/", response_model=List[RecursoResponse])
 def get_recursos(
     request: Request,
@@ -80,8 +68,8 @@ async def create_recurso(request:Request,
 
 ## TODO: Update recurso
 # @router.put("/{id_recurso}", response_model=RecursoResponse)
-def update_recurso(
-    id_recurso: int, recurso_data: RecursoUpdate, db: Session = Depends(get_db)
-):
-    """Actualiza un recurso."""
-    return RecursoService.update(db, id_recurso, recurso_data)
+# def update_recurso(
+#     id_recurso: int, recurso_data: RecursoUpdate, db: Session = Depends(get_db)
+# ):
+#     """Actualiza un recurso."""
+#     return RecursoService.update(db, id_recurso, recurso_data)

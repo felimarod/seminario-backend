@@ -14,11 +14,11 @@ from app.historial_transaccion.selectors import HistorialTransaccionSelectors
 router = APIRouter()
 
 
-@router.get("/", response_model=List[HistorialTransaccionResponse])
-def get_tipo_recurso(
-    request: Request,
-    db: Session = Depends(get_db),
-):
-    """Obtiene un historial_transaccion por su ID."""
-    historial = HistorialTransaccionSelectors.get_all(db=db)
-    return [HistorialTransaccionResponse.from_historial_db(h) for h in historial]
+# @router.get("/", response_model=List[HistorialTransaccionResponse])
+# def get_tipo_recurso(
+#     request: Request,
+#     db: Session = Depends(get_db),
+# ):
+#     """Obtiene un historial_transaccion por su ID."""
+#     historial = HistorialTransaccionSelectors.get_all(db=db)
+#     return [HistorialTransaccionResponse.from_historial_db(h) for h in historial]

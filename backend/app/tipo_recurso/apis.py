@@ -36,27 +36,6 @@ def get_tipo_recursos(
     return [TipoRecursoResponse.from_tipo_recurso_db(recurso) for recurso in recursos]
 
 
-@router.get("/{id_tipo_recurso}", response_model=TipoRecursoResponse)
-def get_tipo_recurso(
-    id_tipo_recurso: int,
-    request: Request,
-    db: Session = Depends(get_db),
-):
-    """Obtiene un tipo_recurso por su ID."""
-    user = request.state.user
-    tipo_recurso = TipoRecursoSelectors.get_by_id(db, id_tipo_recurso)
-    if tipo_recurso is None:
-        raise HTTPException(status_code=404, detail="Tipo de recurso no encontrado")
-    if user["tipo"] == 2 and tipo_recurso.id_unidad != user["unidad"]:
-        raise HTTPException(
-            status_code=403, detail="No tienes permiso para ver esta información"
-        )
-    tipo_recurso.unidad = UnidadSelectors.get_by_id(
-        db, tipo_recurso.id_unidad
-    ).nombre_unidad
-    return tipo_recurso
-
-
 @router.post("/create", response_model=TipoRecursoResponse, status_code=201)
 def create_tipo_recurso(tipo_recurso_data: TipoRecursoCreate, request: Request, db: Session = Depends(get_db)):
     """Crea un nuevo tipo_recurso."""
@@ -72,22 +51,22 @@ def create_tipo_recurso(tipo_recurso_data: TipoRecursoCreate, request: Request, 
     return TipoRecursoResponse.from_tipo_recurso_db(respuesta)
 
 
-@router.put("/{id_tipo_recurso}", response_model=TipoRecursoResponse)
-def update_tipo_recurso(
-    id_tipo_recurso: int, tipo_recurso_data: TipoRecursoUpdate, request: Request, db: Session = Depends(get_db)
-):
-    """Actualiza un tipo_recurso."""
-    user = request.state.user
-    if user["tipo"] not in (1,2):
-        raise HTTPException(status_code=403, detail="No tienes permiso para ver esta información")
-    if user["tipo"] == 2:
-        if not tipo_recurso_data.id_unidad: tipo_recurso_data.id_unidad = user["unidad"]
-        tipo_recurso = TipoRecursoSelectors.get_by_id(db, id_tipo_recurso)
-        if tipo_recurso is None:
-            raise HTTPException(status_code=403, detail="El tipo de recurso no existe")
-        if tipo_recurso.id_unidad != user["unidad"]:
-            raise HTTPException(status_code=403, detail="Este tipo de recursos no pertenece a tu unidad")
-        if tipo_recurso_data.id_unidad != user["unidad"]:
-            raise HTTPException(status_code=403, detail="No puedes mover tus recursos a otras unidades")
-    print(1)
-    return TipoRecursoService.update(db, id_tipo_recurso, tipo_recurso_data)
+# @router.put("/{id_tipo_recurso}", response_model=TipoRecursoResponse)
+# def update_tipo_recurso(
+#     id_tipo_recurso: int, tipo_recurso_data: TipoRecursoUpdate, request: Request, db: Session = Depends(get_db)
+# ):
+#     """Actualiza un tipo_recurso."""
+#     user = request.state.user
+#     if user["tipo"] not in (1,2):
+#         raise HTTPException(status_code=403, detail="No tienes permiso para ver esta información")
+#     if user["tipo"] == 2:
+#         if not tipo_recurso_data.id_unidad: tipo_recurso_data.id_unidad = user["unidad"]
+#         tipo_recurso = TipoRecursoSelectors.get_by_id(db, id_tipo_recurso)
+#         if tipo_recurso is None:
+#             raise HTTPException(status_code=403, detail="El tipo de recurso no existe")
+#         if tipo_recurso.id_unidad != user["unidad"]:
+#             raise HTTPException(status_code=403, detail="Este tipo de recursos no pertenece a tu unidad")
+#         if tipo_recurso_data.id_unidad != user["unidad"]:
+#             raise HTTPException(status_code=403, detail="No puedes mover tus recursos a otras unidades")
+#     print(1)
+#     return TipoRecursoService.update(db, id_tipo_recurso, tipo_recurso_data)

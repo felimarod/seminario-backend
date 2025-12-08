@@ -20,38 +20,6 @@ from app.transaccion.services import TransaccionService
 
 router = APIRouter()
 
-@router.get("/{id_transaccion}", response_model=TransaccionResponse)
-def get_transaccion(
-    id_transaccion: int,
-    db: Session = Depends(get_db),
-):
-    """Obtiene un transaccion por su ID."""
-    transaccion = TransaccionSelectors.get_by_id(db, id_transaccion)
-    if transaccion is None:
-        raise HTTPException(status_code=404, detail="Transaccion no encontrado")
-    usuario = UsuarioSelectors.get_by_id(db=db,id_usuario=transaccion.id_usuario)
-    empleado = UsuarioSelectors.get_by_id(db=db,id_usuario=transaccion.id_empleado_responsable)
-    recurso = RecursoSelectors.get_by_id(db=db,id_recurso=transaccion.id_recurso)
-    tipoRecurso = TipoRecursoSelectors.get_by_id(db=db,id_tipo_recurso=recurso.id_tipo_recurso)
-    transaccion.usuario = {
-        "id_usuario":usuario.id_usuario,
-        "nombre": usuario.nombre,
-        "apellido": usuario.apellido
-    }
-    transaccion.recurso = {
-        "id_recurso": recurso.id_recurso,
-        "nombre_recurso": recurso.nombre_recurso,
-        "id_tip": tipoRecurso.id_tipo_recurso,
-        "nombre_tipo": tipoRecurso.nombre_tipo_recurso,
-    }
-    if transaccion.id_empleado_responsable is not None:
-        transaccion.empleado_responsable={
-            "id_usuario":empleado.id_usuario,
-            "nombre": usuario.nombre,
-            "apellido": usuario.apellido
-        }
-    return transaccion
-
 
 @router.post("/", response_model=List[TransaccionResponse])
 def get_transaccions(
@@ -118,9 +86,9 @@ def prestamo_to_devolucion(
     transaccion = TransaccionService.devolver(db, id_transaccion, int(user["id"]))
     return TransaccionResponse.from_transaccion_db(transaccion)
 
-@router.put("/{id_transaccion}", response_model=TransaccionResponse)
-def update_transaccion(
-    id_transaccion: int, transaccion_data: TransaccionUpdate, db: Session = Depends(get_db)
-):
-    """Actualiza un transaccion."""
-    return TransaccionService.update(db, id_transaccion, transaccion_data)
+# @router.put("/{id_transaccion}", response_model=TransaccionResponse)
+# def update_transaccion(
+#     id_transaccion: int, transaccion_data: TransaccionUpdate, db: Session = Depends(get_db)
+# ):
+#     """Actualiza un transaccion."""
+#     return TransaccionService.update(db, id_transaccion, transaccion_data)
