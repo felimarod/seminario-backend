@@ -133,8 +133,8 @@ class TransaccionService:
         db_transaccion.fecha_inicio_transaccion = TransaccionService.to_aware(db_transaccion.fecha_inicio_transaccion)
         db_transaccion.fecha_fin_transaccion = TransaccionService.to_aware(db_transaccion.fecha_fin_transaccion)
             
-        if db_transaccion.fecha_inicio_transaccion > ahora and ahora > db_transaccion.fecha_inicio_transaccion:
-        
+        if db_transaccion.fecha_inicio_transaccion > ahora or ahora > db_transaccion.fecha_fin_transaccion:
+            raise ValueError("No se puede prestar la reserva fuera del tiempo de programado")
         for field, value in transaccion_data.model_dump(exclude_unset=True).items():
             setattr(db_transaccion, field, value)
         db.commit()
