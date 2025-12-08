@@ -1,4 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
 
 from app.core.database import DBBase
 
@@ -10,4 +11,6 @@ class Calificacion(DBBase):
     cumplimiento_horarios = Column(Integer, nullable=False)
     calidad_servicio = Column(Integer, nullable=False)
     atencion_personal = Column(Integer, nullable=False)
-    id_transaccion = Column(Integer, nullable=False)
+    id_transaccion = Column(Integer, ForeignKey("transaccion.id_transaccion"), nullable=False)
+
+    transaccion = relationship("Transaccion", back_populates="calificaciones")
