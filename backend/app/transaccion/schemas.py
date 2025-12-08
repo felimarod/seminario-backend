@@ -1,6 +1,6 @@
 """Pydantic schemas para Transaccion."""
 
-from typing import Optional, Dict, Any, Tuple
+from typing import List, Optional, Dict, Any, Tuple
 
 from pydantic import BaseModel, Field
 from datetime import datetime
@@ -93,7 +93,8 @@ class Filtros(BaseModel):
     id_usuario: Optional[int] = Field(default=None, description="id del usuario que solicita el recurso")
     id_recurso: Optional[str] = Field(default=None, description="id recurso del recurso solicitado")
     id_empleado_responsable: Optional[int] = Field(default=None, description="id del empleado que da/recibe el recurso")
-    
+    estado_transaccion: Optional[List[int]] = Field(default=None, description="listado de id del estado de la transaccion")
+
     id_tipo_recurso: Optional[int] = Field(default=None, description="id del tipo de recurso solicitado")
     id_unidad: Optional[int] = Field(default=None, description="id de la unidad al que pertence el recurso")
     

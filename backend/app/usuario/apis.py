@@ -34,16 +34,16 @@ def get_usuarios(
     return UsuarioSelectors.get_all(db, skip=skip, limit=limit)
 
 
-@router.get("/{id_usuario}", response_model=UsuarioResponse)
-def get_usuario(id_usuario: int,request: Request, db: Session = Depends(get_db)):
-    """Obtiene un usuario por su ID."""
+@router.get("/{correo_usuario}", response_model=UsuarioResponse)
+def get_usuario_by_correo(correo_usuario: str,request: Request, db: Session = Depends(get_db)):
+    """Obtiene un usuario por su correo."""
     user = request.state.user
-    if user["tipo"] != 2:
+    if user["tipo"] == 4:
         raise HTTPException(status_code=403, detail="No tienes permiso para ver esta información")
-    usuario = UsuarioSelectors.get_by_id(db, id_usuario)
+    usuario = UsuarioSelectors.get_by_correo(db, correo_usuario)
     if not usuario:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
-    return usuario
+    return UsuarioResponse.from_usuario_db(usuario)
 
 
 @router.post("/", response_model=UsuarioResponse, status_code=201)

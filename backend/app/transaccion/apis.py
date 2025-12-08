@@ -68,6 +68,8 @@ def get_transaccions(
     if user["tipo"] == 4:
         filtros.id_usuario = user["id"]
     transacciones = TransaccionSelectors.get_filter(db,filtros=filtros, skip=skip, limit=limit)
+    if filtros.estado_transaccion:
+        return [TransaccionResponse.from_transaccion_db(transaccion) for transaccion in transacciones if transaccion.lastHistorial().id_estado_transaccion in filtros.estado_transaccion]
     return [TransaccionResponse.from_transaccion_db(transaccion) for transaccion in transacciones]
 
 

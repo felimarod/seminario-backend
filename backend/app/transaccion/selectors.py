@@ -10,6 +10,7 @@ from app.estado_transaccion.models import EstadoTransaccion
 from app.transaccion.models import Transaccion
 from app.recurso.models import Recurso
 from app.tipo_recurso.models import TipoRecurso
+from app.estado_transaccion.selectors import EstadoTransaccionSelectors
 from app.transaccion.schemas import Filtros
 
 
@@ -92,7 +93,7 @@ class TransaccionSelectors:
             query = query.join(Recurso, Recurso.id_recurso == Transaccion.id_recurso)
             query = query.join(TipoRecurso, TipoRecurso.id_tipo_recurso == Recurso.id_tipo_recurso)
             query = query.filter(TipoRecurso.id_unidad == filtros.id_unidad)
-
+    
         if filtros.id_usuario:
             query = query.filter(Transaccion.id_usuario == filtros.id_usuario)
         if filtros.id_empleado_responsable:
