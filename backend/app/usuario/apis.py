@@ -58,6 +58,8 @@ def create_usuario(usuario_data: UsuarioCreate, user: dict = Depends(get_current
     if user["tipo"] == 1:
         if usuario_data.id_unidad is None or usuario_data.id_tipo_usuario is None:
             raise HTTPException(status_code=400, detail="id_unidad e id_tipo_usuario son obligatorios")
+        if usuario_data.id_tipo_usuario == 4:
+            raise HTTPException(status_code=403, detail="No puedes crear usuarios")
     if user["tipo"] == 2:
         usuario_data.id_unidad = user["unidad"]
         usuario_data.id_tipo_usuario = 3  # Solo pueden crear usuarios empleados

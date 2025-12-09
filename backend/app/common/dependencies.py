@@ -50,6 +50,7 @@ async def get_current_user(request:Request ,token: str = Depends(oauth2_scheme),
         "tipo": user.id_tipo_usuario,
         "unidad": user.id_unidad
         }
+    return request.state.user
 
 def pagination_params(
     q: str | None = None,

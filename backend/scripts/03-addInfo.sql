@@ -1371,6 +1371,282 @@ BEGIN
   cargar_imagen_recurso('Sal.jpg', 'Sal-8');
   cargar_imagen_recurso('Sal.jpg', 'Sal-9');
   cargar_imagen_recurso('Sal.jpg', 'Sal-10');
+
+  cargar_imagen_recurso('Cam.jpg', 'Cam-1');
+  cargar_imagen_recurso('Cam.jpg', 'Cam-2');
+  cargar_imagen_recurso('Cam.jpg', 'Cam-3');
+  cargar_imagen_recurso('Cam.jpg', 'Cam-4');
+  cargar_imagen_recurso('Cam.jpg', 'Cam-5');
+  cargar_imagen_recurso('Cam.jpg', 'Cam-6');
+  cargar_imagen_recurso('Cam.jpg', 'Cam-7');
+  cargar_imagen_recurso('Cam.jpg', 'Cam-8');
+  cargar_imagen_recurso('Cam.jpg', 'Cam-9');
+  cargar_imagen_recurso('Cam.jpg', 'Cam-10');
+
+  cargar_imagen_recurso('Mic.jpg', 'Mic-1');
+  cargar_imagen_recurso('Mic.jpg', 'Mic-2');
+  cargar_imagen_recurso('Mic.jpg', 'Mic-3');
+  cargar_imagen_recurso('Mic.jpg', 'Mic-4');
+  cargar_imagen_recurso('Mic.jpg', 'Mic-5');
+  cargar_imagen_recurso('Mic.jpg', 'Mic-6');
+  cargar_imagen_recurso('Mic.jpg', 'Mic-7');
+  cargar_imagen_recurso('Mic.jpg', 'Mic-8');
+  cargar_imagen_recurso('Mic.jpg', 'Mic-9');
+  cargar_imagen_recurso('Mic.jpg', 'Mic-10');
+
+  cargar_imagen_recurso('AulaM.jpg', 'AulaM-1');
+  cargar_imagen_recurso('AulaM.jpg', 'AulaM-2');
+  cargar_imagen_recurso('AulaM.jpg', 'AulaM-3');
+  cargar_imagen_recurso('AulaM.jpg', 'AulaM-4');
+  cargar_imagen_recurso('AulaM.jpg', 'AulaM-5');
+  cargar_imagen_recurso('AulaM.jpg', 'AulaM-6');
+  cargar_imagen_recurso('AulaM.jpg', 'AulaM-7');
+  cargar_imagen_recurso('AulaM.jpg', 'AulaM-8');
+  cargar_imagen_recurso('AulaM.jpg', 'AulaM-9');
+  cargar_imagen_recurso('AulaM.jpg', 'AulaM-10');
+
+  cargar_imagen_recurso('ProyHD.jpg', 'ProyHD-1');
+  cargar_imagen_recurso('ProyHD.jpg', 'ProyHD-2');
+  cargar_imagen_recurso('ProyHD.jpg', 'ProyHD-3');
+  cargar_imagen_recurso('ProyHD.jpg', 'ProyHD-4');
+  cargar_imagen_recurso('ProyHD.jpg', 'ProyHD-5');
+  cargar_imagen_recurso('ProyHD.jpg', 'ProyHD-6');
+  cargar_imagen_recurso('ProyHD.jpg', 'ProyHD-7');
+  cargar_imagen_recurso('ProyHD.jpg', 'ProyHD-8');
+  cargar_imagen_recurso('ProyHD.jpg', 'ProyHD-9');
+  cargar_imagen_recurso('ProyHD.jpg', 'ProyHD-10');
+
+  cargar_imagen_recurso('PizInt.jpg', 'PizInt-1');
+  cargar_imagen_recurso('PizInt.jpg', 'PizInt-2');
+  cargar_imagen_recurso('PizInt.jpg', 'PizInt-3');
+  cargar_imagen_recurso('PizInt.jpg', 'PizInt-4');
+  cargar_imagen_recurso('PizInt.jpg', 'PizInt-5');
+  cargar_imagen_recurso('PizInt.jpg', 'PizInt-6');
+  cargar_imagen_recurso('PizInt.jpg', 'PizInt-7');
+  cargar_imagen_recurso('PizInt.jpg', 'PizInt-8');
+  cargar_imagen_recurso('PizInt.jpg', 'PizInt-9');
+  cargar_imagen_recurso('PizInt.jpg', 'PizInt-10');
+
+  cargar_imagen_recurso('Libro.jpg', 'Libro-1');
+  cargar_imagen_recurso('Libro.jpg', 'Libro-2');
+  cargar_imagen_recurso('Libro.jpg', 'Libro-3');
+  cargar_imagen_recurso('Libro.jpg', 'Libro-4');
+  cargar_imagen_recurso('Libro.jpg', 'Libro-5');
+  cargar_imagen_recurso('Libro.jpg', 'Libro-6');
+  cargar_imagen_recurso('Libro.jpg', 'Libro-7');
+  cargar_imagen_recurso('Libro.jpg', 'Libro-8');
+  cargar_imagen_recurso('Libro.jpg', 'Libro-9');
+  cargar_imagen_recurso('Libro.jpg', 'Libro-10');
+
+  cargar_imagen_recurso('Ebook.jpg', 'Ebook-1');
+  cargar_imagen_recurso('Ebook.jpg', 'Ebook-2');
+  cargar_imagen_recurso('Ebook.jpg', 'Ebook-3');
+  cargar_imagen_recurso('Ebook.jpg', 'Ebook-4');
+  cargar_imagen_recurso('Ebook.jpg', 'Ebook-5');
+  cargar_imagen_recurso('Ebook.jpg', 'Ebook-6');
+  cargar_imagen_recurso('Ebook.jpg', 'Ebook-7');
+  cargar_imagen_recurso('Ebook.jpg', 'Ebook-8');
+  cargar_imagen_recurso('Ebook.jpg', 'Ebook-9');
+  cargar_imagen_recurso('Ebook.jpg', 'Ebook-10');
+
+  cargar_imagen_recurso('SalaEst.jpg', 'SalaEst-1');
+  cargar_imagen_recurso('SalaEst.jpg', 'SalaEst-2');
+  cargar_imagen_recurso('SalaEst.jpg', 'SalaEst-3');
+  cargar_imagen_recurso('SalaEst.jpg', 'SalaEst-4');
+  cargar_imagen_recurso('SalaEst.jpg', 'SalaEst-5');
+  cargar_imagen_recurso('SalaEst.jpg', 'SalaEst-6');
+  cargar_imagen_recurso('SalaEst.jpg', 'SalaEst-7');
+  cargar_imagen_recurso('SalaEst.jpg', 'SalaEst-8');
+  cargar_imagen_recurso('SalaEst.jpg', 'SalaEst-9');
+  cargar_imagen_recurso('SalaEst.jpg', 'SalaEst-10');
+
+  cargar_imagen_recurso('PCBib.jpg', 'PCBib-1');
+  cargar_imagen_recurso('PCBib.jpg', 'PCBib-2');
+  cargar_imagen_recurso('PCBib.jpg', 'PCBib-3');
+  cargar_imagen_recurso('PCBib.jpg', 'PCBib-4');
+  cargar_imagen_recurso('PCBib.jpg', 'PCBib-5');
+  cargar_imagen_recurso('PCBib.jpg', 'PCBib-6');
+  cargar_imagen_recurso('PCBib.jpg', 'PCBib-7');
+  cargar_imagen_recurso('PCBib.jpg', 'PCBib-8');
+  cargar_imagen_recurso('PCBib.jpg', 'PCBib-9');
+  cargar_imagen_recurso('PCBib.jpg', 'PCBib-10');
+
+  cargar_imagen_recurso('Cub.jpg', 'Cub-1');
+  cargar_imagen_recurso('Cub.jpg', 'Cub-2');
+  cargar_imagen_recurso('Cub.jpg', 'Cub-3');
+  cargar_imagen_recurso('Cub.jpg', 'Cub-4');
+  cargar_imagen_recurso('Cub.jpg', 'Cub-5');
+  cargar_imagen_recurso('Cub.jpg', 'Cub-6');
+  cargar_imagen_recurso('Cub.jpg', 'Cub-7');
+  cargar_imagen_recurso('Cub.jpg', 'Cub-8');
+  cargar_imagen_recurso('Cub.jpg', 'Cub-9');
+  cargar_imagen_recurso('Cub.jpg', 'Cub-10');
+
+  cargar_imagen_recurso('SalaInn.jpg', 'SalaInn-1');
+  cargar_imagen_recurso('SalaInn.jpg', 'SalaInn-2');
+  cargar_imagen_recurso('SalaInn.jpg', 'SalaInn-3');
+  cargar_imagen_recurso('SalaInn.jpg', 'SalaInn-4');
+  cargar_imagen_recurso('SalaInn.jpg', 'SalaInn-5');
+  cargar_imagen_recurso('SalaInn.jpg', 'SalaInn-6');
+  cargar_imagen_recurso('SalaInn.jpg', 'SalaInn-7');
+  cargar_imagen_recurso('SalaInn.jpg', 'SalaInn-8');
+  cargar_imagen_recurso('SalaInn.jpg', 'SalaInn-9');
+  cargar_imagen_recurso('SalaInn.jpg', 'SalaInn-10');
+
+  cargar_imagen_recurso('Ment.jpg', 'Ment-1');
+  cargar_imagen_recurso('Ment.jpg', 'Ment-2');
+  cargar_imagen_recurso('Ment.jpg', 'Ment-3');
+  cargar_imagen_recurso('Ment.jpg', 'Ment-4');
+  cargar_imagen_recurso('Ment.jpg', 'Ment-5');
+  cargar_imagen_recurso('Ment.jpg', 'Ment-6');
+  cargar_imagen_recurso('Ment.jpg', 'Ment-7');
+  cargar_imagen_recurso('Ment.jpg', 'Ment-8');
+  cargar_imagen_recurso('Ment.jpg', 'Ment-9');
+  cargar_imagen_recurso('Ment.jpg', 'Ment-10');
+
+  cargar_imagen_recurso('Cow.jpg', 'Cow-1');
+  cargar_imagen_recurso('Cow.jpg', 'Cow-2');
+  cargar_imagen_recurso('Cow.jpg', 'Cow-3');
+  cargar_imagen_recurso('Cow.jpg', 'Cow-4');
+  cargar_imagen_recurso('Cow.jpg', 'Cow-5');
+  cargar_imagen_recurso('Cow.jpg', 'Cow-6');
+  cargar_imagen_recurso('Cow.jpg', 'Cow-7');
+  cargar_imagen_recurso('Cow.jpg', 'Cow-8');
+  cargar_imagen_recurso('Cow.jpg', 'Cow-9');
+  cargar_imagen_recurso('Cow.jpg', 'Cow-10');
+
+  cargar_imagen_recurso('ProImp.jpg', 'ProImp-1');
+  cargar_imagen_recurso('ProImp.jpg', 'ProImp-2');
+  cargar_imagen_recurso('ProImp.jpg', 'ProImp-3');
+  cargar_imagen_recurso('ProImp.jpg', 'ProImp-4');
+  cargar_imagen_recurso('ProImp.jpg', 'ProImp-5');
+  cargar_imagen_recurso('ProImp.jpg', 'ProImp-6');
+  cargar_imagen_recurso('ProImp.jpg', 'ProImp-7');
+  cargar_imagen_recurso('ProImp.jpg', 'ProImp-8');
+  cargar_imagen_recurso('ProImp.jpg', 'ProImp-9');
+  cargar_imagen_recurso('ProImp.jpg', 'ProImp-10');
+
+  cargar_imagen_recurso('SalaConf.jpg', 'SalaConf-1');
+  cargar_imagen_recurso('SalaConf.jpg', 'SalaConf-2');
+  cargar_imagen_recurso('SalaConf.jpg', 'SalaConf-3');
+  cargar_imagen_recurso('SalaConf.jpg', 'SalaConf-4');
+  cargar_imagen_recurso('SalaConf.jpg', 'SalaConf-5');
+  cargar_imagen_recurso('SalaConf.jpg', 'SalaConf-6');
+  cargar_imagen_recurso('SalaConf.jpg', 'SalaConf-7');
+  cargar_imagen_recurso('SalaConf.jpg', 'SalaConf-8');
+  cargar_imagen_recurso('SalaConf.jpg', 'SalaConf-9');
+  cargar_imagen_recurso('SalaConf.jpg', 'SalaConf-10');
+
+  cargar_imagen_recurso('Osc.jpg', 'Osc-1');
+  cargar_imagen_recurso('Osc.jpg', 'Osc-2');
+  cargar_imagen_recurso('Osc.jpg', 'Osc-3');
+  cargar_imagen_recurso('Osc.jpg', 'Osc-4');
+  cargar_imagen_recurso('Osc.jpg', 'Osc-5');
+  cargar_imagen_recurso('Osc.jpg', 'Osc-6');
+  cargar_imagen_recurso('Osc.jpg', 'Osc-7');
+  cargar_imagen_recurso('Osc.jpg', 'Osc-8');
+  cargar_imagen_recurso('Osc.jpg', 'Osc-9');
+  cargar_imagen_recurso('Osc.jpg', 'Osc-10');
+
+  cargar_imagen_recurso('Prot.jpg', 'Prot-1');
+  cargar_imagen_recurso('Prot.jpg', 'Prot-2');
+  cargar_imagen_recurso('Prot.jpg', 'Prot-3');
+  cargar_imagen_recurso('Prot.jpg', 'Prot-4');
+  cargar_imagen_recurso('Prot.jpg', 'Prot-5');
+  cargar_imagen_recurso('Prot.jpg', 'Prot-6');
+  cargar_imagen_recurso('Prot.jpg', 'Prot-7');
+  cargar_imagen_recurso('Prot.jpg', 'Prot-8');
+  cargar_imagen_recurso('Prot.jpg', 'Prot-9');
+  cargar_imagen_recurso('Prot.jpg', 'Prot-10');
+
+  cargar_imagen_recurso('Mult.jpg', 'Mult-1');
+  cargar_imagen_recurso('Mult.jpg', 'Mult-2');
+  cargar_imagen_recurso('Mult.jpg', 'Mult-3');
+  cargar_imagen_recurso('Mult.jpg', 'Mult-4');
+  cargar_imagen_recurso('Mult.jpg', 'Mult-5');
+  cargar_imagen_recurso('Mult.jpg', 'Mult-6');
+  cargar_imagen_recurso('Mult.jpg', 'Mult-7');
+  cargar_imagen_recurso('Mult.jpg', 'Mult-8');
+  cargar_imagen_recurso('Mult.jpg', 'Mult-9');
+  cargar_imagen_recurso('Mult.jpg', 'Mult-10');
+
+  cargar_imagen_recurso('Sold.jpg', 'Sold-1');
+  cargar_imagen_recurso('Sold.jpg', 'Sold-2');
+  cargar_imagen_recurso('Sold.jpg', 'Sold-3');
+  cargar_imagen_recurso('Sold.jpg', 'Sold-4');
+  cargar_imagen_recurso('Sold.jpg', 'Sold-5');
+  cargar_imagen_recurso('Sold.jpg', 'Sold-6');
+  cargar_imagen_recurso('Sold.jpg', 'Sold-7');
+  cargar_imagen_recurso('Sold.jpg', 'Sold-8');
+  cargar_imagen_recurso('Sold.jpg', 'Sold-9');
+  cargar_imagen_recurso('Sold.jpg', 'Sold-10');
+
+  cargar_imagen_recurso('KitElec.jpg', 'KitElec-1');
+  cargar_imagen_recurso('KitElec.jpg', 'KitElec-2');
+  cargar_imagen_recurso('KitElec.jpg', 'KitElec-3');
+  cargar_imagen_recurso('KitElec.jpg', 'KitElec-4');
+  cargar_imagen_recurso('KitElec.jpg', 'KitElec-5');
+  cargar_imagen_recurso('KitElec.jpg', 'KitElec-6');
+  cargar_imagen_recurso('KitElec.jpg', 'KitElec-7');
+  cargar_imagen_recurso('KitElec.jpg', 'KitElec-8');
+  cargar_imagen_recurso('KitElec.jpg', 'KitElec-9');
+  cargar_imagen_recurso('KitElec.jpg', 'KitElec-10');
+
+  cargar_imagen_recurso('Aud.jpg', 'Aud-1');
+  cargar_imagen_recurso('Aud.jpg', 'Aud-2');
+  cargar_imagen_recurso('Aud.jpg', 'Aud-3');
+  cargar_imagen_recurso('Aud.jpg', 'Aud-4');
+  cargar_imagen_recurso('Aud.jpg', 'Aud-5');
+  cargar_imagen_recurso('Aud.jpg', 'Aud-6');
+  cargar_imagen_recurso('Aud.jpg', 'Aud-7');
+  cargar_imagen_recurso('Aud.jpg', 'Aud-8');
+  cargar_imagen_recurso('Aud.jpg', 'Aud-9');
+  cargar_imagen_recurso('Aud.jpg', 'Aud-10');
+
+  cargar_imagen_recurso('Son.jpg', 'Son-1');
+  cargar_imagen_recurso('Son.jpg', 'Son-2');
+  cargar_imagen_recurso('Son.jpg', 'Son-3');
+  cargar_imagen_recurso('Son.jpg', 'Son-4');
+  cargar_imagen_recurso('Son.jpg', 'Son-5');
+  cargar_imagen_recurso('Son.jpg', 'Son-6');
+  cargar_imagen_recurso('Son.jpg', 'Son-7');
+  cargar_imagen_recurso('Son.jpg', 'Son-8');
+  cargar_imagen_recurso('Son.jpg', 'Son-9');
+  cargar_imagen_recurso('Son.jpg', 'Son-10');
+
+  cargar_imagen_recurso('Ilum.jpg', 'Ilum-1');
+  cargar_imagen_recurso('Ilum.jpg', 'Ilum-2');
+  cargar_imagen_recurso('Ilum.jpg', 'Ilum-3');
+  cargar_imagen_recurso('Ilum.jpg', 'Ilum-4');
+  cargar_imagen_recurso('Ilum.jpg', 'Ilum-5');
+  cargar_imagen_recurso('Ilum.jpg', 'Ilum-6');
+  cargar_imagen_recurso('Ilum.jpg', 'Ilum-7');
+  cargar_imagen_recurso('Ilum.jpg', 'Ilum-8');
+  cargar_imagen_recurso('Ilum.jpg', 'Ilum-9');
+  cargar_imagen_recurso('Ilum.jpg', 'Ilum-10');
+
+  cargar_imagen_recurso('Esc.jpg', 'Esc-1');
+  cargar_imagen_recurso('Esc.jpg', 'Esc-2');
+  cargar_imagen_recurso('Esc.jpg', 'Esc-3');
+  cargar_imagen_recurso('Esc.jpg', 'Esc-4');
+  cargar_imagen_recurso('Esc.jpg', 'Esc-5');
+  cargar_imagen_recurso('Esc.jpg', 'Esc-6');
+  cargar_imagen_recurso('Esc.jpg', 'Esc-7');
+  cargar_imagen_recurso('Esc.jpg', 'Esc-8');
+  cargar_imagen_recurso('Esc.jpg', 'Esc-9');
+  cargar_imagen_recurso('Esc.jpg', 'Esc-10');
+
+  cargar_imagen_recurso('MicIn.jpg', 'MicIn-1');
+  cargar_imagen_recurso('MicIn.jpg', 'MicIn-2');
+  cargar_imagen_recurso('MicIn.jpg', 'MicIn-3');
+  cargar_imagen_recurso('MicIn.jpg', 'MicIn-4');
+  cargar_imagen_recurso('MicIn.jpg', 'MicIn-5');
+  cargar_imagen_recurso('MicIn.jpg', 'MicIn-6');
+  cargar_imagen_recurso('MicIn.jpg', 'MicIn-7');
+  cargar_imagen_recurso('MicIn.jpg', 'MicIn-8');
+  cargar_imagen_recurso('MicIn.jpg', 'MicIn-9');
+  cargar_imagen_recurso('MicIn.jpg', 'MicIn-10');
+  
 END;
 /
 
