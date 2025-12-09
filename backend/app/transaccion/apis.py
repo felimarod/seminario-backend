@@ -87,9 +87,13 @@ def prestamo_to_devolucion(
     transaccion = TransaccionService.devolver(db, body.id_transaccion, int(user["id"]))
     return TransaccionResponse.from_transaccion_db(transaccion)
 
-# @router.put("/{id_transaccion}", response_model=TransaccionResponse)
-# def update_transaccion(
-#     id_transaccion: int, transaccion_data: TransaccionUpdate, db: Session = Depends(get_db)
-# ):
-#     """Actualiza un transaccion."""
-#     return TransaccionService.update(db, id_transaccion, transaccion_data)
+@router.put("/cambioFechas", response_model=TransaccionResponse)
+def update_transaccion(
+    request: Request, transaccion_data: TransaccionUpdate, db: Session = Depends(get_db)
+):
+    """Actualiza un transaccion."""
+    user = request.state.user
+    if user["tipo"] != 4:
+        raise HTTPException(status_code=403, detail="No tienes permiso para modificar una reserva")
+    transaccion_data.id_usuario = user["id"]
+    return TransaccionResponse.from_transaccion_db(TransaccionService.cambiar_fechas(db, transaccion_data))

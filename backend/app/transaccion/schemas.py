@@ -20,9 +20,6 @@ class TransaccionBase(BaseModel):
     fecha_fin_transaccion: datetime = Field(
         ..., description="fecha y hora de finalización en formato AAAA-MM-DD HH:MM"
     )
-    falla_servicio: Optional[str] = Field(
-        default=None, description="comentarios de falla en el servicio"
-    )
 
 
 class TransaccionCreate(TransaccionBase):
@@ -43,30 +40,12 @@ class TransaccionCreate(TransaccionBase):
     )
 
 
-class TransaccionUpdate(BaseModel):
+class TransaccionUpdate(TransaccionBase):
     """Schema para actualizar un Transaccion."""
 
-    fecha_inicio_transaccion: Optional[datetime] = Field(
-        default=None, description="fecha y hora de inicio en formato AAAA-MM-DD HH:MM"
-    )
-    fecha_fin_transaccion: Optional[datetime] = Field(
-        default=None,
-        description="fecha y hora de finalización en formato AAAA-MM-DD HH:MM",
-    )
-    estado_transaccion: Optional[str] = Field(
-        default=None, description="estado de la transaccion"
-    )
-    falla_servicio: Optional[str] = Field(
-        default=None, description="comentarios de falla en el servicio"
-    )
+    id_transaccion: int = Field(..., description="id de la transaccion a actualizar")
     id_usuario: Optional[int] = Field(
         default=None, description="id del usuario que solicita el recurso"
-    )
-    id_recurso: Optional[str] = Field(
-        default=None, description="id del recurso solicitado"
-    )
-    id_empleado_responsable: Optional[int] = Field(
-        default=None, description="id del empleado que da/recibe el recurso"
     )
 
 

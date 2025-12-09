@@ -237,3 +237,52 @@ class TransaccionService:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Error interno del servidor al actualizar la transacción"
             )
+        
+    @staticmethod
+    def cambiar_fechas(db: Session, data: TransaccionUpdate) -> Transaccion:
+        """Actualiza las fechas de una transaccion existente."""
+        try:
+            db_transaccion = TransaccionSelectors.get_by_id(db, data.id_transaccion)
+            if not db_transaccion:
+                raise ValueError("Transaccion no encontrada")
+            
+            if db_transaccion.id_usuario != data.id_usuario:
+                raise ValueError("Esta reserva no te pertenece no la puedes modificar")
+
+            estado_actual =  sorted(
+                db_transaccion.historial, 
+                key=lambda h: h.fecha_cambio, 
+                reverse=True
+            )[0].estado.id_estado_transaccion
+            
+            if estado_actual != 1:
+                raise ValueError("Solo se pueden cambiar las fechas de transacciones en estado 'reservado'")
+            
+            if data.fecha_inicio_transaccion:
+                db_transaccion.fecha_inicio_transaccion = TransaccionService.to_aware(data.fecha_inicio_transaccion)
+            if data.fecha_fin_transaccion:
+                db_transaccion.fecha_fin_transaccion = TransaccionService.to_aware(data.fecha_fin_transaccion)
+            TransaccionService.validarDisponibilidad(db=db, transaccion_data=db_transaccion)
+            db.commit()
+            db.refresh(db_transaccion)
+            return db_transaccion
+        except ValueError as e:
+            print(e)
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+        except IntegrityError as e:
+            print(e)
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Error de integridad al actualizar la transacción"
+            )
+        except Exception as e:
+            print(e)
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Error interno del servidor al actualizar la transacción"
+            )
+            
+                
