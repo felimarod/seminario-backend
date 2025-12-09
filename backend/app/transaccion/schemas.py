@@ -1,5 +1,6 @@
 """Pydantic schemas para Transaccion."""
 
+import base64
 from typing import List, Optional, Dict, Any, Tuple
 
 from pydantic import BaseModel, Field
@@ -68,7 +69,8 @@ class TransaccionResponse(BaseModel):
         }
         data["recurso"] = {
             "id_recurso": transaccion_db.recurso.id_recurso,
-            "nombre_recurso": transaccion_db.recurso.nombre_recurso
+            "nombre_recurso": transaccion_db.recurso.nombre_recurso,
+            "imagen_recurso": base64.b64encode(transaccion_db.recurso.foto_recurso).decode("utf-8")
         }
         data["usuario"] = {
             "id_usuario": transaccion_db.usuario.id_usuario,
