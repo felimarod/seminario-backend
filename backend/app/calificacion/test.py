@@ -2,17 +2,9 @@
 
 from app.main import app
 from fastapi.testclient import TestClient
+from tests.test_auth import get_token
 
 client = TestClient(app)
-
-def get_token():
-    response = client.post(
-        "/auth/token",
-        data={"username": "admin@istrador.com", "password": "admin"},
-        headers={"Content-Type": "application/x-www-form-urlencoded"}
-    )
-    assert response.status_code == 200
-    return response.json()["access_token"]
 
 
 def test_get_calificacion_by_id():
@@ -22,8 +14,7 @@ def test_get_calificacion_by_id():
     token = get_token()
 
     response = client.get(
-        "/calificacion/1",
-        headers={"Authorization": f"Bearer {token}"}
+        "/calificacion/1", headers={"Authorization": f"Bearer {token}"}
     )
 
     assert response.status_code == 200

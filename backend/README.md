@@ -1,6 +1,7 @@
 # Backend
 
 ## Configuración local
+
 1. Setup Virtual Environment (If you are not using docker)
 
    ```shell
@@ -13,10 +14,9 @@
 
 2. Install dependencies:
 
-  ```shell
-    pip install -r requirements.txt
-  ```
-
+```shell
+  pip install -r requirements.txt
+```
 
 3. Create a `.env` file and input environment variables.
 
@@ -32,25 +32,26 @@
     fastapi run
    ```
 
-
 5. Test the application by making requests to endpoints.
 
-  You can go to the next URI to see the ednpoints:
+You can go to the next URI to see the ednpoints:
 
-  http://localhost:8081/docs
+http://localhost:8081/docs
 
 6. To connect to the database, you have to:
 
-  - run the docker container with "docker-compose up"
+- run the docker container with "docker-compose up"
 
-  - (optional) you can create a connection to the database with the next credentials
+- (optional) you can create a connection to the database with the next credentials
 
-  user = seminario
-  password = seminario
-  host = localhost
-  port = 1522
-  service name = XE
+user = seminario
+password = seminario
+host = localhost
+port = 1522
+service name = XE
 
 7. To run the test
-  - Execute the project
-  - Run `pytest -v`
+
+- Execute the project or run docker container and get into it with `sudo docker exec -it backend-seminario-backend-1 /bin/bash`
+- Run `pytest -v`
+- You can probe a unique file with `pytest app/usuario/test.py -v`
