@@ -5,6 +5,7 @@ services:
       - "1522:1521"
     environment:
       - ORACLE_PASSWORD=oracle
+      - TZ=America/Bogota
     volumes:
       - data:/opt/oracle/oradata
       - ./scripts:/container-entrypoint-initdb.d/
@@ -25,6 +26,7 @@ services:
       - DATABASE_URL=oracle+oracledb://seminario:seminario@seminario-bd:1521/?service_name=xe
       - SECRET_KEY=cualquiercosaquevosgusteparaserunasecretkey
       - ACCESS_TOKEN_EXPIRE_MINUTES=30
+      - TZ=America/Bogota
     depends_on:
       - seminario-bd
 volumes:
