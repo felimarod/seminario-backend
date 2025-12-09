@@ -208,7 +208,8 @@ class TransaccionService:
                 raise ValueError("La transacción no está en estado 'prestado', no se puede realizar la devolucion")
             
             db_transaccion.id_empleado_responsable = id_empleado
-            
+            db_transaccion.fecha_fin_transaccion = TransaccionService.to_aware(datetime.now(TZ))
+           
             db_historial_transaccion = HistorialTransaccion(
                 id_transaccion=id_transaccion,
                 estado_nuevo=4,

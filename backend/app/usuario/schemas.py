@@ -6,22 +6,22 @@ from pydantic import BaseModel, EmailStr, Field
 
 from app.usuario.models import Usuario
 
-class UsuarioBase(BaseModel):
+class UsuarioCreateBase(BaseModel):
     """Base schema para Usuario."""
 
     # id_unidad: int = Field(..., description="ID de la unidad")
     nombre: str = Field(..., max_length=100, description="Nombre del usuario")
     apellido: str = Field(..., max_length=100, description="Apellido del usuario")
     correo: EmailStr = Field(..., description="Email del usuario")
-    id_tipo_usuario: int = Field(..., description="ID del tipo de usuario")
-    id_unidad: Optional[int] = Field(None, description="ID de la unidad")
-
-
-class UsuarioCreate(UsuarioBase):
-    """Schema para crear un nuevo Usuario."""
-
     contrasena: str = Field(..., max_length=100, description="Contraseña del usuario")
+    
 
+
+class UsuarioCreate(UsuarioCreateBase):
+    """Schema para crear un nuevo Usuario."""
+    
+    id_tipo_usuario: Optional[int] = Field(..., description="ID de la unidad")
+    id_unidad: Optional[int] = Field(..., description="ID de la unidad")
 
 class UsuarioUpdate(BaseModel):
     """Schema para actualizar un Usuario."""

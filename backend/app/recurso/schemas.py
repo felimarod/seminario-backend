@@ -49,8 +49,8 @@ class RecursoResponse(BaseModel):
                           "nombre_unidad": recurso_db.tipo_recurso.unidad.nombre_unidad}
         
         if recurso_db.foto_recurso:
-            # data["foto_recurso"] = base64.b64encode(recurso_db.foto_recurso).decode("utf-8")
-            data["foto_recurso"]="incluye imagen"
+            data["foto_recurso"] = base64.b64encode(recurso_db.foto_recurso).decode("utf-8")
+            # data["foto_recurso"]= None
         else:
             data["foto_recurso"] = None
 

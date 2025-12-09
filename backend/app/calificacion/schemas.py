@@ -1,5 +1,6 @@
 """Pydantic schemas para Calificacion."""
 
+import base64
 from typing import Any, Dict, Optional
 
 from pydantic import BaseModel, Field
@@ -54,6 +55,7 @@ class CalificacionResponse(BaseModel):
             "recurso": {
                 "id_recurso": calificacion_db.transaccion.id_recurso,
                 "nombre_recurso": calificacion_db.transaccion.recurso.nombre_recurso,
+                "foto_recurso": base64.b64encode(calificacion_db.transaccion.recurso.foto_recurso).decode("utf-8") if calificacion_db.transaccion.recurso.foto_recurso else None
             }
         }
         return cls.from_orm(data)

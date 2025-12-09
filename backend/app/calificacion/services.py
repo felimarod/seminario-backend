@@ -37,7 +37,7 @@ class CalificacionService:
             if ultimaHistoria.estado_nuevo != 4:  # Estado 4 es 'completada'
                 raise ValueError("Esta transaccion aun no se completa")
             
-            if (ahora - ultimaHistoria.fecha_cambio) > timedelta(days=3):
+            if (ahora - CalificacionService.to_aware(ultimaHistoria.fecha_cambio)) > timedelta(days=3):
                 raise ValueError("El periodo para calificar esta transacción ha expirado")
 
             db_calificacion = Calificacion(**calificacion_data.model_dump())

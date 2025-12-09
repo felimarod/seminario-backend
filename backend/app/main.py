@@ -32,6 +32,7 @@ from app.recurso.apis import router as recurso_router
 from app.transaccion.apis import router as transaccion_router
 from app.calificacion.apis import router as calificacion_router
 from app.historial_transaccion.apis import router as historial_router
+from app.unidad.apis import router as unidad_router
 from app.common.auth import router as auth_router
 
 # Globals
@@ -96,7 +97,8 @@ async def health_check(_=Depends(get_db)):
 
 
 # Routers
-app.include_router(usuario_router, prefix="/usuario", tags=["Usuario"],dependencies = [Depends(get_current_user)])
+app.include_router(usuario_router, prefix="/usuario", tags=["Usuario"])
+app.include_router(unidad_router, prefix="/unidad", tags=["Unidad"],dependencies = [Depends(get_current_user)])
 app.include_router(tipo_recurso_router, prefix="/tipo_recurso", tags=["Tipo Recurso"],dependencies = [Depends(get_current_user)])
 app.include_router(recurso_router, prefix="/recurso", tags=["Recurso"],dependencies = [Depends(get_current_user)])
 app.include_router(transaccion_router, prefix="/transaccion", tags=["Transaccion"],dependencies = [Depends(get_current_user)])

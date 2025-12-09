@@ -70,7 +70,8 @@ class TransaccionResponse(BaseModel):
         data["recurso"] = {
             "id_recurso": transaccion_db.recurso.id_recurso,
             "nombre_recurso": transaccion_db.recurso.nombre_recurso,
-            "imagen_recurso": base64.b64encode(transaccion_db.recurso.foto_recurso).decode("utf-8")
+            # "foto_recurso": None
+            "foto_recurso": base64.b64encode(transaccion_db.recurso.foto_recurso).decode("utf-8")
         }
         data["usuario"] = {
             "id_usuario": transaccion_db.usuario.id_usuario,

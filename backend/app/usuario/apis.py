@@ -10,9 +10,11 @@ from app.usuario.schemas import (
     UsuarioCreate,
     UsuarioResponse,
     UsuarioUpdate,
+    UsuarioCreateBase
 )
 from app.usuario.selectors import UsuarioSelectors
 from app.usuario.services import UsuarioService
+from app.common.dependencies import get_current_user
 
 router = APIRouter()
 
@@ -35,9 +37,8 @@ router = APIRouter()
 
 
 @router.get("/{correo_usuario}", response_model=UsuarioResponse)
-def get_usuario_by_correo(correo_usuario: str,request: Request, db: Session = Depends(get_db)):
+def get_usuario_by_correo(correo_usuario: str, user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
     """Obtiene un usuario por su correo."""
-    user = request.state.user
     if user["tipo"] == 4:
         raise HTTPException(status_code=403, detail="No tienes permiso para ver esta información")
     usuario = UsuarioSelectors.get_by_correo(db, correo_usuario)
@@ -46,11 +47,19 @@ def get_usuario_by_correo(correo_usuario: str,request: Request, db: Session = De
     return UsuarioResponse.from_usuario_db(usuario)
 
 
-# @router.post("/", response_model=UsuarioResponse, status_code=201)
-# def create_usuario(usuario_data: UsuarioCreate, request: Request, db: Session = Depends(get_db)):
-#     """Crea un nuevo usuario."""
-#     user = request.state.user
-#     if user["tipo"] != 1:
-#         raise HTTPException(status_code=403, detail="No tienes permiso para ver esta información")
-#     return UsuarioService.create(db, usuario_data)
+@router.post("/sing-in", response_model=UsuarioResponse, status_code=201)
+def create_usuario(usuario_data: UsuarioCreateBase, db: Session = Depends(get_db)):
+    """Crea un nuevo usuario."""
+    return UsuarioResponse.from_usuario_db(UsuarioService.createExterno(db, usuario_data))
+
+@router.post("/", response_model=UsuarioResponse, status_code=201)
+def create_usuario(usuario_data: UsuarioCreate, user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
+    """Crea un nuevo usuario."""
+    if user["tipo"] == 1:
+        if usuario_data.id_unidad is None or usuario_data.id_tipo_usuario is None:
+            raise HTTPException(status_code=400, detail="id_unidad e id_tipo_usuario son obligatorios")
+    if user["tipo"] == 2:
+        usuario_data.id_unidad = user["unidad"]
+        usuario_data.id_tipo_usuario = 3  # Solo pueden crear usuarios empleados
+    return UsuarioResponse.from_usuario_db(UsuarioService.create(db, usuario_data))
 

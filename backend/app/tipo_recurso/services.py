@@ -31,6 +31,7 @@ class TipoRecursoService:
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail="Ya existe un tipo_recurso con este nombre en la unidad",
                 )
+            TipoRecursoService.updateSchedule(db, UnidadSelectors.get_by_id(db,tipo_recurso_data.id_unidad).horario_unidad, tipo_recurso_data.horario_disponibilidad)
             db_tipo_recurso = TipoRecurso(**tipo_recurso_data.model_dump())
             db.add(db_tipo_recurso)
             db.commit()
@@ -59,6 +60,11 @@ class TipoRecursoService:
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail=f"Error de integridad en BD: {str(e.orig)}"
                 )
+        except ValueError as ve:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(ve)
+            )
 
     @staticmethod
     def update(db: Session, id_tipo_recurso: int, tipo_recurso_data: TipoRecursoUpdate) -> TipoRecurso:
@@ -118,10 +124,7 @@ class TipoRecursoService:
         newHorarioDetails = HorarioSelectors.get_detaills_by_id(db,newHorario)
         unitHorarioDetails = HorarioSelectors.get_detaills_by_id(db,unitHorario)
         if not newHorarioDetails:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"No se encontró el horario indicado"
-            )
+            raise ValueError(f"No se encontró el horario indicado")
         for detail in newHorarioDetails:
             detail : HorarioDetalle
             aceptance = False
@@ -132,10 +135,7 @@ class TipoRecursoService:
             if not aceptance:
                 detailEr = f"El horario {detail.id_horario} no encaja dentro del horario de atencion de la unidad"
                 detailEr += f" ({detail_unit.id_horario}), particularmente el dia {detail.dia_semana}"
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=detailEr
-                )
+                raise ValueError(detailEr)
         
         return newHorarioDetails
 

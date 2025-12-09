@@ -4,12 +4,28 @@ from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.usuario.models import Usuario
-from app.usuario.schemas import UsuarioCreate, UsuarioUpdate
+from app.usuario.schemas import UsuarioCreate, UsuarioCreateBase, UsuarioUpdate
 from app.usuario.selectors import UsuarioSelectors
 
 
 class UsuarioService:
     """Service para operaciones con Usuario."""
+
+    @staticmethod
+    def createExterno(db: Session, usuario_data: UsuarioCreateBase) -> Usuario:
+        """Crea un nuevo usuario base."""
+        existing_usuario = UsuarioSelectors.get_by_correo(db, usuario_data.correo)
+        if existing_usuario:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Ya existe un usuario con este correo",
+            )
+        db_usuario = Usuario(**usuario_data.model_dump())
+        db_usuario.id_tipo_usuario = 4  # Tipo de usuario externo
+        db.add(db_usuario)
+        db.commit()
+        db.refresh(db_usuario)
+        return db_usuario
 
     @staticmethod
     def create(db: Session, usuario_data: UsuarioCreate) -> Usuario:

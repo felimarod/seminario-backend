@@ -14,6 +14,11 @@ class UnidadSelectors:
     def get_by_id(db: Session, id_unidad: int) -> Optional[Unidad]:
         """Obtiene un unidad por su ID."""
         return db.query(Unidad).filter(Unidad.id_unidad == id_unidad).first()
+    
+    @staticmethod
+    def get_by_nombre(db: Session, nombre_unidad: str) -> Optional[Unidad]:
+        """Obtiene un unidad por su nombre."""
+        return db.query(Unidad).filter(Unidad.nombre_unidad == nombre_unidad).first()
 
     @staticmethod
     def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[Unidad]:
