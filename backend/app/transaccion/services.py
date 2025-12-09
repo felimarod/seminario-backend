@@ -162,10 +162,10 @@ class TransaccionService:
             )
             db.add(db_historial_transaccion)
             db.commit()
-            db.refresh(db_historial_transaccion)
             db.refresh(db_transaccion)
             return db_transaccion
         except ValueError as e:
+            print(e)
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=str(e)
@@ -177,6 +177,7 @@ class TransaccionService:
                 detail="Error de integridad al actualizar la transacción"
             )
         except Exception as e:
+            print(e)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Error interno del servidor al actualizar la transacción"
@@ -215,10 +216,10 @@ class TransaccionService:
             )
             db.add(db_historial_transaccion)
             db.commit()
-            db.refresh(db_historial_transaccion)
             db.refresh(db_transaccion)
             return db_transaccion
         except ValueError as e:
+            print(e)
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=str(e)

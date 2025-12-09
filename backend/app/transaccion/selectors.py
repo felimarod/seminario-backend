@@ -105,16 +105,16 @@ class TransaccionSelectors:
             if filtros.ventana_tiempo_inicio:
                 query = query.filter(Transaccion.fecha_creacion >= filtros.ventana_tiempo_inicio)
             if filtros.ventana_tiempo_fin:
-                query = query.filter(Transaccion.fecha_creacion >= filtros.ventana_tiempo_fin)
+                query = query.filter(Transaccion.fecha_creacion <= filtros.ventana_tiempo_fin)
         if filtros.ventana_atributo == "inicio":
             if filtros.ventana_tiempo_inicio:
                 query = query.filter(Transaccion.fecha_inicio_transaccion >= filtros.ventana_tiempo_inicio)
             if filtros.ventana_tiempo_fin:
-                query = query.filter(Transaccion.fecha_inicio_transaccion >= filtros.ventana_tiempo_fin)
+                query = query.filter(Transaccion.fecha_inicio_transaccion <= filtros.ventana_tiempo_fin)
         if filtros.ventana_atributo == "fin":
             if filtros.ventana_tiempo_inicio:
                 query = query.filter(Transaccion.fecha_fin_transaccion >= filtros.ventana_tiempo_inicio)
             if filtros.ventana_tiempo_fin:
-                query = query.filter(Transaccion.fecha_fin_transaccion >= filtros.ventana_tiempo_fin)
+                query = query.filter(Transaccion.fecha_fin_transaccion <= filtros.ventana_tiempo_fin)
         
         return query.offset(skip).limit(limit).all()

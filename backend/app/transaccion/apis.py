@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 
 from app.common.dependencies import get_db
 from app.transaccion.schemas import (
+    DevolucionIN,
+    PrestamoIN,
     TransaccionCreate,
     TransaccionResponse,
     TransaccionUpdate,
@@ -62,28 +64,27 @@ def create_transaccion(request: Request, transaccion_data: TransaccionCreate, db
 @router.put("/prestamo", response_model=TransaccionResponse)
 def reserva_to_prestamo(
     request: Request, 
-    id_transaccion: int = Form(..., description="ID de la transacción a actualizar"), 
-    password_user: str = Form(..., description="Valor propio del usuario para validar que la accion se realiza con conocimiento del usuario (por ahora la contraseña)"), 
+    body: PrestamoIN,
     db: Session = Depends(get_db)
 ):
     """Actualiza estado de transaccion de reserva a prestamo."""
     user = request.state.user
     if user["tipo"] != 3:
         raise HTTPException(status_code=403, detail="No tienes permiso para actualizar una reserva a prestamo")
-    transaccion = TransaccionService.prestar(db, id_transaccion, int(user["id"]), password_user)
+    transaccion = TransaccionService.prestar(db, body.id_transaccion, int(user["id"]), body.password_user)
     return TransaccionResponse.from_transaccion_db(transaccion)
 
 @router.put("/devolucion", response_model=TransaccionResponse)
 def prestamo_to_devolucion(
     request: Request, 
-    id_transaccion: int = Form(..., description="ID de la transacción a actualizar"),  
+    body: DevolucionIN,
     db: Session = Depends(get_db)
 ):
     """Actualiza estado de transaccion de reserva a prestamo."""
     user = request.state.user
     if user["tipo"] != 3:
         raise HTTPException(status_code=403, detail="No tienes permiso para actualizar una reserva a prestamo")
-    transaccion = TransaccionService.devolver(db, id_transaccion, int(user["id"]))
+    transaccion = TransaccionService.devolver(db, body.id_transaccion, int(user["id"]))
     return TransaccionResponse.from_transaccion_db(transaccion)
 
 # @router.put("/{id_transaccion}", response_model=TransaccionResponse)

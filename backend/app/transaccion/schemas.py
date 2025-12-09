@@ -98,3 +98,10 @@ class Filtros(BaseModel):
     id_tipo_recurso: Optional[int] = Field(default=None, description="id del tipo de recurso solicitado")
     id_unidad: Optional[int] = Field(default=None, description="id de la unidad al que pertence el recurso")
     
+class DevolucionIN(BaseModel):
+    """Schema para crear un nuevo Prestamo."""
+    id_transaccion: int = Field(..., description="id de la transaccion a actualizar")
+
+class PrestamoIN(DevolucionIN):
+    """Schema para crear un nuevo Prestamo."""
+    password_user: str = Field(..., description="contraseña del usuario que solicita el recurso")

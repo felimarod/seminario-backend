@@ -9,13 +9,6 @@ INSERT INTO TipoUsuario (id_tipo_usuario, nombre_tipo_usuario)
  VALUES (4,'usuario');
 
 
---INSERCCION DE TIPOS DE TRANSACCION-------------------------------------------------------------------
-INSERT INTO TipoTransaccion (id_tipo_transaccion, nombre_tipo_transaccion, descripcion_tipo_transaccion)
- VALUES (1, 'Reserva', 'Reserva de un recurso o espacio'); 
-INSERT INTO TipoTransaccion (id_tipo_transaccion, nombre_tipo_transaccion, descripcion_tipo_transaccion)
- VALUES (2, 'Prestamo', 'Prestamo de un recurso o espacio');
-
-
 --INSERCCION DE HORARIOS-------------------------------------------------------------------
 INSERT INTO Horario (id_horario)
  VALUES ('horario_default');
@@ -907,27 +900,354 @@ INSERT INTO EstadoTransaccion (id_estado_transaccion,nombre_estado_transaccion) 
 INSERT INTO EstadoTransaccion (id_estado_transaccion,nombre_estado_transaccion) VALUES (3,'Cancelada');
 INSERT INTO EstadoTransaccion (id_estado_transaccion,nombre_estado_transaccion) VALUES (4,'Completada');
 
-INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
-  VALUES (TO_TIMESTAMP('2025-12-08 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2025-12-08 16:00:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'PC-1', NULL);
-INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
-  VALUES (TO_TIMESTAMP('2025-12-09 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2025-12-09 14:00:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'PC-1', NULL);
-INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
-  VALUES (TO_TIMESTAMP('2025-12-10 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2025-12-10 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'PC-1', NULL);
-INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
-  VALUES (TO_TIMESTAMP('2025-12-11 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2025-12-11 18:00:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'PC-1', NULL);
-INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
-  VALUES (TO_TIMESTAMP('2025-12-12 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2025-12-12 16:00:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'PC-1', NULL);
-INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
-  VALUES (TO_TIMESTAMP('2025-12-13 10:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2025-12-13 12:00:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'PC-1', NULL);
+ALTER TABLE Transaccion DISABLE ALL TRIGGERS;
+-- ############################################################
+-- Bloque 1: 6 reservas -> préstamo -> devolución (pasado, calificadas)
+-- ############################################################
+-- T1 (2025-11-23) Reserva -> Préstamo -> Completada, calificada
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (1, TO_TIMESTAMP('2025-11-23 09:00:00','YYYY-MM-DD HH24:MI:SS'),
+ TO_TIMESTAMP('2025-11-23 12:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'PC-1', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (1, TO_TIMESTAMP('2025-11-23 06:55:00','YYYY-MM-DD HH24:MI:SS'), 1, 2); 
 
-INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
-  VALUES (TO_TIMESTAMP('2025-12-08 02:00:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2025-12-08 02:30:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'Ebook-1', NULL);
-INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
-  VALUES (TO_TIMESTAMP('2025-12-08 02:50:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2025-12-08 03:20:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'Ebook-2', NULL);
-INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
-  VALUES (TO_TIMESTAMP('2025-12-08 03:10:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2025-12-08 03:40:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'Ebook-3', NULL);
-INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
-  VALUES (TO_TIMESTAMP('2025-12-08 03:30:00', 'YYYY-MM-DD HH24:MI:SS'), TO_TIMESTAMP('2025-12-08 05:00:00', 'YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'Ebook-4', NULL);
+UPDATE Transaccion SET id_empleado_responsable = 7 WHERE id_transaccion = 1;
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (1, TO_TIMESTAMP('2025-11-23 09:05:00','YYYY-MM-DD HH24:MI:SS'), 2, 7);
+
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (1, TO_TIMESTAMP('2025-11-23 12:05:00','YYYY-MM-DD HH24:MI:SS'), 4, 7);
+INSERT INTO Calificacion (cumplimiento_horarios, calidad_servicio, atencion_personal, id_transaccion)
+ VALUES (5, 5, 5, 1);
+
+-- T2 (2025-11-24) Reserva -> Préstamo -> Completada, calificada
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (2, TO_TIMESTAMP('2025-11-24 10:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-11-24 13:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 3, 'Proyec-1', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (2, TO_TIMESTAMP('2025-11-24 07:40:00','YYYY-MM-DD HH24:MI:SS'), 1, 3);
+
+UPDATE Transaccion SET id_empleado_responsable = 10 WHERE id_transaccion = 2;
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (2, TO_TIMESTAMP('2025-11-24 10:05:00','YYYY-MM-DD HH24:MI:SS'), 2, 10);
+
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (2, TO_TIMESTAMP('2025-11-24 13:10:00','YYYY-MM-DD HH24:MI:SS'), 4, 10);
+INSERT INTO Calificacion (cumplimiento_horarios, calidad_servicio, atencion_personal, id_transaccion)
+ VALUES (4, 5, 4, 2);
+
+-- T3 (2025-11-25) Reserva -> Préstamo -> Completada, calificada
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (3, TO_TIMESTAMP('2025-11-25 11:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-11-25 15:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 4, 'Sal-1', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (3, TO_TIMESTAMP('2025-11-25 08:30:00','YYYY-MM-DD HH24:MI:SS'), 1, 4);
+
+UPDATE Transaccion SET id_empleado_responsable = 8 WHERE id_transaccion = 3;
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (3, TO_TIMESTAMP('2025-11-25 11:05:00','YYYY-MM-DD HH24:MI:SS'), 2, 8);
+
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (3, TO_TIMESTAMP('2025-11-25 15:05:00','YYYY-MM-DD HH24:MI:SS'), 4, 8);
+INSERT INTO Calificacion (cumplimiento_horarios, calidad_servicio, atencion_personal, id_transaccion)
+ VALUES (5, 4, 5, 3);
+
+-- T4 (2025-11-26) Reserva -> Préstamo -> Completada, calificada
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (4, TO_TIMESTAMP('2025-11-26 09:30:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-11-26 12:30:00','YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'Lab-1', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (4, TO_TIMESTAMP('2025-11-26 06:10:00','YYYY-MM-DD HH24:MI:SS'), 1, 2);
+
+UPDATE Transaccion SET id_empleado_responsable = 11 WHERE id_transaccion = 4;
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (4, TO_TIMESTAMP('2025-11-26 09:35:00','YYYY-MM-DD HH24:MI:SS'), 2, 11);
+
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (4, TO_TIMESTAMP('2025-11-26 12:35:00','YYYY-MM-DD HH24:MI:SS'), 4, 11);
+INSERT INTO Calificacion (cumplimiento_horarios, calidad_servicio, atencion_personal, id_transaccion)
+ VALUES (4, 4, 4, 4);
+
+-- T5 (2025-11-27) Reserva -> Préstamo -> Completada, calificada
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (5, TO_TIMESTAMP('2025-11-27 14:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-11-27 17:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 3, 'Imp-1', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (5, TO_TIMESTAMP('2025-11-27 13:30:00','YYYY-MM-DD HH24:MI:SS'), 1, 3);
+
+UPDATE Transaccion SET id_empleado_responsable = 13 WHERE id_transaccion = 5;
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (5, TO_TIMESTAMP('2025-11-27 14:05:00','YYYY-MM-DD HH24:MI:SS'), 2, 13);
+
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (5, TO_TIMESTAMP('2025-11-27 17:05:00','YYYY-MM-DD HH24:MI:SS'), 4, 13);
+INSERT INTO Calificacion (cumplimiento_horarios, calidad_servicio, atencion_personal, id_transaccion)
+ VALUES (5, 5, 5, 5);
+
+-- T6 (2025-11-28) Reserva -> Préstamo -> Completada, calificada
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (6, TO_TIMESTAMP('2025-11-28 08:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-11-28 10:30:00','YYYY-MM-DD HH24:MI:SS'), NULL, 4, 'PC-2', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (6, TO_TIMESTAMP('2025-11-28 07:45:00','YYYY-MM-DD HH24:MI:SS'), 1, 4);
+
+UPDATE Transaccion SET id_empleado_responsable = 7 WHERE id_transaccion = 6;
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (6, TO_TIMESTAMP('2025-11-28 05:05:00','YYYY-MM-DD HH24:MI:SS'), 2, 7);
+
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (6, TO_TIMESTAMP('2025-11-28 10:35:00','YYYY-MM-DD HH24:MI:SS'), 4, 7);
+INSERT INTO Calificacion (cumplimiento_horarios, calidad_servicio, atencion_personal, id_transaccion)
+ VALUES (4, 5, 4, 6);
+
+-- ############################################################
+-- Bloque 2: 6 préstamos directos ya completados (pasado, calificados)
+-- ############################################################
+-- T7 (2025-11-29) Préstamo directo -> Completada
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (7, TO_TIMESTAMP('2025-11-29 09:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-11-29 11:30:00','YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'PC-3', 8);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (7, TO_TIMESTAMP('2025-11-29 09:00:00','YYYY-MM-DD HH24:MI:SS'), 2, 8);
+
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (7, TO_TIMESTAMP('2025-11-29 11:35:00','YYYY-MM-DD HH24:MI:SS'), 4, 8);
+INSERT INTO Calificacion (cumplimiento_horarios, calidad_servicio, atencion_personal, id_transaccion)
+ VALUES (5, 4, 5, 7);
+
+-- T8 (2025-11-30) Préstamo directo -> Completada
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (8, TO_TIMESTAMP('2025-11-30 10:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-11-30 12:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 3, 'Proyec-2', 7);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (8, TO_TIMESTAMP('2025-11-30 10:00:00','YYYY-MM-DD HH24:MI:SS'), 2, 7);
+
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (8, TO_TIMESTAMP('2025-11-30 12:05:00','YYYY-MM-DD HH24:MI:SS'), 4, 7);
+INSERT INTO Calificacion (cumplimiento_horarios, calidad_servicio, atencion_personal, id_transaccion)
+ VALUES (4, 4, 4, 8);
+
+-- T9 (2025-12-01) Préstamo directo -> Completada
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (9, TO_TIMESTAMP('2025-12-01 08:30:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-01 10:30:00','YYYY-MM-DD HH24:MI:SS'), NULL, 4, 'Sal-2', 8);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (9, TO_TIMESTAMP('2025-12-01 08:30:00','YYYY-MM-DD HH24:MI:SS'), 2, 8);
+
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (9, TO_TIMESTAMP('2025-12-01 10:35:00','YYYY-MM-DD HH24:MI:SS'), 4, 8);
+INSERT INTO Calificacion (cumplimiento_horarios, calidad_servicio, atencion_personal, id_transaccion)
+ VALUES (5, 5, 4, 9);
+
+-- T10 (2025-12-02) Préstamo directo -> Completada
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (10, TO_TIMESTAMP('2025-12-02 13:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-02 15:30:00','YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'Imp-2', 7);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (10, TO_TIMESTAMP('2025-12-02 13:00:00','YYYY-MM-DD HH24:MI:SS'), 2, 7);
+
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (10, TO_TIMESTAMP('2025-12-02 15:35:00','YYYY-MM-DD HH24:MI:SS'), 4, 7);
+INSERT INTO Calificacion (cumplimiento_horarios, calidad_servicio, atencion_personal, id_transaccion)
+ VALUES (4, 5, 5, 10);
+
+-- T11 (2025-12-03) Préstamo directo -> Completada
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (11, TO_TIMESTAMP('2025-12-03 09:15:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-03 11:45:00','YYYY-MM-DD HH24:MI:SS'), NULL, 3, 'Lab-2', 8);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (11, TO_TIMESTAMP('2025-12-03 09:15:00','YYYY-MM-DD HH24:MI:SS'), 2, 8);
+
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (11, TO_TIMESTAMP('2025-12-03 11:50:00','YYYY-MM-DD HH24:MI:SS'), 4, 8);
+INSERT INTO Calificacion (cumplimiento_horarios, calidad_servicio, atencion_personal, id_transaccion)
+ VALUES (5, 4, 4, 11);
+
+-- T12 (2025-12-03) Préstamo directo -> Completada
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (12, TO_TIMESTAMP('2025-12-03 14:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-03 16:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 4, 'PC-4', 7);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (12, TO_TIMESTAMP('2025-12-03 14:00:00','YYYY-MM-DD HH24:MI:SS'), 2, 7);
+
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (12, TO_TIMESTAMP('2025-12-03 16:05:00','YYYY-MM-DD HH24:MI:SS'), 4, 7);
+INSERT INTO Calificacion (cumplimiento_horarios, calidad_servicio, atencion_personal, id_transaccion)
+ VALUES (4, 4, 5, 12);
+
+-- ############################################################
+-- Bloque 3: 4 préstamos recientes aún en préstamo (pasado cercano)
+-- ############################################################
+-- T13 (2025-12-04) Préstamo en curso (no completada)
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (13, TO_TIMESTAMP('2025-12-04 09:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-04 17:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'PC-5', 8);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (13, TO_TIMESTAMP('2025-12-04 09:00:00','YYYY-MM-DD HH24:MI:SS'), 2, 8);
+
+-- T14 (2025-12-05) Préstamo en curso
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (14, TO_TIMESTAMP('2025-12-05 10:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-05 18:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 3, 'Proyec-3', 7);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (14, TO_TIMESTAMP('2025-12-05 10:00:00','YYYY-MM-DD HH24:MI:SS'), 2, 7);
+
+-- T15 (2025-12-06) Préstamo en curso
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (15, TO_TIMESTAMP('2025-12-06 08:30:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-06 12:30:00','YYYY-MM-DD HH24:MI:SS'), NULL, 4, 'Sal-3', 7);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (15, TO_TIMESTAMP('2025-12-06 08:30:00','YYYY-MM-DD HH24:MI:SS'), 2, 7);
+
+-- T16 (2025-12-06) Préstamo en curso
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (16, TO_TIMESTAMP('2025-12-06 13:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-06 17:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'Imp-3', 7);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (16, TO_TIMESTAMP('2025-12-06 13:00:00','YYYY-MM-DD HH24:MI:SS'), 2, 7);
+
+-- ############################################################
+-- Bloque 4: 4 reservas/préstamos de hoy (2025-12-08) con distintos estados
+-- ############################################################
+-- T17 Reserva hoy (pendiente)
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (17, TO_TIMESTAMP('2025-12-08 09:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-08 11:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 3, 'PC-6', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (17, TO_TIMESTAMP('2025-12-08 06:50:00','YYYY-MM-DD HH24:MI:SS'), 1, 3);
+
+-- T18 Reserva -> Préstamo hoy (en préstamo)
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (18, TO_TIMESTAMP('2025-12-08 10:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-08 12:30:00','YYYY-MM-DD HH24:MI:SS'), NULL, 4, 'Proyec-4', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (18, TO_TIMESTAMP('2025-12-08 07:40:00','YYYY-MM-DD HH24:MI:SS'), 1, 4);
+
+UPDATE Transaccion SET id_empleado_responsable = 7 WHERE id_transaccion = 18;
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (18, TO_TIMESTAMP('2025-12-08 10:05:00','YYYY-MM-DD HH24:MI:SS'), 2, 7);
+
+-- T19 Préstamo directo hoy (en préstamo)
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (19, TO_TIMESTAMP('2025-12-08 11:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-08 15:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'Sal-4', 7);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (19, TO_TIMESTAMP('2025-12-08 11:00:00','YYYY-MM-DD HH24:MI:SS'), 2, 7);
+
+-- T20 Préstamo directo hoy (en préstamo)
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (20, TO_TIMESTAMP('2025-12-08 14:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-08 18:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 3, 'Imp-4', 8);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (20, TO_TIMESTAMP('2025-12-08 14:00:00','YYYY-MM-DD HH24:MI:SS'), 2, 8);
+
+-- ############################################################
+-- Bloque 5: 5 reservas futuras cercanas (10-15 dic) aún en estado Reservada
+-- ############################################################
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (21, TO_TIMESTAMP('2025-12-10 09:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-10 11:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 4, 'PC-7', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (21, TO_TIMESTAMP('2025-12-10 08:50:00','YYYY-MM-DD HH24:MI:SS'), 1, 4);
+
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (22, TO_TIMESTAMP('2025-12-11 10:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-11 12:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'Proyec-5', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (22, TO_TIMESTAMP('2025-12-11 09:45:00','YYYY-MM-DD HH24:MI:SS'), 1, 2);
+
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (23, TO_TIMESTAMP('2025-12-12 14:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-12 16:30:00','YYYY-MM-DD HH24:MI:SS'), NULL, 3, 'Sal-5', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (23, TO_TIMESTAMP('2025-12-12 13:40:00','YYYY-MM-DD HH24:MI:SS'), 1, 3);
+
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (24, TO_TIMESTAMP('2025-12-13 08:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-13 10:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 4, 'Lab-3', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (24, TO_TIMESTAMP('2025-12-13 07:50:00','YYYY-MM-DD HH24:MI:SS'), 1, 4);
+
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (25, TO_TIMESTAMP('2025-12-14 15:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-14 18:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'Imp-5', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (25, TO_TIMESTAMP('2025-12-14 14:40:00','YYYY-MM-DD HH24:MI:SS'), 1, 2);
+
+-- ############################################################
+-- Bloque 6: 5 reservas futuras lejanas (17-23 dic) en estado Reservada
+-- ############################################################
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (26, TO_TIMESTAMP('2025-12-17 09:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-17 12:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 3, 'PC-8', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (26, TO_TIMESTAMP('2025-12-17 08:50:00','YYYY-MM-DD HH24:MI:SS'), 1, 3);
+
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (27, TO_TIMESTAMP('2025-12-18 10:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-18 13:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 4, 'Proyec-6', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (27, TO_TIMESTAMP('2025-12-18 09:45:00','YYYY-MM-DD HH24:MI:SS'), 1, 4);
+
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (28, TO_TIMESTAMP('2025-12-20 11:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-20 14:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 2, 'Sal-6', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (28, TO_TIMESTAMP('2025-12-20 10:40:00','YYYY-MM-DD HH24:MI:SS'), 1, 2);
+
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (29, TO_TIMESTAMP('2025-12-21 13:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-21 16:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 3, 'Lab-4', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (29, TO_TIMESTAMP('2025-12-21 12:45:00','YYYY-MM-DD HH24:MI:SS'), 1, 3);
+
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (30, TO_TIMESTAMP('2025-12-23 15:00:00','YYYY-MM-DD HH24:MI:SS'), 
+ TO_TIMESTAMP('2025-12-23 18:00:00','YYYY-MM-DD HH24:MI:SS'), NULL, 4, 'Imp-6', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (30, TO_TIMESTAMP('2025-12-23 14:45:00','YYYY-MM-DD HH24:MI:SS'), 1, 4);
+
+-- ############################################################
+-- Bloque 7: 5 transacciones de usuario 2 en tiempo real (hoy)
+-- ############################################################
+
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (31, CURRENT_TIMESTAMP - INTERVAL '3' HOUR,
+ CURRENT_TIMESTAMP - INTERVAL '1' HOUR, NULL, 2, 'PC-9', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (31, CURRENT_TIMESTAMP, 1, 2); 
+
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (32, CURRENT_TIMESTAMP - INTERVAL '2' HOUR,
+ CURRENT_TIMESTAMP - INTERVAL '0' HOUR, NULL, 2, 'PC-10', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (32, CURRENT_TIMESTAMP, 1, 2); 
+
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (33, CURRENT_TIMESTAMP - INTERVAL '1' HOUR,
+ CURRENT_TIMESTAMP + INTERVAL '1' HOUR, NULL, 2, 'Proyec-7', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (33, CURRENT_TIMESTAMP, 1, 2); 
+
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (34, CURRENT_TIMESTAMP - INTERVAL '0' HOUR,
+ CURRENT_TIMESTAMP + INTERVAL '2' HOUR, NULL, 2, 'Proyec-8', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (34, CURRENT_TIMESTAMP, 1, 2); 
+
+INSERT INTO Transaccion (id_transaccion, fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_usuario, id_recurso, id_empleado_responsable)
+ VALUES (35, CURRENT_TIMESTAMP + INTERVAL '1' HOUR,
+ CURRENT_TIMESTAMP + INTERVAL '3' HOUR, NULL, 2, 'Proyec-9', NULL);
+INSERT INTO HistorialTransaccion (id_transaccion, fecha_cambio, estado_nuevo, usuario_responsable)
+ VALUES (35, CURRENT_TIMESTAMP, 1, 2); 
+
+-- Reactivar triggers y ajustar secuencia
+
+ALTER TABLE Transaccion ENABLE ALL TRIGGERS;
+
+ALTER SEQUENCE trans_seq RESTART START WITH 36;
+
+
 -- INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_tipo_transaccion, id_usuario, id_recurso, id_empleado_responsable)
 --   VALUES (SYSDATE, SYSDATE + 1, 'Completada', NULL, 1, 4, 'PC-1', 3);
 -- INSERT INTO Transaccion (fecha_inicio_transaccion, fecha_fin_transaccion, falla_servicio, id_tipo_transaccion, id_usuario, id_recurso, id_empleado_responsable)
