@@ -34,6 +34,7 @@ from app.calificacion.apis import router as calificacion_router
 from app.historial_transaccion.apis import router as historial_router
 from app.unidad.apis import router as unidad_router
 from app.common.auth import router as auth_router
+from app.estado_transaccion.apis import router as estado_transaccion_router
 
 # Globals
 settings = get_settings()
@@ -102,6 +103,7 @@ app.include_router(unidad_router, prefix="/unidad", tags=["Unidad"],dependencies
 app.include_router(tipo_recurso_router, prefix="/tipo_recurso", tags=["Tipo Recurso"],dependencies = [Depends(get_current_user)])
 app.include_router(recurso_router, prefix="/recurso", tags=["Recurso"],dependencies = [Depends(get_current_user)])
 app.include_router(transaccion_router, prefix="/transaccion", tags=["Transaccion"],dependencies = [Depends(get_current_user)])
+app.include_router(estado_transaccion_router, prefix="/estado_transaccion", tags=["Estado Transaccion"], dependencies=[Depends(get_current_user)])
 app.include_router(historial_router, prefix="/historial_transaccion", tags=["Historial Transaccion"], dependencies=[Depends(get_current_user)])
 app.include_router(calificacion_router, prefix="/calificacion", tags=["Calificacion"],dependencies = [Depends(get_current_user)])
 app.include_router(auth_router, prefix="/auth")
