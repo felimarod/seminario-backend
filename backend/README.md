@@ -55,3 +55,10 @@ service name = XE
 - Execute the project or run docker container and get into it with `sudo docker exec -it backend-seminario-backend-1 /bin/bash`
 - Run `pytest -v`
 - You can probe a unique file with `pytest app/usuario/test.py -v`
+
+8. To delete docker
+
+- sudo docker compose rm
+
+- sudo docker volume ls
+- sudo docker volume rm backend_data

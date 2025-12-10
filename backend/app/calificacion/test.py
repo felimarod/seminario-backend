@@ -7,6 +7,7 @@ from tests.test_auth import get_token
 client = TestClient(app)
 
 
+# hechas por el usuario
 def test_get_calificacion_by_id():
     """Prueba para obtener una calificacion por su ID"""
     response = client.get("/calificacion/1")

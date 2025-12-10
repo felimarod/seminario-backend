@@ -13,17 +13,18 @@ def test_get_usuario_by_email():
     token = get_token()
 
     response = client.get(
-        "/usuario/admin@istrador.com", headers={"Authorization": f"Bearer {token}"}
+        "/usuario/carlos.vergara@admin.com",
+        headers={"Authorization": f"Bearer {token}"},
     )
 
     assert response.status_code == 200
     assert response.json() == {
         "usuario": {
-            "id_usuario": 3,
-            "nombre": "admin",
-            "apellido": "admin",
-            "correo": "admin@istrador.com",
+            "id_usuario": 1,
+            "nombre": "Carlos",
+            "apellido": "Vergara",
+            "correo": "carlos.vergara@admin.com",
         },
-        "unidad": {"id_unidad": 1, "nombre_unidad": "Laboratorios de Computo"},
-        "tipo": {"id_tipo_usuario": 2, "nombre_tipo_usuario": "admin unidad"},
+        "unidad": None,
+        "tipo": {"id_tipo_usuario": 1, "nombre_tipo_usuario": "superadmin"},
     }
