@@ -52,13 +52,29 @@ service name = XE
 
 7. To run the test
 
-- Execute the project or run docker container and get into it with `sudo docker exec -it backend-seminario-backend-1 /bin/bash`
+- Execute the project or run docker container and get into it with
+  ```bash
+  sudo docker exec -it backend-seminario-backend-1 /bin/bash
+  ```
 - Run `pytest -v`
 - You can probe a unique file with `pytest app/usuario/test.py -v`
 
 8. To delete docker
 
-- sudo docker compose rm
+- `sudo docker compose rm`
+- `sudo docker volume ls`
+- `sudo docker volume rm backend_data`
 
-- sudo docker volume ls
-- sudo docker volume rm backend_data
+9. Some users to authentication
+
+   1. User: carlos.vergara@admin.com
+      Password: Super2025\*
+
+   2. User: admin@juandoc.com
+      Password: admin
+
+   3. User: julian.cortes@labcomputo.com
+      Password: Empleado01
+
+   4. User: laura.ramirez@gmail.com
+      Password: Laura123

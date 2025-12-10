@@ -20,8 +20,6 @@ def get_token(user_type: int = 1):
 
     if user_type == 1:
         user_data = {"username": "carlos.vergara@admin.com", "password": "Super2025*"}
-    elif user_type == 4:
-        user_data = {"username": "laura.ramirez@gmail.com", "password": "Laura123"}
     elif user_type == 2:
         user_data = {"username": "admin@juandoc.com", "password": "admin"}
     elif user_type == 3:
@@ -29,6 +27,8 @@ def get_token(user_type: int = 1):
             "username": "julian.cortes@labcomputo.com",
             "password": "Empleado01",
         }
+    elif user_type == 4:
+        user_data = {"username": "laura.ramirez@gmail.com", "password": "Laura123"}
 
     response = client.post(
         "/auth/token",

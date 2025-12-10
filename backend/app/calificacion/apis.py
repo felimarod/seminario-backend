@@ -2,16 +2,12 @@
 
 from typing import List
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from sqlalchemy.orm import Session
-
-from app.common.dependencies import get_db
-from app.calificacion.schemas import (
-    CalificacionCreate,
-    CalificacionResponse
-)
+from app.calificacion.schemas import CalificacionCreate, CalificacionResponse
 from app.calificacion.selectors import CalificacionSelectors
 from app.calificacion.services import CalificacionService
+from app.common.dependencies import get_db
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 
@@ -24,24 +20,25 @@ def get_calificacions(
 ):
     """Obtiene calificacions, opcionalmente filtrados por transaccion."""
     calificaciones = CalificacionSelectors.get_all(db, skip=skip, limit=limit)
-    return [CalificacionResponse.from_calificacion_db(calificacion) for calificacion in calificaciones]
-
-
-@router.get("/{id_calificacion}", response_model=CalificacionResponse)
-def get_calificacion(id_calificacion: int, db: Session = Depends(get_db)):
-    """Obtiene un calificacion por su ID."""
-    calificacion = CalificacionSelectors.get_by_id(db, id_calificacion)
-    if not calificacion:
-        raise HTTPException(status_code=404, detail="Calificacion no encontrada")
-    return calificacion
+    return [
+        CalificacionResponse.from_calificacion_db(calificacion)
+        for calificacion in calificaciones
+    ]
 
 
 @router.post("/create", response_model=CalificacionResponse, status_code=201)
-def create_calificacion(request:Request ,calificacion_data: CalificacionCreate, db: Session = Depends(get_db)):
+def create_calificacion(
+    request: Request,
+    calificacion_data: CalificacionCreate,
+    db: Session = Depends(get_db),
+):
     """Crea una nueva calificacion."""
     user = request.state.user  # Obtener el usuario del request,
     if user["tipo"] != 4:  # ID 4 es el rol de 'cliente'
-        raise HTTPException(status_code=403, detail="Solo los usuarios tienen permiso para crear una calificación.")
-    
-    calificacion = CalificacionService.create(db, calificacion_data,user["id"])
+        raise HTTPException(
+            status_code=403,
+            detail="Solo los usuarios tienen permiso para crear una calificación.",
+        )
+
+    calificacion = CalificacionService.create(db, calificacion_data, user["id"])
     return CalificacionResponse.from_calificacion_db(calificacion)
